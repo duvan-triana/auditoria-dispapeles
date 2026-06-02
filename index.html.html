@@ -1,0 +1,2495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#1E2761">
+<title>Plantilla Auditor · DISPAPELES S.A.S.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.8.2/docx.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+<style>
+:root {
+  /* Paleta corporativa Dispapeles */
+  --navy: #1E2761;
+  --navy-dark: #151a48;
+  --navy-light: #2d3a85;
+  --red: #C00000;
+  --red-dark: #990000;
+  --red-light: #ff4444;
+  --ice: #E8EEF7;
+  --cream: #F7F5F0;
+  --bg: #FAFAF8;
+  --surface: #FFFFFF;
+  --ink: #0F1A3A;
+  --ink-soft: #384563;
+  --muted: #8892B0;
+  --border: #E5E9F2;
+  --success: #2E7D32;
+  --success-bg: #E8F5E9;
+  --warning: #ED6C02;
+  --warning-bg: #FFF3E0;
+  --danger: #C62828;
+  --danger-bg: #FFEBEE;
+  --pending: #90A4AE;
+  --pending-bg: #ECEFF1;
+
+  --shadow-sm: 0 1px 2px rgba(15, 26, 58, 0.06);
+  --shadow-md: 0 4px 16px rgba(15, 26, 58, 0.08);
+  --shadow-lg: 0 12px 40px rgba(15, 26, 58, 0.12);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --font-display: 'Fraunces', 'Georgia', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--bg);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ APP SHELL ============ */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ============ HEADER ============ */
+.header {
+  background: var(--navy);
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+  border-bottom: 3px solid var(--red);
+}
+.header__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.header__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.3px;
+  min-width: 0;
+}
+@media (min-width: 640px) {
+  .header__logo { font-size: 18px; }
+}
+.header__logo-mark {
+  width: 36px;
+  height: 36px;
+  background: var(--red);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 16px;
+  font-family: var(--font-body);
+  flex-shrink: 0;
+}
+.header__title { line-height: 1.1; }
+.header__title-sub {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.75;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.header__spacer { flex: 1; }
+
+.header__auditor {
+  display: none;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 12px;
+  padding: 0 12px;
+  border-right: 1px solid rgba(255,255,255,0.15);
+  margin-right: 8px;
+  text-align: right;
+  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (min-width: 640px) {
+  .header__auditor { display: flex; }
+}
+.header__auditor-name {
+  font-weight: 600;
+  font-size: 13px;
+}
+.header__auditor-city {
+  opacity: 0.7;
+  font-size: 11px;
+}
+
+.header__actions {
+  display: flex;
+  gap: 6px;
+}
+.btn-icon {
+  width: 38px; height: 38px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  font-size: 17px;
+}
+.btn-icon:hover { background: rgba(255,255,255,0.18); }
+
+/* ============ NAVEGACIÓN INFERIOR (móvil) / LATERAL (desktop) ============ */
+.nav {
+  display: flex;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 90;
+  padding: 4px 0 calc(4px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -2px 8px rgba(15, 26, 58, 0.06);
+}
+.nav::-webkit-scrollbar { display: none; }
+.nav__item {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  padding: 6px 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s;
+  font-family: inherit;
+  overflow: hidden;
+}
+.nav__item-icon { font-size: 18px; }
+.nav__item[aria-current="page"] {
+  color: var(--navy);
+  font-weight: 700;
+}
+.nav__item[aria-current="page"] .nav__item-icon {
+  transform: scale(1.1);
+}
+.nav__item:hover { background: var(--ice); }
+
+@media (min-width: 900px) {
+  .nav {
+    position: sticky;
+    top: 72px;
+    bottom: auto;
+    flex-direction: column;
+    width: 220px;
+    height: fit-content;
+    border-top: none;
+    border-right: 1px solid var(--border);
+    padding: 16px 10px;
+    align-self: flex-start;
+    background: transparent;
+  }
+  .nav__item {
+    flex: none;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+    text-align: left;
+    width: 100%;
+  }
+  .nav__item-icon { font-size: 18px; }
+  .nav__item[aria-current="page"] {
+    background: var(--navy);
+    color: white;
+  }
+  .nav__item[aria-current="page"]:hover { background: var(--navy-dark); }
+}
+
+/* ============ MAIN LAYOUT ============ */
+.main {
+  flex: 1;
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 16px;
+  padding-bottom: 80px; /* espacio para nav bottom en móvil */
+}
+
+@media (min-width: 900px) {
+  .main {
+    gap: 24px;
+    padding: 24px 24px 24px 24px;
+    padding-bottom: 24px;
+  }
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  padding: 16px 0;
+}
+
+@media (min-width: 900px) {
+  .content { padding: 8px 0; }
+}
+
+/* ============ SECCIONES ============ */
+.section { display: none; animation: fadeIn 0.25s ease; }
+.section--active { display: block; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.section__title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.section__subtitle {
+  color: var(--ink-soft);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* ============ CARDS ============ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 14px;
+}
+.card--accent {
+  background: linear-gradient(135deg, var(--ice) 0%, #F5F0EC 100%);
+  border-color: var(--navy);
+}
+
+/* ============ FORMS ============ */
+.field { margin-bottom: 14px; }
+.field__label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.field__label-req::after {
+  content: " *";
+  color: var(--red);
+}
+.field__input,
+.field__select,
+.field__textarea {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 14px;
+  background: white;
+  color: var(--ink);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field__input:focus,
+.field__select:focus,
+.field__textarea:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(30, 39, 97, 0.1);
+}
+.field__textarea { min-height: 80px; resize: vertical; font-family: inherit; }
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 600px) {
+  .field-grid--2 { grid-template-columns: 1fr 1fr; }
+  .field-grid--3 { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+/* ============ BOTONES ============ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.btn--primary { background: var(--navy); color: white; }
+.btn--primary:hover { background: var(--navy-dark); }
+.btn--danger { background: var(--red); color: white; }
+.btn--danger:hover { background: var(--red-dark); }
+.btn--ghost { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); }
+.btn--ghost:hover { background: var(--ice); }
+.btn--sm { padding: 7px 12px; font-size: 12px; }
+
+/* ============ DASHBOARD / KPIs ============ */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+@media (min-width: 700px) { .kpi-grid { grid-template-columns: repeat(4, 1fr); } }
+
+.kpi {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.kpi__label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.kpi__value {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: var(--navy);
+}
+.kpi__value--green { color: var(--success); }
+.kpi__value--red { color: var(--danger); }
+.kpi__value--amber { color: var(--warning); }
+.kpi__value--muted { color: var(--muted); }
+.kpi__sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.progress-bar {
+  height: 10px;
+  background: var(--ice);
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.progress-bar__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--navy), var(--red));
+  transition: width 0.4s ease;
+}
+
+/* ============ LISTAS DE PRUEBAS ============ */
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+.filters__input {
+  flex: 1;
+  min-width: 160px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 13px;
+}
+.filters__select {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 13px;
+  background: white;
+}
+
+.prueba-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--muted);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  transition: box-shadow 0.15s;
+  cursor: pointer;
+}
+.prueba-card:hover { box-shadow: var(--shadow-md); }
+.prueba-card--cumple { border-left-color: var(--success); }
+.prueba-card--nocumple { border-left-color: var(--danger); }
+.prueba-card--parcial { border-left-color: var(--warning); }
+.prueba-card--pendiente { border-left-color: var(--pending); }
+
+.prueba-card__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+.prueba-card__codigo {
+  background: var(--navy);
+  color: white;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.badge--sustantiva { background: #FFEBEE; color: var(--danger); }
+.badge--diseno { background: #E3F2FD; color: #1565C0; }
+.badge--alto { background: var(--danger); color: white; }
+.badge--medio { background: var(--warning); color: white; }
+.badge--bajo { background: var(--success); color: white; }
+.badge--area { background: var(--ice); color: var(--navy); font-weight: 600; }
+
+.badge--estado-cumple { background: var(--success-bg); color: var(--success); }
+.badge--estado-nocumple { background: var(--danger-bg); color: var(--danger); }
+.badge--estado-parcial { background: var(--warning-bg); color: var(--warning); }
+.badge--estado-pendiente { background: var(--pending-bg); color: var(--pending); }
+
+.prueba-card__titulo {
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+.prueba-card__meta {
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ============ MODAL ============ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 26, 58, 0.5);
+  backdrop-filter: blur(3px);
+  z-index: 200;
+  padding: 16px;
+  align-items: flex-end;
+  justify-content: center;
+}
+.modal-overlay--open { display: flex; }
+@media (min-width: 700px) { .modal-overlay { align-items: center; } }
+
+.modal {
+  background: white;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  width: 100%;
+  max-width: 680px;
+  max-height: 92vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.25s ease;
+  box-shadow: var(--shadow-lg);
+}
+@media (min-width: 700px) { .modal { border-radius: var(--radius-lg); } }
+@keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.modal__header {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+.modal__title {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ink);
+}
+.modal__close {
+  background: var(--ice);
+  border: none;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--ink-soft);
+  flex-shrink: 0;
+}
+.modal__close:hover { background: var(--border); }
+
+.modal__body { padding: 18px 22px; flex: 1; }
+.modal__footer {
+  padding: 14px 22px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  position: sticky;
+  bottom: 0;
+  background: white;
+}
+
+.criterio-block {
+  background: var(--ice);
+  border-left: 3px solid var(--navy);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.criterio-block__label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+.criterio-block strong { color: var(--navy); }
+
+/* ============ TABLAS ============ */
+.table-wrap {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.table th {
+  background: var(--navy);
+  color: white;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.table td {
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+  vertical-align: top;
+}
+.table tr:hover { background: var(--ice); }
+
+/* ============ HALLAZGOS ============ */
+.hallazgo-card {
+  background: white;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 14px;
+  border: 1px solid var(--border);
+}
+.hallazgo-card__head {
+  padding: 14px 16px;
+  background: var(--navy);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.hallazgo-card__titulo {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  flex: 1;
+  min-width: 0;
+}
+.hallazgo-card__body { padding: 16px; }
+.hallazgo-card__field {
+  margin-bottom: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.hallazgo-card__field-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--navy);
+  margin-bottom: 3px;
+}
+
+/* ============ TOAST ============ */
+.toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 300;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transition: opacity 0.25s;
+  pointer-events: none;
+  max-width: 90%;
+  text-align: center;
+}
+.toast--show { opacity: 1; }
+@media (min-width: 900px) { .toast { bottom: 24px; } }
+
+/* ============ EMPTY STATE ============ */
+.empty {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--muted);
+}
+.empty__icon { font-size: 42px; margin-bottom: 10px; }
+.empty__title { font-family: var(--font-display); font-size: 18px; color: var(--ink); margin-bottom: 6px; }
+.empty__sub { font-size: 13px; max-width: 320px; margin: 0 auto; }
+
+/* ============ HELPERS ============ */
+.stack-sm > * + * { margin-top: 8px; }
+.stack > * + * { margin-top: 14px; }
+.text-muted { color: var(--muted); }
+.text-small { font-size: 12px; }
+.text-center { text-align: center; }
+.mono { font-family: 'Courier New', monospace; }
+
+/* Scrollbar custom */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* Decorative element */
+.display-underline {
+  display: inline-block;
+  position: relative;
+}
+.display-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 36px;
+  height: 3px;
+  background: var(--red);
+  border-radius: 2px;
+}
+
+/* Paper Trabajo entry */
+.pt-entry {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+.pt-entry__codigo {
+  background: var(--navy);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 12px;
+}
+.pt-entry__desc {
+  font-size: 13px;
+  line-height: 1.3;
+}
+.pt-entry__desc-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <div class="header__logo-mark">D</div>
+      <div class="header__title">
+        <div class="header__title-sub">Auditoría Interna</div>
+        <div>Dispapeles</div>
+      </div>
+    </div>
+    <div class="header__spacer"></div>
+    <div class="header__auditor">
+      <span class="header__auditor-name" id="hAuditor">—</span>
+      <span class="header__auditor-city" id="hCiudad">Sin auditoría activa</span>
+    </div>
+    <div class="header__actions">
+      <button class="btn-icon" id="btnImportar" title="Importar Excel">📥</button>
+      <button class="btn-icon" id="btnExportar" title="Exportar Excel">📤</button>
+      <button class="btn-icon" id="btnInforme" title="Generar Informe Word">📄</button>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+<!-- NAV -->
+<nav class="nav" role="navigation">
+  <button class="nav__item" data-section="portada" aria-current="page">
+    <span class="nav__item-icon">🏠</span><span>Inicio</span>
+  </button>
+  <button class="nav__item" data-section="matriz">
+    <span class="nav__item-icon">📚</span><span>Matriz</span>
+  </button>
+  <button class="nav__item" data-section="ejecucion">
+    <span class="nav__item-icon">✅</span><span>Ejecución</span>
+  </button>
+  <button class="nav__item" data-section="hallazgos">
+    <span class="nav__item-icon">🚩</span><span>Hallazgos</span>
+  </button>
+  <button class="nav__item" data-section="papeles">
+    <span class="nav__item-icon">📎</span><span>Papeles</span>
+  </button>
+  <button class="nav__item" data-section="dashboard">
+    <span class="nav__item-icon">📊</span><span>Dashboard</span>
+  </button>
+  <button class="nav__item" data-section="informe">
+    <span class="nav__item-icon">📝</span><span>Informe</span>
+  </button>
+</nav>
+
+<!-- CONTENIDO -->
+<main class="content" id="content">
+
+<!-- ======================= SECCIÓN PORTADA ======================= -->
+<section class="section section--active" id="section-portada">
+  <div class="section__header">
+    <div>
+      <h1 class="section__title display-underline">Información de la Auditoría</h1>
+      <p class="section__subtitle">Complete los datos iniciales. Se guardan automáticamente en este dispositivo.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="field-grid field-grid--2">
+      <div class="field">
+        <label class="field__label field__label-req">Código de auditoría</label>
+        <input class="field__input" id="f-codigo" placeholder="AUD-2026-S1-017">
+      </div>
+      <div class="field">
+        <label class="field__label field__label-req">Semestre</label>
+        <select class="field__select" id="f-semestre">
+          <option value="2026-S1">2026-S1</option>
+          <option value="2026-S2">2026-S2</option>
+          <option value="2027-S1">2027-S1</option>
+          <option value="2027-S2">2027-S2</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-grid field-grid--2">
+      <div class="field">
+        <label class="field__label field__label-req">Nombre del auditor</label>
+        <input class="field__input" id="f-auditor" placeholder="Nombre completo">
+      </div>
+      <div class="field">
+        <label class="field__label">Código auditor</label>
+        <input class="field__input" id="f-auditor-cod" placeholder="JDZ">
+      </div>
+    </div>
+    <div class="field-grid field-grid--2">
+      <div class="field">
+        <label class="field__label field__label-req">Ciudad</label>
+        <input class="field__input" id="f-ciudad" placeholder="Villavicencio">
+      </div>
+      <div class="field">
+        <label class="field__label">Distrito auditado</label>
+        <input class="field__input" id="f-distrito" placeholder="Distrito B Villavicencio">
+      </div>
+    </div>
+    <div class="field-grid field-grid--2">
+      <div class="field">
+        <label class="field__label">Fecha inicio</label>
+        <input type="date" class="field__input" id="f-fecha-ini">
+      </div>
+      <div class="field">
+        <label class="field__label">Fecha fin planeada</label>
+        <input type="date" class="field__input" id="f-fecha-fin">
+      </div>
+    </div>
+    <div class="field">
+      <label class="field__label">Periodo auditado</label>
+      <input class="field__input" id="f-periodo" placeholder="Ej: Enero – Marzo 2026">
+    </div>
+  </div>
+
+  <div class="card card--accent">
+    <div style="display: flex; gap: 12px; align-items: flex-start;">
+      <div style="font-size: 28px;">💡</div>
+      <div>
+        <div style="font-family: var(--font-display); font-weight: 700; margin-bottom: 4px;">Flujo de trabajo recomendado</div>
+        <div class="text-small text-muted" style="line-height: 1.55;">
+          1. Complete los datos de esta pantalla · 2. Revise la Matriz Maestra (85 pruebas) ·
+          3. Ejecute cada prueba registrando estado, evidencia y observación ·
+          4. Registre hallazgos cuando encuentre debilidades · 5. Exporte el Excel al finalizar
+          para enviarlo al Coordinador.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;">
+    <button class="btn btn--primary" id="btnIrEjecucion">▶ Ir a Ejecución</button>
+    <button class="btn btn--ghost" id="btnResetAll">🗑 Reiniciar auditoría</button>
+  </div>
+</section>
+
+<!-- ======================= SECCIÓN MATRIZ ======================= -->
+<section class="section" id="section-matriz">
+  <div class="section__header">
+    <div>
+      <h1 class="section__title display-underline">Matriz Maestra</h1>
+      <p class="section__subtitle">85 pruebas consolidadas del Plan de Pruebas de Auditoría</p>
+    </div>
+  </div>
+
+  <div class="filters">
+    <input class="filters__input" id="matrizSearch" placeholder="Buscar por código, prueba, subárea…">
+    <select class="filters__select" id="matrizArea">
+      <option value="">Todas las áreas</option>
+      <option>TESORERÍA</option>
+      <option>VENTAS</option>
+      <option>LOGÍSTICA</option>
+      <option>CARTERA</option>
+      <option>ADMINISTRACIÓN</option>
+    </select>
+    <select class="filters__select" id="matrizTipo">
+      <option value="">Tipo (todas)</option>
+      <option>Diseño</option>
+      <option>Sustantiva</option>
+    </select>
+    <select class="filters__select" id="matrizNivel">
+      <option value="">Nivel (todos)</option>
+      <option>Alto</option>
+      <option>Medio</option>
+      <option>Bajo</option>
+    </select>
+  </div>
+
+  <div id="matrizList"></div>
+</section>
+
+<!-- ======================= SECCIÓN EJECUCIÓN ======================= -->
+<section class="section" id="section-ejecucion">
+  <div class="section__header">
+    <div>
+      <h1 class="section__title display-underline">Ejecución de Pruebas</h1>
+      <p class="section__subtitle">Toque cualquier prueba para registrar su estado y evidencia</p>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi__label">Total</div>
+      <div class="kpi__value" id="kpi-total">0</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Cumple</div>
+      <div class="kpi__value kpi__value--green" id="kpi-cumple">0</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">No cumple</div>
+      <div class="kpi__value kpi__value--red" id="kpi-nocumple">0</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Pendientes</div>
+      <div class="kpi__value kpi__value--muted" id="kpi-pendiente">0</div>
+    </div>
+  </div>
+
+  <div class="filters">
+    <input class="filters__input" id="ejecSearch" placeholder="Buscar en pruebas…">
+    <select class="filters__select" id="ejecArea">
+      <option value="">Todas las áreas</option>
+      <option>TESORERÍA</option>
+      <option>VENTAS</option>
+      <option>LOGÍSTICA</option>
+      <option>CARTERA</option>
+      <option>ADMINISTRACIÓN</option>
+    </select>
+    <select class="filters__select" id="ejecEstado">
+      <option value="">Todos los estados</option>
+      <option>Pendiente</option>
+      <option>Cumple</option>
+      <option>No Cumple</option>
+      <option>Parcial</option>
+      <option>No Aplica</option>
+    </select>
+  </div>
+
+  <div id="ejecList"></div>
+</section>
+
+<!-- ======================= SECCIÓN HALLAZGOS ======================= -->
+<section class="section" id="section-hallazgos">
+  <div class="section__header">
+    <div>
+      <h1 class="section__title display-underline">Hallazgos</h1>
+      <p class="section__subtitle">Registro formal de debilidades identificadas</p>
+    </div>
+    <button class="btn btn--danger" id="btnNuevoHallazgo">+ Nuevo hallazgo</button>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi__label">Total</div><div class="kpi__value" id="kpi-h-total">0</div></div>
+    <div class="kpi"><div class="kpi__label">Alto</div><div class="kpi__value kpi__value--red" id="kpi-h-alto">0</div></div>
+    <div class="kpi"><div class="kpi__label">Medio</div><div class="kpi__value kpi__value--amber" id="kpi-h-medio">0</div></div>
+    <div class="kpi"><div class="kpi__label">Bajo</div><div class="kpi__value kpi__value--green" id="kpi-h-bajo">0</div></div>
+  </div>
+
+  <div id="hallazgosList"></div>
+</section>
+
+<!-- ======================= SECCIÓN PAPELES ======================= -->
+<section class="section" id="section-papeles">
+  <div class="section__header">
+    <div>
+      <h1 class="section__title display-underline">Papeles de Trabajo</h1>
+      <p class="section__subtitle">Evidencias documentales de la auditoría</p>
+    </div>
+    <button class="btn btn--primary" id="btnNuevoPT">+ Nueva evidencia</button>
+  </div>
+  <div id="papelesList"></div>
+</section>
+
+<!-- ======================= SECCIÓN DASHBOARD ======================= -->
+<section class="section" id="section-dashboard">
+  <div class="section__header">
+    <div>
+      <h1 class="section__title display-underline">Dashboard</h1>
+      <p class="section__subtitle">Estado consolidado de la auditoría</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="kpi__label">Cobertura global</div>
+    <div style="display: flex; align-items: center; gap: 16px; margin-top: 8px;">
+      <div class="kpi__value" id="dash-cobertura">0%</div>
+      <div style="flex: 1;">
+        <div class="progress-bar"><div class="progress-bar__fill" id="dash-progress" style="width: 0%"></div></div>
+        <div class="text-small text-muted" style="margin-top: 6px;" id="dash-progress-text">0 de 85 pruebas ejecutadas</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-family: var(--font-display); font-size: 17px; margin: 20px 0 10px 0;">Estado por área</h3>
+  <div class="table-wrap">
+    <table class="table" id="dash-areas">
+      <thead>
+        <tr>
+          <th>Área</th><th>Total</th><th>Cumple</th><th>No cumple</th>
+          <th>Pendiente</th><th>Cobertura</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <h3 style="font-family: var(--font-display); font-size: 17px; margin: 20px 0 10px 0;">Hallazgos por nivel</h3>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi__label">🔴 Alto</div><div class="kpi__value kpi__value--red" id="dash-halto">0</div><div class="kpi__sub">Requiere acción inmediata</div></div>
+    <div class="kpi"><div class="kpi__label">🟠 Medio</div><div class="kpi__value kpi__value--amber" id="dash-hmedio">0</div><div class="kpi__sub">Plan de acción corto plazo</div></div>
+    <div class="kpi"><div class="kpi__label">🟢 Bajo</div><div class="kpi__value kpi__value--green" id="dash-hbajo">0</div><div class="kpi__sub">Oportunidades de mejora</div></div>
+    <div class="kpi"><div class="kpi__label">Total</div><div class="kpi__value" id="dash-htotal">0</div><div class="kpi__sub">Hallazgos registrados</div></div>
+  </div>
+</section>
+
+<!-- ======================= SECCIÓN INFORME ======================= -->
+<section class="section" id="section-informe">
+  <div class="section__header">
+    <div>
+      <h1 class="section__title display-underline">Informe Final</h1>
+      <p class="section__subtitle">Generación del informe de auditoría</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="kpi__label">Resumen listo para exportar</div>
+    <div id="informeResumen" style="margin-top: 10px; font-size: 14px; line-height: 1.6;"></div>
+  </div>
+
+  <div class="card">
+    <div style="font-family: var(--font-display); font-weight: 700; font-size: 17px; margin-bottom: 10px;">Acciones disponibles</div>
+
+    <div style="display: grid; gap: 12px;">
+      <button class="btn btn--primary" id="btnGenerarWord" style="justify-self: flex-start;">
+        📄 Generar Informe en Word (.docx)
+      </button>
+      <button class="btn btn--primary" id="btnExportarExcel2" style="justify-self: flex-start;">
+        📤 Exportar Excel completo (para el Coordinador)
+      </button>
+      <button class="btn btn--ghost" id="btnImportarExcel2" style="justify-self: flex-start;">
+        📥 Importar Excel existente (para continuar trabajo previo)
+      </button>
+    </div>
+  </div>
+
+  <div class="card card--accent">
+    <div style="display: flex; gap: 12px; align-items: flex-start;">
+      <div style="font-size: 28px;">✅</div>
+      <div>
+        <div style="font-family: var(--font-display); font-weight: 700; margin-bottom: 4px;">Cuando termine la auditoría</div>
+        <div class="text-small text-muted" style="line-height: 1.55;">
+          Exporte el archivo Excel y envíelo al Coordinador. El Coordinador lo guardará en la
+          carpeta compartida del sistema y al sincronizar, su auditoría quedará consolidada
+          automáticamente en el tablero del equipo.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+</div>
+</div>
+
+<!-- ============= MODALES (se llenan dinámicamente) ============= -->
+<div class="modal-overlay" id="modal">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- Input file oculto -->
+<input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none">
+
+<script>
+// El JavaScript viene aparte inyectado aquí
+// ==========================================================================
+//  PLANTILLA AUDITOR WEB — DISPAPELES S.A.S.
+//  Lógica completa: estado, persistencia, UI, modales, import/export, Word
+// ==========================================================================
+
+// ========== MATRIZ BASE EMBEBIDA ==========
+const PRUEBAS_BASE = [{"n": 1, "codigo": "T-01", "area": "TESORERÍA", "subarea": "Políticas y Procedimientos", "prueba": "Verificar existencia y aprobación por máximo órgano de políticas de tesorería (caja menor, pagos, recaudo, conciliaciones).", "tipo": "Diseño", "criterio": "GH-IND-CAJ-003; GH-IND-ADM-004", "riesgo": "Actividades no autorizadas del proceso de tesorería", "nivel": "Alto"}, {"n": 2, "codigo": "T-02", "area": "TESORERÍA", "subarea": "Caja Menor", "prueba": "Validar documento formal de apertura/asignación de caja menor firmado por GR, con fondo fijo, topes y responsable.", "tipo": "Diseño", "criterio": "GH-IND-CAJ-003 Mód.2.1", "riesgo": "Pérdidas por debilidad en control de cajas menores", "nivel": "Alto"}, {"n": 3, "codigo": "T-03", "area": "TESORERÍA", "subarea": "Caja Menor", "prueba": "Muestreo 100% legalizaciones último trimestre: soporte físico, originalidad, autorización jefe inmediato, oportunidad, cruce contable.", "tipo": "Sustantiva", "criterio": "GH-IND-CAJ-003 Mód.2.1", "riesgo": "Fraude por gastos no permitidos / jineteo del fondo", "nivel": "Alto"}, {"n": 4, "codigo": "T-04", "area": "TESORERÍA", "subarea": "Caja Menor", "prueba": "Realizar arqueo físico en sitio: conteo, organización por denominaciones, cruce soportes vs fondo fijo, custodia bajo llave, acta firmada.", "tipo": "Sustantiva", "criterio": "GH-IND-CAJ-003 Mód.2.1", "riesgo": "Fraude por ausencia de control del fondo fijo", "nivel": "Alto"}, {"n": 5, "codigo": "T-05", "area": "TESORERÍA", "subarea": "Caja Menor", "prueba": "Validar topes: gasto individual ≤ $50.000 y reembolso ≤ 50% del fondo.", "tipo": "Sustantiva", "criterio": "GH-IND-CAJ-003 Mód.2.1", "riesgo": "Fraude por gastos no autorizados", "nivel": "Medio"}, {"n": 6, "codigo": "T-06", "area": "TESORERÍA", "subarea": "Caja Principal y POS", "prueba": "Arqueo caja principal y POS: tope $500.000, formato + print de caja, libro control de sobres, inclusión de títulos valores.", "tipo": "Sustantiva", "criterio": "GH-IND-CAJ-003 Mód.2.2-2.3", "riesgo": "Fraude / robo / manejo inadecuado de efectivo", "nivel": "Alto"}, {"n": 7, "codigo": "T-07", "area": "TESORERÍA", "subarea": "Chequera", "prueba": "Arqueo de chequera con formato iSolución: consecutivo completo, cheques en blanco, custodia caja fuerte, firma entrega/recibido.", "tipo": "Sustantiva", "criterio": "GH-IND-CAJ-003 Mód.2.5", "riesgo": "Pérdidas por mal uso / robo / hurto de cheques", "nivel": "Alto"}, {"n": 8, "codigo": "T-08", "area": "TESORERÍA", "subarea": "Cofre de Seguridad", "prueba": "Validar apertura del cofre en presencia obligatoria de Coord.Admin + Auxiliar de Caja; puertas cerradas; acta firmada.", "tipo": "Diseño", "criterio": "GH-IND-CAJ-003 Mód.2.4", "riesgo": "Robo / hurto por debilidad en custodia", "nivel": "Alto"}, {"n": 9, "codigo": "T-09", "area": "TESORERÍA", "subarea": "Gestión de Recaudo", "prueba": "Muestreo de recaudo diario: cruce fechas, valores, punto de venta, consignación y cierres de caja.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Recaudo", "riesgo": "Fraude por debilidad en cierres de caja", "nivel": "Alto"}, {"n": 10, "codigo": "T-10", "area": "TESORERÍA", "subarea": "Transportadora de Valores", "prueba": "Validar recogida lunes/miércoles/viernes; personal en libro Brinks; soporte entrega al Coord. Admin; formato para recogida extraordinaria.", "tipo": "Diseño", "criterio": "GH-IND-CAJ-003 Mód.4.4", "riesgo": "Pérdidas / robo en el transporte de efectivo", "nivel": "Alto"}, {"n": 11, "codigo": "T-11", "area": "TESORERÍA", "subarea": "Gestión de Pagos", "prueba": "Inspección física de tokens; niveles de autorización para cargue al portal bancario; archivos protegidos contra edición.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Pagos", "riesgo": "Pérdidas económicas por pagos no autorizados", "nivel": "Alto"}, {"n": 12, "codigo": "T-12", "area": "TESORERÍA", "subarea": "Gestión de Pagos", "prueba": "Validar segregación: quien emite egresos ≠ compras y contabilidad. Revisar log del sistema.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Pagos", "riesgo": "Fraude por inadecuada segregación de funciones", "nivel": "Alto"}, {"n": 13, "codigo": "T-13", "area": "TESORERÍA", "subarea": "Cheques Girados", "prueba": "Verificar sello restrictivo 'Para consignar únicamente a la cuenta del primer beneficiario' (excepciones: viaje, caja menor, empleados).", "tipo": "Sustantiva", "criterio": "GH-IND-CAJ-003 Mód.3.1", "riesgo": "Pérdidas económicas / fraude por cobro indebido", "nivel": "Medio"}, {"n": 14, "codigo": "T-14", "area": "TESORERÍA", "subarea": "Cheques Posfechados y Devueltos", "prueba": "Validar custodia en caja fuerte, firma cliente, sello restrictivo, consecutivo, fecha; entrega a cartera con firma en libro.", "tipo": "Sustantiva", "criterio": "GH-IND-CAR-002 Mód.1.3", "riesgo": "Pérdidas / devoluciones / fraude", "nivel": "Alto"}, {"n": 15, "codigo": "T-15", "area": "TESORERÍA", "subarea": "Conciliaciones Bancarias", "prueba": "Muestra de 4 meses: saldo inicial/final extractos vs libro; recálculo conciliación; documentos soporte; segregación.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Conciliaciones", "riesgo": "Información financiera no confiable", "nivel": "Alto"}, {"n": 16, "codigo": "T-16", "area": "TESORERÍA", "subarea": "Partidas Conciliatorias", "prueba": "Verificar antigüedad de partidas; soportes de depuración; autorización; indicadores de oportunidad.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Conciliaciones", "riesgo": "Fraude / información no confiable por no depuración", "nivel": "Alto"}, {"n": 17, "codigo": "T-17", "area": "TESORERÍA", "subarea": "Cierres de Módulos", "prueba": "Validar cronograma de cierres y bloqueo de módulos cartera/tesorería para meses anteriores.", "tipo": "Diseño", "criterio": "Plan de Pruebas · Conciliaciones", "riesgo": "Fraude por registros retroactivos no autorizados", "nivel": "Medio"}, {"n": 18, "codigo": "V-01", "area": "VENTAS", "subarea": "Políticas y Procedimientos", "prueba": "Validar existencia, actualización, divulgación y aprobación por máximo órgano de políticas de ventas.", "tipo": "Diseño", "criterio": "Plan de Pruebas · Ventas", "riesgo": "Actividades no autorizadas del proceso de ventas", "nivel": "Medio"}, {"n": 19, "codigo": "V-02", "area": "VENTAS", "subarea": "Planeación de Ventas", "prueba": "Verificar criterios de planeación (histórico, mercado, competencia), presupuesto autorizado e indicadores mensuales.", "tipo": "Diseño", "criterio": "Plan de Pruebas · Ventas", "riesgo": "Pérdidas por inadecuada planeación / riesgo reputacional", "nivel": "Medio"}, {"n": 20, "codigo": "V-03", "area": "VENTAS", "subarea": "Gestión y Aprobación de Pedidos", "prueba": "Validar proceso de gestión y aprobación de pedidos con seguimiento a Coordinación de Ventas regional.", "tipo": "Diseño", "criterio": "GH-IND-FAC-005 Mód.3", "riesgo": "Fraude por pedidos no autorizados", "nivel": "Medio"}, {"n": 21, "codigo": "V-04", "area": "VENTAS", "subarea": "Verificación de Pagos", "prueba": "Validar verificación de pagos por consignación y aprobación con Cartera Bogotá antes de liberar a Logística.", "tipo": "Diseño", "criterio": "GH-IND-FAC-005 Mód.3", "riesgo": "Pérdidas por ventas de difícil recaudo", "nivel": "Medio"}, {"n": 22, "codigo": "V-05", "area": "VENTAS", "subarea": "Crédito Express", "prueba": "Validar que pedidos Crédito Express no excedan 30 días de crédito.", "tipo": "Sustantiva", "criterio": "Políticas y Normas de Cartera", "riesgo": "Pérdidas por incumplimiento de política de crédito", "nivel": "Medio"}, {"n": 23, "codigo": "V-06", "area": "VENTAS", "subarea": "Política de Descuentos", "prueba": "Muestra de facturas con descuentos del periodo: verificar soporte y autorización escrita de Gerentes de Línea y/o GR.", "tipo": "Sustantiva", "criterio": "GH-IND-FAC-005 Mód.1.2", "riesgo": "Descuentos no autorizados (riesgo histórico: descuentos 86% detectados por Contraloría)", "nivel": "Alto"}, {"n": 24, "codigo": "V-07", "area": "VENTAS", "subarea": "Facturas Estado 1", "prueba": "Correr opción 37 AS400: listar facturas estado 1 > 3 días; validar justificaciones y responsables.", "tipo": "Sustantiva", "criterio": "GH-IND-FAC-005 Mód.1.1", "riesgo": "Errores en facturación / ingresos no reconocidos", "nivel": "Medio"}, {"n": 25, "codigo": "V-08", "area": "VENTAS", "subarea": "Reporte Diario a Coord. Admin", "prueba": "Verificar muestra de reportes diarios con soportes completos y firmas de autorización (reversiones, devoluciones, notas crédito).", "tipo": "Sustantiva", "criterio": "GH-IND-FAC-005 Mód.1.3", "riesgo": "Ingresos no reconocidos correctamente", "nivel": "Medio"}, {"n": 26, "codigo": "V-09", "area": "VENTAS", "subarea": "Entregas en Dirección Diferente", "prueba": "Validar muestra de entregas a dirección diferente: carta de autorización firmada por Coord. Ventas; sin carta no hay despacho.", "tipo": "Sustantiva", "criterio": "GH-IND-FAC-005 Mód.2.1", "riesgo": "Fraude por entregas a terceros no autorizados", "nivel": "Medio"}, {"n": 27, "codigo": "V-10", "area": "VENTAS", "subarea": "Notas Crédito", "prueba": "Muestra de notas crédito: soporte del motivo; firma de GR para cruces, otros recaudos y saldos crédito.", "tipo": "Sustantiva", "criterio": "GH-IND-FAC-005 Mód.2.2", "riesgo": "Notas crédito no autorizadas / favorecimiento", "nivel": "Alto"}, {"n": 28, "codigo": "V-11", "area": "VENTAS", "subarea": "Segregación en Pedidos", "prueba": "Verificar en AS400 usuarios con acceso a bloquear/desbloquear clientes y pedidos; segregación vs. comercial y facturación; log del sistema.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Facturación", "riesgo": "Fraude por inadecuada segregación de funciones", "nivel": "Alto"}, {"n": 29, "codigo": "V-12", "area": "VENTAS", "subarea": "Segregación en Emisión de Facturas", "prueba": "Identificar en AS400 usuarios con acceso a emitir y anular facturas; segregación vs. comercial y recaudo; log del sistema.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Facturación", "riesgo": "Fraude por ventas no autorizadas / segregación deficiente", "nivel": "Alto"}, {"n": 30, "codigo": "V-13", "area": "VENTAS", "subarea": "Resolución DIAN", "prueba": "Verificar vigencia de la resolución de facturación y control automático del consecutivo.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Facturación", "riesgo": "Sanciones por incumplimiento normativo", "nivel": "Alto"}, {"n": 31, "codigo": "V-14", "area": "VENTAS", "subarea": "Anulaciones y Devoluciones", "prueba": "Muestra de anulaciones/devoluciones: soporte físico firmado por cliente (fecha, causal, cantidad, costo), entrada a inventario, autorización.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Facturación", "riesgo": "Anulaciones / devoluciones no autorizadas", "nivel": "Alto"}, {"n": 32, "codigo": "L-01", "area": "LOGÍSTICA", "subarea": "Políticas y Procedimientos", "prueba": "Validar políticas y procedimientos de logística actualizados, divulgados y aprobados por máximo órgano.", "tipo": "Diseño", "criterio": "Plan de Pruebas · Logística", "riesgo": "Actividades no autorizadas del proceso", "nivel": "Medio"}, {"n": 33, "codigo": "L-02", "area": "LOGÍSTICA", "subarea": "Recepción desde Manufactura", "prueba": "Validar que entradas a bodega del Distrito estén soportadas en planilla física y cruzadas con salida de manufactura.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Logística", "riesgo": "Pérdidas por ausencia de control en inventario recibido", "nivel": "Alto"}, {"n": 34, "codigo": "L-03", "area": "LOGÍSTICA", "subarea": "Segregación en Traslados", "prueba": "Verificar en AS400 que la función de trasladar inventario entre bodegas esté segregada; revisar log.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Logística", "riesgo": "Fraude por accesos no autorizados a traslados", "nivel": "Alto"}, {"n": 35, "codigo": "L-04", "area": "LOGÍSTICA", "subarea": "Acceso y Seguridad de Bodega", "prueba": "Inspección física: accesos, extintores, controles sanitarios, cámaras, infraestructura, cumplimiento normativo.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Logística", "riesgo": "Pérdidas por almacenamiento inadecuado / sanciones", "nivel": "Medio"}, {"n": 36, "codigo": "L-05", "area": "LOGÍSTICA", "subarea": "Conciliación de Bodegas Virtuales", "prueba": "Identificar todas las bodegas del sistema vs. bodegas físicas; verificar existencias antiguas sin salidas.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Logística", "riesgo": "Fraude por movimientos no autorizados / bodegas fantasma", "nivel": "Alto"}, {"n": 37, "codigo": "L-06", "area": "LOGÍSTICA", "subarea": "Tomas Físicas de Inventario", "prueba": "Verificar periodicidad (cíclicos ≥1/semana, resmillas/rollos ≥3/semana); actas inicio/cierre; notas de ajuste autorizadas; kardex vs físico.", "tipo": "Sustantiva", "criterio": "GH-IND-LOG-001 Mód.3.3-3.4", "riesgo": "Fraude por salidas/bajas no autorizadas / info no confiable", "nivel": "Alto"}, {"n": 38, "codigo": "L-07", "area": "LOGÍSTICA", "subarea": "Planeación de Distribución", "prueba": "Validar planeación de distribución en sistema: órdenes, capacidad de flota, rutas, distribución propia vs. tercerizada.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Logística", "riesgo": "Fraude por favorecimiento a terceros / pérdidas por errores", "nivel": "Medio"}, {"n": 39, "codigo": "L-08", "area": "LOGÍSTICA", "subarea": "Alistamiento de Pedidos", "prueba": "Muestra de órdenes: control manual de packing; estado de órdenes abiertas; segregación en creación/cierre.", "tipo": "Sustantiva", "criterio": "LM-PE-023 Act.11-13", "riesgo": "Fraude por salidas no autorizadas / reprocesos", "nivel": "Medio"}, {"n": 40, "codigo": "L-09", "area": "LOGÍSTICA", "subarea": "ILM / Obsoletos / Averiados", "prueba": "Verificar clasificación física vs. sistema; cumplimiento memorando CTR-001-2022 (envío a bodega 260).", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Logística", "riesgo": "Pérdidas por inventarios no reales", "nivel": "Medio"}, {"n": 41, "codigo": "L-10", "area": "LOGÍSTICA", "subarea": "Despacho Perímetro Urbano", "prueba": "Muestreo de despachos (LM-PE-023): planilla firmada, cargue en presencia del conductor, revisión diaria vehículo, aseguramiento, inspección.", "tipo": "Sustantiva", "criterio": "LM-PE-023 v6", "riesgo": "Riesgo reputacional / pérdidas en despacho", "nivel": "Alto"}, {"n": 42, "codigo": "L-11", "area": "LOGÍSTICA", "subarea": "Facturas Estado 2", "prueba": "Listar facturas estado 2; verificar físicamente en bodega antes de programar despacho.", "tipo": "Sustantiva", "criterio": "GH-IND-LOG-001 Mód.1.5", "riesgo": "Pérdidas por salidas de inventario no facturadas", "nivel": "Alto"}, {"n": 43, "codigo": "L-12", "area": "LOGÍSTICA", "subarea": "Tránsitos", "prueba": "Tránsitos enviados/recibidos: antigüedad sin legalizar, motivo, gestión con distrito correspondiente, correos a Auditoría.", "tipo": "Sustantiva", "criterio": "GH-IND-SUP-007 Mód.1.3", "riesgo": "Pérdidas por mercancía sin trazabilidad", "nivel": "Alto"}, {"n": 44, "codigo": "L-13", "area": "LOGÍSTICA", "subarea": "Remisiones Manuales", "prueba": "Validar que remisiones manuales sean excepcionales con autorización GR; talonario bajo control; consecutivo; facturación posterior.", "tipo": "Sustantiva", "criterio": "GH-IND-LOG-001 Mód.2.3", "riesgo": "Salidas no facturadas / pérdida de trazabilidad", "nivel": "Alto"}, {"n": 45, "codigo": "L-14", "area": "LOGÍSTICA", "subarea": "Devoluciones", "prueba": "Proceso: formato iSolución → autorización GR → recepción física → revisión → aprobación Coord.Admin (Bodega NO aprueba).", "tipo": "Sustantiva", "criterio": "GH-IND-LOG-001 Mód.3.1", "riesgo": "Devoluciones no autorizadas / fraude", "nivel": "Alto"}, {"n": 46, "codigo": "L-15", "area": "LOGÍSTICA", "subarea": "Consumo Interno y Muestras", "prueba": "Formato firmado por GR; aprobación Coord. Admin; nota de ajuste; firma de recibido del cliente.", "tipo": "Sustantiva", "criterio": "GH-IND-LOG-001 Mód.3.5-3.6", "riesgo": "Salidas de inventario no autorizadas", "nivel": "Medio"}, {"n": 47, "codigo": "L-16", "area": "LOGÍSTICA", "subarea": "Entrega de Dineros por Conductores", "prueba": "Validar que conductores entreguen dinero directamente a Caja; NO supervisores, SENAS, jefes logística; sello 'Cancelado' en planillas.", "tipo": "Sustantiva", "criterio": "GH-IND-LOG-001 Mód.4.1-4.2", "riesgo": "Fraude por intermediarios en recaudo", "nivel": "Alto"}, {"n": 48, "codigo": "L-17", "area": "LOGÍSTICA", "subarea": "Dispacentros — Recepción", "prueba": "Salidas del Distrito a Dispacentros con nota débito; firma recibido; controles de conteo; notas crédito por diferencias.", "tipo": "Sustantiva", "criterio": "GH-IND-DIS-006", "riesgo": "Pérdidas por ausencia de control en recepción", "nivel": "Alto"}, {"n": 49, "codigo": "L-18", "area": "LOGÍSTICA", "subarea": "Dispacentros — Arqueos", "prueba": "Arqueo de caja cada 15 días coincidiendo con cíclico; base para devueltas con acta firmada; recaudo = vendido del día.", "tipo": "Sustantiva", "criterio": "GH-IND-DIS-006 Mód.1.4", "riesgo": "Diferencias de caja / recaudos no consignados", "nivel": "Alto"}, {"n": 50, "codigo": "L-19", "area": "LOGÍSTICA", "subarea": "Dispacentros — Guillotina", "prueba": "Cortes solo con formato diligenciado + factura cancelada; consecutivo controlado; verificación mensual; solo material Dispapeles.", "tipo": "Sustantiva", "criterio": "GH-IND-DIS-006 Mód.2", "riesgo": "Operaciones no autorizadas / fraude", "nivel": "Alto"}, {"n": 51, "codigo": "L-20", "area": "LOGÍSTICA", "subarea": "Vehículos y Documentos", "prueba": "Validar documentación vigente: SOAT, tecnomecánica, licencias, pólizas, contratos renting, tarjetas de propiedad.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Logística", "riesgo": "Sanciones / multas / riesgo reputacional", "nivel": "Medio"}, {"n": 52, "codigo": "L-21", "area": "LOGÍSTICA", "subarea": "Costos de Logística", "prueba": "Contratos de arrendamiento vigentes; muestra facturas cobro (tarifas negociadas); negociación gasolina; fluctuaciones peajes.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Logística", "riesgo": "Pérdidas económicas / fraude por costos no autorizados", "nivel": "Medio"}, {"n": 53, "codigo": "L-22", "area": "LOGÍSTICA", "subarea": "Cobros Transportadora", "prueba": "Facturación transportadora: stand-by, desvíos, novedades; justificación en operación; cumplimiento ANS.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Logística", "riesgo": "Pérdidas por cobros sin justificación", "nivel": "Medio"}, {"n": 54, "codigo": "L-23", "area": "LOGÍSTICA", "subarea": "Indicadores de Gestión", "prueba": "Verificar indicadores de eficiencia, oportunidad, ahorros (fletes, gasolina); entregas fallidas (AS400 planillas F10).", "tipo": "Diseño", "criterio": "GH-IND-SUP-007 Mód.4", "riesgo": "Pérdidas por inoportunidad en despacho", "nivel": "Bajo"}, {"n": 55, "codigo": "C-01", "area": "CARTERA", "subarea": "Políticas y Procedimientos", "prueba": "Validar políticas de cartera aprobadas por máximo órgano; plazos, mora y gestión de cobranza documentados y divulgados.", "tipo": "Diseño", "criterio": "Plan de Pruebas · Cartera", "riesgo": "Actividades no autorizadas del proceso", "nivel": "Medio"}, {"n": 56, "codigo": "C-02", "area": "CARTERA", "subarea": "Comité de Créditos", "prueba": "Verificar actas periódicas del comité: firmas, número, fecha, decisiones (cupos, bloqueos, moras 60/90/120, cobro jurídico).", "tipo": "Sustantiva", "criterio": "GH-IND-CAR-002 Mód.2.6", "riesgo": "Aprobaciones no autorizadas", "nivel": "Alto"}, {"n": 57, "codigo": "C-03", "area": "CARTERA", "subarea": "Creación de Clientes", "prueba": "Muestra de clientes activos: RUT, cámara, estados financieros, cupos y plazos aprobados por área independiente al comercial.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Cartera", "riesgo": "Fraude por creación de clientes no autorizados", "nivel": "Alto"}, {"n": 58, "codigo": "C-04", "area": "CARTERA", "subarea": "Listas Restrictivas", "prueba": "Verificar consulta en listas restrictivas < 1 año antes de crear clientes.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Cartera", "riesgo": "Riesgo legal por incumplimientos", "nivel": "Alto"}, {"n": 59, "codigo": "C-05", "area": "CARTERA", "subarea": "Segregación Administración Clientes", "prueba": "Identificar en AS400 usuarios con acceso a crear/modificar/bloquear clientes; segregación vs comercial y recaudo; log.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Cartera", "riesgo": "Fraude por inadecuada segregación", "nivel": "Alto"}, {"n": 60, "codigo": "C-06", "area": "CARTERA", "subarea": "Garantías y Pagarés", "prueba": "Validar pagaré firmado por deudor + 2 codeudores con finca raíz para canal reventa; cupos > $300M con garantías reales; consecutivo.", "tipo": "Sustantiva", "criterio": "Políticas y Normas de Cartera", "riesgo": "Pérdida de garantías / difícil recaudo", "nivel": "Alto"}, {"n": 61, "codigo": "C-07", "area": "CARTERA", "subarea": "Talonarios de Recibos de Caja", "prueba": "Arqueo AI ER 004: 1 talonario activo por ejecutivo; recibos anulados con juego completo; consecutivo; entrega iSolución.", "tipo": "Sustantiva", "criterio": "GH-IND-CAR-002 Mód.2.1", "riesgo": "Fraude / pérdida de recibos", "nivel": "Alto"}, {"n": 62, "codigo": "C-08", "area": "CARTERA", "subarea": "Libro Contados Especiales", "prueba": "Validar libro de contados especiales aprobados a conductores y cruce con planillas.", "tipo": "Sustantiva", "criterio": "GH-IND-CAR-002 Mód.2.2", "riesgo": "Fraude por contados no autorizados", "nivel": "Medio"}, {"n": 63, "codigo": "C-09", "area": "CARTERA", "subarea": "Carpetas de Clientes", "prueba": "Revisión aleatoria: RUT, cámara de comercio, estados de cuenta, correspondencia actualizada.", "tipo": "Sustantiva", "criterio": "GH-IND-CAR-002 Mód.2.3", "riesgo": "Información desactualizada / riesgo legal", "nivel": "Bajo"}, {"n": 64, "codigo": "C-10", "area": "CARTERA", "subarea": "Gestión de Cobro", "prueba": "Muestra de cartera >90 días: soportes de gestión de cobro por asesor/jurídico; seguimiento documentado.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Cartera", "riesgo": "Pérdidas por cartera de difícil cobro", "nivel": "Alto"}, {"n": 65, "codigo": "C-11", "area": "CARTERA", "subarea": "Circularización de Saldos", "prueba": "Validar procedimiento de confirmación de saldos mayor a 60 días; muestra con soporte de llamadas/cartas.", "tipo": "Sustantiva", "criterio": "GH-IND-CAR-002 Mód.4.3", "riesgo": "Información financiera no confiable", "nivel": "Medio"}, {"n": 66, "codigo": "C-12", "area": "CARTERA", "subarea": "Cheques Posfechados (Cartera)", "prueba": "Consultar AS400 cheques posfechados por fechas; validar custodia y gestión de cobro.", "tipo": "Sustantiva", "criterio": "GH-IND-CAR-002 Mód.1.3", "riesgo": "Pérdidas por mal manejo de cheques", "nivel": "Medio"}, {"n": 67, "codigo": "C-13", "area": "CARTERA", "subarea": "Consignaciones por Identificar", "prueba": "Detectar duplicados entre distritos; partidas no identificadas en conciliación; investigación y seguimiento.", "tipo": "Sustantiva", "criterio": "GH-IND-CAR-002 Mód.1.4", "riesgo": "Fraude por doble contabilización", "nivel": "Alto"}, {"n": 68, "codigo": "C-14", "area": "CARTERA", "subarea": "Cobros Jurídicos", "prueba": "Verificar registro de casos; gestión con abogados externos; informes; consolidación con jefatura nacional de cartera.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Cartera", "riesgo": "Pérdidas / daño reputacional / sanciones", "nivel": "Medio"}, {"n": 69, "codigo": "C-15", "area": "CARTERA", "subarea": "Reportes CIFIN", "prueba": "Validar VB de Coord. Jurídico y Cartera previo al reporte; cumplimiento de prerrequisitos.", "tipo": "Sustantiva", "criterio": "Políticas y Normas de Cartera", "riesgo": "Riesgo legal por reporte indebido", "nivel": "Medio"}, {"n": 70, "codigo": "A-01", "area": "ADMINISTRACIÓN", "subarea": "Documentación Legal y Tributaria", "prueba": "Validar vigencia: Cámara Comercio y RUT ≤60 días, resolución facturación, uso de suelos, bomberos, sanidad, SAYCO/ACINPRO, ICA, predios, vehículos.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Administración", "riesgo": "Sanciones económicas / cierre de establecimiento", "nivel": "Alto"}, {"n": 71, "codigo": "A-02", "area": "ADMINISTRACIÓN", "subarea": "Trabajo en Casa", "prueba": "Verificar cumplimiento GH-NR-007: medición desempeño, horarios, auxilio conectividad, otrosí laboral, reporte MinTrabajo y ARL.", "tipo": "Sustantiva", "criterio": "GH-NR-007", "riesgo": "Sanciones / demandas laborales", "nivel": "Medio"}, {"n": 72, "codigo": "A-03", "area": "ADMINISTRACIÓN", "subarea": "Activos Fijos", "prueba": "Registro en Axentria con escaneo factura; placa adherida; tramitación de retiros con registro fotográfico y justificación.", "tipo": "Sustantiva", "criterio": "GH-IND-ADM-004 Mód.3.2", "riesgo": "Pérdidas por debilidad en control de activos", "nivel": "Medio"}, {"n": 73, "codigo": "A-04", "area": "ADMINISTRACIÓN", "subarea": "Compras de Bienes/Servicios", "prueba": "Validar 3 cotizaciones mínimo; autorización de Gerencia Financiera Bogotá si > 2 SMLMV; orden de compra.", "tipo": "Sustantiva", "criterio": "GH-IND-ADM-004 Mód.3.3", "riesgo": "Pérdidas por compras no autorizadas", "nivel": "Medio"}, {"n": 74, "codigo": "A-05", "area": "ADMINISTRACIÓN", "subarea": "Control de Gastos", "prueba": "Revisar control por área: estibas, combustible, cafetería, papelería, servicios públicos, mantenimientos.", "tipo": "Sustantiva", "criterio": "GH-IND-ADM-004 Mód.3.4", "riesgo": "Pérdidas por gastos sin control", "nivel": "Medio"}, {"n": 75, "codigo": "A-06", "area": "ADMINISTRACIÓN", "subarea": "Archivo Inactivo", "prueba": "Departamentos archivan por año, rotulados; facturas de ventas 10 años; accesibilidad del archivo.", "tipo": "Diseño", "criterio": "GH-IND-ADM-004 Mód.3.5", "riesgo": "Pérdida de información / sanciones", "nivel": "Bajo"}, {"n": 76, "codigo": "A-07", "area": "ADMINISTRACIÓN", "subarea": "Legalización de Anticipos", "prueba": "Anticipos proveedores: nota crédito, causación completa con retenciones. Anticipos trabajadores: firma GR, reintegro con soporte.", "tipo": "Sustantiva", "criterio": "GH-IND-ADM-004 Mód.3.6", "riesgo": "Pérdidas / riesgo fiscal", "nivel": "Medio"}, {"n": 77, "codigo": "A-08", "area": "ADMINISTRACIÓN", "subarea": "Ingreso de Personal", "prueba": "Axentria → Gestión Humana → exámenes → lista chequeo → EPS/Caja el mismo día → ARL día anterior. Sin ARL no labora.", "tipo": "Diseño", "criterio": "GH-IND-ADM-004 Mód.4.1", "riesgo": "Riesgo laboral / sanciones", "nivel": "Alto"}, {"n": 78, "codigo": "A-09", "area": "ADMINISTRACIÓN", "subarea": "Control de Personal Temporal", "prueba": "Cuadro quincenal a Luz Dary/Elizabeth; definición <3 meses; paz y salvo iSolución al retiro.", "tipo": "Diseño", "criterio": "GH-IND-ADM-004 Mód.4.2", "riesgo": "Riesgo laboral", "nivel": "Medio"}, {"n": 79, "codigo": "A-10", "area": "ADMINISTRACIÓN", "subarea": "Aviso al Banco (Firmantes)", "prueba": "Al desvincular firmante de cheques: aviso inmediato al banco para retirar autorización.", "tipo": "Diseño", "criterio": "GH-IND-ADM-004 Mód.4.4", "riesgo": "Fraude por firmante desvinculado activo", "nivel": "Alto"}, {"n": 80, "codigo": "A-11", "area": "ADMINISTRACIÓN", "subarea": "Seguridad en Instalaciones", "prueba": "Ingreso externos con autorización; ARL vigente para trabajos; altura con certificación; puertas cerradas en entrega a transportadora.", "tipo": "Diseño", "criterio": "GH-IND-ADM-004 Mód.4.3", "riesgo": "Accidentes / pérdidas / sanciones", "nivel": "Medio"}, {"n": 81, "codigo": "A-12", "area": "ADMINISTRACIÓN", "subarea": "Supervisión a Otras Áreas", "prueba": "Validar ejecución: arqueos caja/cheques a tesorería y dispacentros; facturación contra entrega; estados de documentos; tránsitos; partidas conciliatorias.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Administración", "riesgo": "Procesos inoperantes / pérdidas económicas", "nivel": "Alto"}, {"n": 82, "codigo": "A-13", "area": "ADMINISTRACIÓN", "subarea": "Impuestos — Políticas", "prueba": "Políticas y procedimientos de impuestos actualizados, divulgados y aprobados por máximo órgano.", "tipo": "Diseño", "criterio": "Plan de Pruebas · Impuestos", "riesgo": "Actividades no autorizadas", "nivel": "Medio"}, {"n": 83, "codigo": "A-14", "area": "ADMINISTRACIÓN", "subarea": "Impuestos — Creación Terceros", "prueba": "Muestra de proveedores/clientes: parametrización tributaria según RUT (régimen, tarifas, gran contribuyente, ciudad); acceso solo área impuestos.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Impuestos", "riesgo": "Pérdidas por errores en liquidación tributaria", "nivel": "Alto"}, {"n": 84, "codigo": "A-15", "area": "ADMINISTRACIÓN", "subarea": "Impuestos — Tarifas", "prueba": "Validar actualización anual de tarifas según reforma tributaria vigente; parametrización de retenciones, IVA, bases.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Impuestos", "riesgo": "Pérdidas por errores en descuentos tributarios", "nivel": "Alto"}, {"n": 85, "codigo": "A-16", "area": "ADMINISTRACIÓN", "subarea": "Impuestos — Presentación y Pago", "prueba": "Muestra de impuestos: cronograma cumplido, VB responsable del área + Revisor Fiscal, pago y causación; sanciones e intereses.", "tipo": "Sustantiva", "criterio": "Plan de Pruebas · Impuestos", "riesgo": "Sanciones / intereses de mora / riesgo fiscal", "nivel": "Alto"}];
+
+// ========== ESTADO DE LA APP ==========
+const STORAGE_KEY = "dispapeles_auditor_v1";
+
+const defaultState = () => ({
+  portada: {
+    codigo: "",
+    semestre: "2026-S1",
+    auditor: "",
+    auditorCod: "",
+    ciudad: "",
+    distrito: "",
+    fechaIni: "",
+    fechaFin: "",
+    periodo: "",
+  },
+  ejecucion: {}, // { "T-01": { estado, procedimiento, muestra, evidencia, observacion, fecha } }
+  hallazgos: [], // [{ id, codigo, area, subarea, titulo, condicion, criterio, causa, efecto, clasificacion, recomendacion, responsable, plazo, estado }]
+  papeles: [],   // [{ id, codigo, fecha, tipo, descripcion, muestra, resultado, ubicacion, elaborado }]
+  meta: { creado: new Date().toISOString(), modificado: new Date().toISOString(), version: 1 },
+});
+
+let state = loadState();
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return defaultState();
+    const parsed = JSON.parse(raw);
+    // merge con defaultState para compatibilidad con futuras versiones
+    return { ...defaultState(), ...parsed };
+  } catch (e) {
+    console.error("Error cargando estado:", e);
+    return defaultState();
+  }
+}
+
+function saveState() {
+  state.meta.modificado = new Date().toISOString();
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    console.error("Error guardando:", e);
+    toast("⚠ No se pudo guardar (espacio lleno)");
+  }
+}
+
+// ========== UTILIDADES ==========
+function $(sel) { return document.querySelector(sel); }
+function $$(sel) { return document.querySelectorAll(sel); }
+function escHtml(s) {
+  if (s === null || s === undefined) return "";
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[c]);
+}
+function uid() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
+
+function toast(msg, duration = 2400) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("toast--show");
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => t.classList.remove("toast--show"), duration);
+}
+
+function fmtDate(iso) {
+  if (!iso) return "—";
+  try {
+    const d = new Date(iso);
+    if (isNaN(d)) return iso;
+    return d.toLocaleDateString("es-CO", { day: "2-digit", month: "2-digit", year: "numeric" });
+  } catch { return iso; }
+}
+
+function cleanEstado(e) {
+  if (!e) return "Pendiente";
+  return e;
+}
+
+function areaColor(area) {
+  return {
+    "TESORERÍA": "#E8EAF6",
+    "VENTAS": "#FCE4EC",
+    "LOGÍSTICA": "#FFF3E0",
+    "CARTERA": "#E8F5E9",
+    "ADMINISTRACIÓN": "#F3E5F5",
+  }[area] || "#ECEFF1";
+}
+
+function getPruebaByCodigo(codigo) {
+  return PRUEBAS_BASE.find(p => p.codigo === codigo);
+}
+function getEjec(codigo) {
+  return state.ejecucion[codigo] || { estado: "Pendiente", procedimiento: "", muestra: "", evidencia: "", observacion: "", fecha: "" };
+}
+
+// ========== NAVEGACIÓN ==========
+function showSection(name) {
+  $$(".section").forEach(s => s.classList.remove("section--active"));
+  const target = $(`#section-${name}`);
+  if (target) target.classList.add("section--active");
+  $$(".nav__item").forEach(btn => {
+    btn.removeAttribute("aria-current");
+    if (btn.dataset.section === name) btn.setAttribute("aria-current", "page");
+  });
+  // Scroll al tope
+  window.scrollTo({ top: 0, behavior: "instant" });
+  // Refrescar datos de la sección
+  refreshSection(name);
+}
+
+function refreshSection(name) {
+  if (name === "matriz") renderMatriz();
+  if (name === "ejecucion") renderEjecucion();
+  if (name === "hallazgos") renderHallazgos();
+  if (name === "papeles") renderPapeles();
+  if (name === "dashboard") renderDashboard();
+  if (name === "informe") renderInforme();
+}
+
+// ========== PORTADA ==========
+function initPortada() {
+  const fields = ["codigo", "semestre", "auditor", "auditorCod", "ciudad", "distrito", "fechaIni", "fechaFin", "periodo"];
+  const map = {
+    codigo: "f-codigo", semestre: "f-semestre", auditor: "f-auditor", auditorCod: "f-auditor-cod",
+    ciudad: "f-ciudad", distrito: "f-distrito", fechaIni: "f-fecha-ini", fechaFin: "f-fecha-fin",
+    periodo: "f-periodo"
+  };
+  fields.forEach(f => {
+    const el = $(`#${map[f]}`);
+    if (!el) return;
+    el.value = state.portada[f] || "";
+    el.addEventListener("input", () => {
+      state.portada[f] = el.value;
+      saveState();
+      updateHeader();
+    });
+  });
+}
+
+function updateHeader() {
+  $("#hAuditor").textContent = state.portada.auditor || "Sin nombre";
+  $("#hCiudad").textContent = state.portada.ciudad ? `${state.portada.codigo || "AUD"} · ${state.portada.ciudad}` : "Sin auditoría activa";
+}
+
+// ========== MATRIZ ==========
+function renderMatriz() {
+  const search = ($("#matrizSearch").value || "").toLowerCase();
+  const area = $("#matrizArea").value;
+  const tipo = $("#matrizTipo").value;
+  const nivel = $("#matrizNivel").value;
+
+  const filtered = PRUEBAS_BASE.filter(p => {
+    if (area && p.area !== area) return false;
+    if (tipo && p.tipo !== tipo) return false;
+    if (nivel && p.nivel !== nivel) return false;
+    if (search) {
+      const hay = (p.codigo + " " + p.prueba + " " + p.subarea + " " + p.criterio).toLowerCase();
+      if (!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  const container = $("#matrizList");
+  if (filtered.length === 0) {
+    container.innerHTML = `<div class="empty"><div class="empty__icon">🔍</div><div class="empty__title">Sin resultados</div><div class="empty__sub">Intenta con otros filtros</div></div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(p => {
+    const ejec = getEjec(p.codigo);
+    const estadoClass = {
+      "Cumple":"cumple", "No Cumple":"nocumple", "Parcial":"parcial"
+    }[ejec.estado] || "pendiente";
+    return `
+      <div class="prueba-card prueba-card--${estadoClass}" data-codigo="${p.codigo}" onclick="openEjecModal('${p.codigo}')">
+        <div class="prueba-card__head">
+          <span class="prueba-card__codigo">${p.codigo}</span>
+          <span class="badge badge--area">${escHtml(p.area)}</span>
+          <span class="badge badge--${p.tipo === 'Sustantiva' ? 'sustantiva' : 'diseno'}">${p.tipo}</span>
+          <span class="badge badge--${p.nivel.toLowerCase()}">${p.nivel}</span>
+        </div>
+        <div class="prueba-card__titulo"><strong>${escHtml(p.subarea)}:</strong> ${escHtml(p.prueba)}</div>
+        <div class="prueba-card__meta">
+          <span>📌 ${escHtml(p.criterio)}</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+// ========== EJECUCIÓN ==========
+function renderEjecucion() {
+  // KPIs
+  let cumple = 0, nocumple = 0, parcial = 0, pendiente = 0;
+  PRUEBAS_BASE.forEach(p => {
+    const e = getEjec(p.codigo).estado;
+    if (e === "Cumple") cumple++;
+    else if (e === "No Cumple") nocumple++;
+    else if (e === "Parcial") parcial++;
+    else pendiente++;
+  });
+  $("#kpi-total").textContent = PRUEBAS_BASE.length;
+  $("#kpi-cumple").textContent = cumple;
+  $("#kpi-nocumple").textContent = nocumple;
+  $("#kpi-pendiente").textContent = pendiente;
+
+  // Filtros
+  const search = ($("#ejecSearch").value || "").toLowerCase();
+  const area = $("#ejecArea").value;
+  const estadoF = $("#ejecEstado").value;
+
+  const filtered = PRUEBAS_BASE.filter(p => {
+    if (area && p.area !== area) return false;
+    const ejec = getEjec(p.codigo);
+    if (estadoF && ejec.estado !== estadoF) return false;
+    if (search) {
+      const hay = (p.codigo + " " + p.prueba + " " + p.subarea).toLowerCase();
+      if (!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  const container = $("#ejecList");
+  if (filtered.length === 0) {
+    container.innerHTML = `<div class="empty"><div class="empty__icon">🔍</div><div class="empty__title">Sin pruebas</div></div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(p => {
+    const ejec = getEjec(p.codigo);
+    const estadoClass = {
+      "Cumple":"cumple", "No Cumple":"nocumple", "Parcial":"parcial"
+    }[ejec.estado] || "pendiente";
+    const estadoBadgeClass = `badge--estado-${estadoClass}`;
+    return `
+      <div class="prueba-card prueba-card--${estadoClass}" onclick="openEjecModal('${p.codigo}')">
+        <div class="prueba-card__head">
+          <span class="prueba-card__codigo">${p.codigo}</span>
+          <span class="badge badge--area">${escHtml(p.area)}</span>
+          <span class="badge badge--${p.tipo === 'Sustantiva' ? 'sustantiva' : 'diseno'}">${p.tipo}</span>
+          <span class="badge ${estadoBadgeClass}">${ejec.estado}</span>
+        </div>
+        <div class="prueba-card__titulo">${escHtml(p.subarea)} — ${escHtml(p.prueba.substring(0, 120))}${p.prueba.length > 120 ? "…" : ""}</div>
+        ${ejec.observacion ? `<div class="prueba-card__meta" style="margin-top: 6px;"><span>💬 ${escHtml(ejec.observacion.substring(0, 100))}${ejec.observacion.length > 100 ? "…" : ""}</span></div>` : ""}
+      </div>
+    `;
+  }).join("");
+}
+
+function openEjecModal(codigo) {
+  const p = getPruebaByCodigo(codigo);
+  const e = getEjec(codigo);
+  if (!p) return;
+
+  $("#modalContent").innerHTML = `
+    <div class="modal__header">
+      <div>
+        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px; flex-wrap: wrap;">
+          <span class="prueba-card__codigo">${p.codigo}</span>
+          <span class="badge badge--area">${escHtml(p.area)}</span>
+          <span class="badge badge--${p.tipo === 'Sustantiva' ? 'sustantiva' : 'diseno'}">${p.tipo}</span>
+          <span class="badge badge--${p.nivel.toLowerCase()}">${p.nivel}</span>
+        </div>
+        <div class="modal__title">${escHtml(p.subarea)}</div>
+      </div>
+      <button class="modal__close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal__body">
+      <div class="criterio-block">
+        <div class="criterio-block__label">📋 Prueba a ejecutar</div>
+        ${escHtml(p.prueba)}
+      </div>
+      <div class="criterio-block" style="background: #FFF9E6; border-left-color: var(--red);">
+        <div class="criterio-block__label" style="color: var(--red);">⚠ Riesgo que mitiga</div>
+        ${escHtml(p.riesgo)}
+      </div>
+      <div class="field">
+        <label class="field__label field__label-req">Estado de la prueba</label>
+        <select class="field__select" id="m-estado">
+          <option value="Pendiente" ${e.estado === "Pendiente" ? "selected" : ""}>Pendiente</option>
+          <option value="Cumple" ${e.estado === "Cumple" ? "selected" : ""}>✅ Cumple</option>
+          <option value="No Cumple" ${e.estado === "No Cumple" ? "selected" : ""}>❌ No Cumple</option>
+          <option value="Parcial" ${e.estado === "Parcial" ? "selected" : ""}>⚠️ Parcial</option>
+          <option value="No Aplica" ${e.estado === "No Aplica" ? "selected" : ""}>— No Aplica</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field__label">Procedimiento aplicado</label>
+        <select class="field__select" id="m-procedimiento">
+          <option value="">Seleccionar…</option>
+          <option ${e.procedimiento === "Entrevista" ? "selected" : ""}>Entrevista</option>
+          <option ${e.procedimiento === "Observación directa" ? "selected" : ""}>Observación directa</option>
+          <option ${e.procedimiento === "Inspección física" ? "selected" : ""}>Inspección física</option>
+          <option ${e.procedimiento === "Muestreo estadístico" ? "selected" : ""}>Muestreo estadístico</option>
+          <option ${e.procedimiento === "Recálculo" ? "selected" : ""}>Recálculo</option>
+          <option ${e.procedimiento === "Confirmación externa" ? "selected" : ""}>Confirmación externa</option>
+          <option ${e.procedimiento === "Consulta en sistema" ? "selected" : ""}>Consulta en sistema</option>
+          <option ${e.procedimiento === "Revisión documental" ? "selected" : ""}>Revisión documental</option>
+          <option ${e.procedimiento === "Analítica" ? "selected" : ""}>Analítica</option>
+          <option ${e.procedimiento === "Combinado" ? "selected" : ""}>Combinado</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field__label">Muestra / Alcance</label>
+        <input class="field__input" id="m-muestra" value="${escHtml(e.muestra)}" placeholder="Ej: 30 facturas del periodo ene-mar 2026">
+      </div>
+      <div class="field">
+        <label class="field__label">Evidencia (ref. a papel de trabajo)</label>
+        <input class="field__input" id="m-evidencia" value="${escHtml(e.evidencia)}" placeholder="PT-001">
+      </div>
+      <div class="field">
+        <label class="field__label">Observación del auditor</label>
+        <textarea class="field__textarea" id="m-observacion" placeholder="Describa lo verificado, los hallazgos de esta prueba, etc.">${escHtml(e.observacion)}</textarea>
+      </div>
+      <div class="field">
+        <label class="field__label">Fecha de ejecución</label>
+        <input type="date" class="field__input" id="m-fecha" value="${e.fecha || ""}">
+      </div>
+      ${p.tipo === "Sustantiva" ? `
+        <div class="criterio-block" style="background: #FFEBEE; border-left-color: var(--red);">
+          <div class="criterio-block__label" style="color: var(--red);">🔒 Recordatorio</div>
+          Esta es una prueba <strong>Sustantiva</strong>. Si marca "Cumple", recuerde documentar
+          la evidencia y la muestra para que la prueba sea defendible ante Contraloría.
+        </div>
+      ` : ""}
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn--primary" onclick="guardarEjec('${codigo}')">Guardar</button>
+    </div>
+  `;
+  openModal();
+}
+
+function guardarEjec(codigo) {
+  const data = {
+    estado: $("#m-estado").value || "Pendiente",
+    procedimiento: $("#m-procedimiento").value || "",
+    muestra: $("#m-muestra").value || "",
+    evidencia: $("#m-evidencia").value || "",
+    observacion: $("#m-observacion").value || "",
+    fecha: $("#m-fecha").value || "",
+  };
+  state.ejecucion[codigo] = data;
+  saveState();
+  closeModal();
+  renderEjecucion();
+  renderMatriz();
+  toast(`✓ ${codigo} guardado`);
+}
+
+// ========== HALLAZGOS ==========
+function renderHallazgos() {
+  const alto = state.hallazgos.filter(h => h.clasificacion === "Alto").length;
+  const medio = state.hallazgos.filter(h => h.clasificacion === "Medio").length;
+  const bajo = state.hallazgos.filter(h => h.clasificacion === "Bajo").length;
+  $("#kpi-h-total").textContent = state.hallazgos.length;
+  $("#kpi-h-alto").textContent = alto;
+  $("#kpi-h-medio").textContent = medio;
+  $("#kpi-h-bajo").textContent = bajo;
+
+  const container = $("#hallazgosList");
+  if (state.hallazgos.length === 0) {
+    container.innerHTML = `
+      <div class="empty">
+        <div class="empty__icon">🚩</div>
+        <div class="empty__title">Sin hallazgos registrados</div>
+        <div class="empty__sub">Los hallazgos documentan las debilidades de control que identifique durante la auditoría. Toque el botón "+ Nuevo hallazgo" para crear el primero.</div>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = state.hallazgos.map((h, idx) => {
+    const nivelClass = h.clasificacion === "Alto" ? "red" : (h.clasificacion === "Medio" ? "amber" : "success");
+    const headBg = h.clasificacion === "Alto" ? "var(--red)" : (h.clasificacion === "Medio" ? "var(--warning)" : "var(--success)");
+    return `
+      <div class="hallazgo-card">
+        <div class="hallazgo-card__head" style="background: ${headBg};">
+          <div class="hallazgo-card__titulo">H-${idx + 1}. ${escHtml(h.titulo || "(sin título)")}</div>
+          <span class="badge badge--${h.clasificacion ? h.clasificacion.toLowerCase() : 'medio'}" style="background: rgba(255,255,255,0.25); color: white;">
+            ${escHtml(h.clasificacion || "—")}
+          </span>
+        </div>
+        <div class="hallazgo-card__body">
+          <div class="text-small text-muted" style="margin-bottom: 10px;">
+            <strong>${escHtml(h.area || "")}</strong> · ${escHtml(h.subarea || "")} · ${escHtml(h.codigo || "")}
+          </div>
+          ${h.condicion ? `<div class="hallazgo-card__field"><div class="hallazgo-card__field-label">Condición</div>${escHtml(h.condicion)}</div>` : ""}
+          ${h.criterio ? `<div class="hallazgo-card__field"><div class="hallazgo-card__field-label">Criterio</div>${escHtml(h.criterio)}</div>` : ""}
+          ${h.efecto ? `<div class="hallazgo-card__field"><div class="hallazgo-card__field-label">Efecto</div>${escHtml(h.efecto)}</div>` : ""}
+          ${h.recomendacion ? `<div class="hallazgo-card__field"><div class="hallazgo-card__field-label">Recomendación</div>${escHtml(h.recomendacion)}</div>` : ""}
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <button class="btn btn--ghost btn--sm" onclick="openHallazgoModal('${h.id}')">✏ Editar</button>
+            <button class="btn btn--ghost btn--sm" onclick="eliminarHallazgo('${h.id}')" style="color: var(--red); border-color: var(--red);">🗑 Eliminar</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function openHallazgoModal(id) {
+  const isNew = !id;
+  const h = isNew
+    ? { id: uid(), codigo: "", area: "", subarea: "", titulo: "", condicion: "", criterio: "", causa: "", efecto: "", clasificacion: "Medio", recomendacion: "", responsable: "", plazo: "", estado: "Abierto" }
+    : state.hallazgos.find(x => x.id === id);
+  if (!h) return;
+
+  $("#modalContent").innerHTML = `
+    <div class="modal__header">
+      <div>
+        <div class="modal__title">${isNew ? "Nuevo hallazgo" : "Editar hallazgo"}</div>
+        <div class="text-small text-muted">Complete todos los campos para un hallazgo profesional</div>
+      </div>
+      <button class="modal__close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal__body">
+      <div class="field-grid field-grid--2">
+        <div class="field">
+          <label class="field__label">Código de prueba relacionada</label>
+          <input class="field__input" id="h-codigo" value="${escHtml(h.codigo)}" placeholder="V-06, T-03, ...">
+        </div>
+        <div class="field">
+          <label class="field__label">Área</label>
+          <select class="field__select" id="h-area">
+            <option value="">Seleccionar…</option>
+            <option ${h.area === "TESORERÍA" ? "selected" : ""}>TESORERÍA</option>
+            <option ${h.area === "VENTAS" ? "selected" : ""}>VENTAS</option>
+            <option ${h.area === "LOGÍSTICA" ? "selected" : ""}>LOGÍSTICA</option>
+            <option ${h.area === "CARTERA" ? "selected" : ""}>CARTERA</option>
+            <option ${h.area === "ADMINISTRACIÓN" ? "selected" : ""}>ADMINISTRACIÓN</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field__label">Subárea</label>
+        <input class="field__input" id="h-subarea" value="${escHtml(h.subarea)}">
+      </div>
+      <div class="field">
+        <label class="field__label field__label-req">Título del hallazgo</label>
+        <input class="field__input" id="h-titulo" value="${escHtml(h.titulo)}" placeholder="Resumen del hallazgo en una línea">
+      </div>
+      <div class="field">
+        <label class="field__label field__label-req">Condición (qué ocurre)</label>
+        <textarea class="field__textarea" id="h-condicion">${escHtml(h.condicion)}</textarea>
+      </div>
+      <div class="field">
+        <label class="field__label field__label-req">Criterio (norma incumplida)</label>
+        <textarea class="field__textarea" id="h-criterio">${escHtml(h.criterio)}</textarea>
+      </div>
+      <div class="field">
+        <label class="field__label">Causa</label>
+        <textarea class="field__textarea" id="h-causa">${escHtml(h.causa)}</textarea>
+      </div>
+      <div class="field">
+        <label class="field__label field__label-req">Efecto / Riesgo</label>
+        <textarea class="field__textarea" id="h-efecto">${escHtml(h.efecto)}</textarea>
+      </div>
+      <div class="field">
+        <label class="field__label field__label-req">Clasificación del riesgo</label>
+        <select class="field__select" id="h-clasificacion">
+          <option value="Alto" ${h.clasificacion === "Alto" ? "selected" : ""}>🔴 Alto</option>
+          <option value="Medio" ${h.clasificacion === "Medio" ? "selected" : ""}>🟠 Medio</option>
+          <option value="Bajo" ${h.clasificacion === "Bajo" ? "selected" : ""}>🟢 Bajo</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field__label field__label-req">Recomendación</label>
+        <textarea class="field__textarea" id="h-recomendacion">${escHtml(h.recomendacion)}</textarea>
+      </div>
+      <div class="field-grid field-grid--2">
+        <div class="field">
+          <label class="field__label">Responsable sugerido</label>
+          <input class="field__input" id="h-responsable" value="${escHtml(h.responsable)}" placeholder="GR / Coord. Admin / etc.">
+        </div>
+        <div class="field">
+          <label class="field__label">Plazo</label>
+          <input class="field__input" id="h-plazo" value="${escHtml(h.plazo)}" placeholder="15 días">
+        </div>
+      </div>
+      <div class="field">
+        <label class="field__label">Estado</label>
+        <select class="field__select" id="h-estado">
+          <option ${h.estado === "Abierto" ? "selected" : ""}>Abierto</option>
+          <option ${h.estado === "En proceso" ? "selected" : ""}>En proceso</option>
+          <option ${h.estado === "Cerrado" ? "selected" : ""}>Cerrado</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn--danger" onclick="guardarHallazgo('${h.id}', ${isNew})">Guardar hallazgo</button>
+    </div>
+  `;
+  openModal();
+}
+
+function guardarHallazgo(id, isNew) {
+  const data = {
+    id: id,
+    codigo: $("#h-codigo").value,
+    area: $("#h-area").value,
+    subarea: $("#h-subarea").value,
+    titulo: $("#h-titulo").value,
+    condicion: $("#h-condicion").value,
+    criterio: $("#h-criterio").value,
+    causa: $("#h-causa").value,
+    efecto: $("#h-efecto").value,
+    clasificacion: $("#h-clasificacion").value,
+    recomendacion: $("#h-recomendacion").value,
+    responsable: $("#h-responsable").value,
+    plazo: $("#h-plazo").value,
+    estado: $("#h-estado").value,
+  };
+  if (!data.titulo) { toast("⚠ El título es obligatorio"); return; }
+  if (isNew) {
+    state.hallazgos.push(data);
+  } else {
+    const idx = state.hallazgos.findIndex(h => h.id === id);
+    if (idx >= 0) state.hallazgos[idx] = data;
+  }
+  saveState();
+  closeModal();
+  renderHallazgos();
+  toast("✓ Hallazgo guardado");
+}
+
+function eliminarHallazgo(id) {
+  if (!confirm("¿Eliminar este hallazgo? Esta acción no se puede deshacer.")) return;
+  state.hallazgos = state.hallazgos.filter(h => h.id !== id);
+  saveState();
+  renderHallazgos();
+  toast("🗑 Hallazgo eliminado");
+}
+
+// ========== PAPELES DE TRABAJO ==========
+function renderPapeles() {
+  const container = $("#papelesList");
+  if (state.papeles.length === 0) {
+    container.innerHTML = `
+      <div class="empty">
+        <div class="empty__icon">📎</div>
+        <div class="empty__title">Sin papeles de trabajo</div>
+        <div class="empty__sub">Registre aquí cada evidencia consultada durante la auditoría: pantallazos, actas, listados, entrevistas. Cada evidencia obtiene un código único PT-XXX.</div>
+      </div>`;
+    return;
+  }
+  container.innerHTML = state.papeles.map((p, i) => `
+    <div class="pt-entry" onclick="openPapelModal('${p.id}')">
+      <div class="pt-entry__codigo">${p.codigo || `PT-${String(i+1).padStart(3,'0')}`}</div>
+      <div>
+        <div class="pt-entry__desc">${escHtml(p.descripcion || "(sin descripción)")}</div>
+        <div class="pt-entry__desc-sub">
+          ${escHtml(p.tipo || "Sin tipo")} · ${escHtml(p.fecha || "sin fecha")} · Prueba: ${escHtml(p.codigoPrueba || "—")}
+        </div>
+      </div>
+      <button class="btn-icon" onclick="event.stopPropagation(); eliminarPapel('${p.id}')" style="background:var(--danger-bg); color:var(--danger); border:none;">🗑</button>
+    </div>
+  `).join("");
+}
+
+function openPapelModal(id) {
+  const isNew = !id;
+  const p = isNew
+    ? { id: uid(), codigo: `PT-${String(state.papeles.length + 1).padStart(3, '0')}`, codigoPrueba: "", fecha: "", tipo: "", descripcion: "", muestra: "", resultado: "", ubicacion: "", elaborado: state.portada.auditor }
+    : state.papeles.find(x => x.id === id);
+  if (!p) return;
+
+  $("#modalContent").innerHTML = `
+    <div class="modal__header">
+      <div>
+        <div class="modal__title">${isNew ? "Nuevo papel de trabajo" : "Editar papel de trabajo"}</div>
+        <div class="text-small text-muted">Documente la evidencia consultada</div>
+      </div>
+      <button class="modal__close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal__body">
+      <div class="field-grid field-grid--2">
+        <div class="field">
+          <label class="field__label">Código PT</label>
+          <input class="field__input" id="p-codigo" value="${escHtml(p.codigo)}" readonly>
+        </div>
+        <div class="field">
+          <label class="field__label">Código prueba relacionada</label>
+          <input class="field__input" id="p-codprueba" value="${escHtml(p.codigoPrueba)}" placeholder="T-04, V-06...">
+        </div>
+      </div>
+      <div class="field-grid field-grid--2">
+        <div class="field">
+          <label class="field__label">Fecha</label>
+          <input type="date" class="field__input" id="p-fecha" value="${escHtml(p.fecha)}">
+        </div>
+        <div class="field">
+          <label class="field__label">Tipo de evidencia</label>
+          <select class="field__select" id="p-tipo">
+            <option value="">Seleccionar…</option>
+            <option ${p.tipo === "Acta" ? "selected" : ""}>Acta</option>
+            <option ${p.tipo === "Listado AS400" ? "selected" : ""}>Listado AS400</option>
+            <option ${p.tipo === "Factura" ? "selected" : ""}>Factura</option>
+            <option ${p.tipo === "Planilla" ? "selected" : ""}>Planilla</option>
+            <option ${p.tipo === "Conciliación" ? "selected" : ""}>Conciliación</option>
+            <option ${p.tipo === "Pantallazo" ? "selected" : ""}>Pantallazo</option>
+            <option ${p.tipo === "Soporte contable" ? "selected" : ""}>Soporte contable</option>
+            <option ${p.tipo === "Correo" ? "selected" : ""}>Correo</option>
+            <option ${p.tipo === "Entrevista" ? "selected" : ""}>Entrevista</option>
+            <option ${p.tipo === "Acta de arqueo" ? "selected" : ""}>Acta de arqueo</option>
+            <option ${p.tipo === "Otro" ? "selected" : ""}>Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field__label field__label-req">Descripción / referencia</label>
+        <textarea class="field__textarea" id="p-desc">${escHtml(p.descripcion)}</textarea>
+      </div>
+      <div class="field-grid field-grid--2">
+        <div class="field">
+          <label class="field__label">Tamaño muestra</label>
+          <input class="field__input" id="p-muestra" value="${escHtml(p.muestra)}" placeholder="30 casos">
+        </div>
+        <div class="field">
+          <label class="field__label">Resultado</label>
+          <select class="field__select" id="p-resultado">
+            <option value="">Seleccionar…</option>
+            <option ${p.resultado === "Consistente" ? "selected" : ""}>Consistente</option>
+            <option ${p.resultado === "Inconsistente" ? "selected" : ""}>Inconsistente</option>
+            <option ${p.resultado === "Parcial" ? "selected" : ""}>Parcial</option>
+            <option ${p.resultado === "Sin observaciones" ? "selected" : ""}>Sin observaciones</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field__label">Ubicación física / digital</label>
+        <input class="field__input" id="p-ubicacion" value="${escHtml(p.ubicacion)}" placeholder="Carpeta del distrito, correo, nube...">
+      </div>
+      <div class="field">
+        <label class="field__label">Elaborado por</label>
+        <input class="field__input" id="p-elab" value="${escHtml(p.elaborado)}">
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn--primary" onclick="guardarPapel('${p.id}', ${isNew})">Guardar</button>
+    </div>
+  `;
+  openModal();
+}
+
+function guardarPapel(id, isNew) {
+  const data = {
+    id: id,
+    codigo: $("#p-codigo").value,
+    codigoPrueba: $("#p-codprueba").value,
+    fecha: $("#p-fecha").value,
+    tipo: $("#p-tipo").value,
+    descripcion: $("#p-desc").value,
+    muestra: $("#p-muestra").value,
+    resultado: $("#p-resultado").value,
+    ubicacion: $("#p-ubicacion").value,
+    elaborado: $("#p-elab").value,
+  };
+  if (!data.descripcion) { toast("⚠ La descripción es obligatoria"); return; }
+  if (isNew) state.papeles.push(data);
+  else {
+    const idx = state.papeles.findIndex(x => x.id === id);
+    if (idx >= 0) state.papeles[idx] = data;
+  }
+  saveState();
+  closeModal();
+  renderPapeles();
+  toast("✓ Evidencia guardada");
+}
+
+function eliminarPapel(id) {
+  if (!confirm("¿Eliminar este papel de trabajo?")) return;
+  state.papeles = state.papeles.filter(p => p.id !== id);
+  saveState();
+  renderPapeles();
+  toast("🗑 Eliminado");
+}
+
+// ========== DASHBOARD ==========
+function renderDashboard() {
+  let cumple = 0, nocumple = 0, parcial = 0;
+  const porArea = {
+    "TESORERÍA": { total: 0, cumple: 0, nocumple: 0, parcial: 0, pendiente: 0 },
+    "VENTAS": { total: 0, cumple: 0, nocumple: 0, parcial: 0, pendiente: 0 },
+    "LOGÍSTICA": { total: 0, cumple: 0, nocumple: 0, parcial: 0, pendiente: 0 },
+    "CARTERA": { total: 0, cumple: 0, nocumple: 0, parcial: 0, pendiente: 0 },
+    "ADMINISTRACIÓN": { total: 0, cumple: 0, nocumple: 0, parcial: 0, pendiente: 0 },
+  };
+  PRUEBAS_BASE.forEach(p => {
+    const e = getEjec(p.codigo).estado;
+    porArea[p.area].total++;
+    if (e === "Cumple") { cumple++; porArea[p.area].cumple++; }
+    else if (e === "No Cumple") { nocumple++; porArea[p.area].nocumple++; }
+    else if (e === "Parcial") { parcial++; porArea[p.area].parcial++; }
+    else porArea[p.area].pendiente++;
+  });
+  const ejecutadas = cumple + nocumple + parcial;
+  const cobertura = (ejecutadas / PRUEBAS_BASE.length * 100).toFixed(1);
+  $("#dash-cobertura").textContent = cobertura + "%";
+  $("#dash-progress").style.width = cobertura + "%";
+  $("#dash-progress-text").textContent = `${ejecutadas} de ${PRUEBAS_BASE.length} pruebas ejecutadas`;
+
+  const tbody = $("#dash-areas tbody");
+  tbody.innerHTML = Object.keys(porArea).map(area => {
+    const d = porArea[area];
+    const ej = d.cumple + d.nocumple + d.parcial;
+    const cov = d.total > 0 ? ((ej / d.total) * 100).toFixed(0) : 0;
+    return `
+      <tr>
+        <td><strong style="color: var(--navy);">${area}</strong></td>
+        <td>${d.total}</td>
+        <td style="color: var(--success); font-weight: 600;">${d.cumple}</td>
+        <td style="color: var(--danger); font-weight: 600;">${d.nocumple}</td>
+        <td style="color: var(--muted);">${d.pendiente}</td>
+        <td><strong>${cov}%</strong></td>
+      </tr>
+    `;
+  }).join("");
+
+  $("#dash-htotal").textContent = state.hallazgos.length;
+  $("#dash-halto").textContent = state.hallazgos.filter(h => h.clasificacion === "Alto").length;
+  $("#dash-hmedio").textContent = state.hallazgos.filter(h => h.clasificacion === "Medio").length;
+  $("#dash-hbajo").textContent = state.hallazgos.filter(h => h.clasificacion === "Bajo").length;
+}
+
+// ========== INFORME ==========
+function renderInforme() {
+  let cumple = 0, nocumple = 0, parcial = 0, pendiente = 0;
+  PRUEBAS_BASE.forEach(p => {
+    const e = getEjec(p.codigo).estado;
+    if (e === "Cumple") cumple++;
+    else if (e === "No Cumple") nocumple++;
+    else if (e === "Parcial") parcial++;
+    else pendiente++;
+  });
+  const ejec = cumple + nocumple + parcial;
+  const cob = (ejec / PRUEBAS_BASE.length * 100).toFixed(1);
+
+  const halto = state.hallazgos.filter(h => h.clasificacion === "Alto").length;
+  const hmedio = state.hallazgos.filter(h => h.clasificacion === "Medio").length;
+  const hbajo = state.hallazgos.filter(h => h.clasificacion === "Bajo").length;
+
+  $("#informeResumen").innerHTML = `
+    <div><strong>Auditoría:</strong> ${escHtml(state.portada.codigo || "sin código")} — ${escHtml(state.portada.ciudad || "sin ciudad")}</div>
+    <div><strong>Auditor:</strong> ${escHtml(state.portada.auditor || "—")}</div>
+    <div><strong>Periodo auditado:</strong> ${escHtml(state.portada.periodo || "—")}</div>
+    <hr style="margin: 10px 0; border: none; border-top: 1px solid var(--border);">
+    <div><strong>Cobertura:</strong> ${cob}% (${ejec} de ${PRUEBAS_BASE.length} pruebas)</div>
+    <div><strong>Resultados:</strong> ${cumple} Cumple · ${nocumple} No cumple · ${parcial} Parcial · ${pendiente} Pendiente</div>
+    <div><strong>Hallazgos:</strong> ${state.hallazgos.length} totales — <span style="color: var(--danger);">🔴 ${halto} Alto</span> · <span style="color: var(--warning);">🟠 ${hmedio} Medio</span> · <span style="color: var(--success);">🟢 ${hbajo} Bajo</span></div>
+    <div><strong>Papeles de trabajo:</strong> ${state.papeles.length}</div>
+  `;
+}
+
+// ========== MODALES ==========
+function openModal() { $("#modal").classList.add("modal-overlay--open"); document.body.style.overflow = "hidden"; }
+function closeModal() { $("#modal").classList.remove("modal-overlay--open"); document.body.style.overflow = ""; }
+$("#modal").addEventListener("click", (e) => { if (e.target === $("#modal")) closeModal(); });
+
+// ========== EXPORTAR EXCEL ==========
+function exportarExcel() {
+  try {
+    const wb = XLSX.utils.book_new();
+
+    // Portada
+    const portadaRows = [
+      ["HERRAMIENTA DE AUDITORÍA — DISPAPELES S.A.S."],
+      [],
+      ["Código auditoría", state.portada.codigo],
+      ["Semestre", state.portada.semestre],
+      ["Auditor", state.portada.auditor],
+      ["Código auditor", state.portada.auditorCod],
+      ["Ciudad", state.portada.ciudad],
+      ["Distrito", state.portada.distrito],
+      ["Fecha inicio", state.portada.fechaIni],
+      ["Fecha fin planeada", state.portada.fechaFin],
+      ["Periodo auditado", state.portada.periodo],
+      ["Fecha exportación", new Date().toLocaleString("es-CO")],
+    ];
+    const wsP = XLSX.utils.aoa_to_sheet(portadaRows);
+    wsP["!cols"] = [{ wch: 25 }, { wch: 50 }];
+    XLSX.utils.book_append_sheet(wb, wsP, "1. Portada");
+
+    // Matriz Maestra
+    const matrizRows = [["N°", "Código", "Área", "Subárea", "Prueba", "Tipo", "Criterio", "Riesgo", "Nivel"]];
+    PRUEBAS_BASE.forEach(p => {
+      matrizRows.push([p.n, p.codigo, p.area, p.subarea, p.prueba, p.tipo, p.criterio, p.riesgo, p.nivel]);
+    });
+    const wsM = XLSX.utils.aoa_to_sheet(matrizRows);
+    wsM["!cols"] = [{wch:5},{wch:9},{wch:16},{wch:22},{wch:60},{wch:11},{wch:22},{wch:26},{wch:9}];
+    XLSX.utils.book_append_sheet(wb, wsM, "2. Matriz Maestra");
+
+    // Ejecución
+    const ejecRows = [["Código", "Área", "Subárea", "Prueba", "Tipo", "Nivel", "Estado", "Procedimiento", "Muestra", "Evidencia", "Observación", "Fecha"]];
+    PRUEBAS_BASE.forEach(p => {
+      const e = getEjec(p.codigo);
+      ejecRows.push([p.codigo, p.area, p.subarea, p.prueba, p.tipo, p.nivel, e.estado, e.procedimiento, e.muestra, e.evidencia, e.observacion, e.fecha]);
+    });
+    const wsE = XLSX.utils.aoa_to_sheet(ejecRows);
+    wsE["!cols"] = [{wch:9},{wch:16},{wch:22},{wch:45},{wch:12},{wch:9},{wch:14},{wch:18},{wch:22},{wch:22},{wch:40},{wch:12}];
+    XLSX.utils.book_append_sheet(wb, wsE, "3. Ejecución");
+
+    // Hallazgos
+    const hallRows = [["#", "Código", "Área", "Subárea", "Título", "Condición", "Criterio", "Causa", "Efecto", "Clasificación", "Recomendación", "Responsable", "Plazo", "Estado"]];
+    state.hallazgos.forEach((h, i) => {
+      hallRows.push([i+1, h.codigo, h.area, h.subarea, h.titulo, h.condicion, h.criterio, h.causa, h.efecto, h.clasificacion, h.recomendacion, h.responsable, h.plazo, h.estado]);
+    });
+    const wsH = XLSX.utils.aoa_to_sheet(hallRows);
+    wsH["!cols"] = [{wch:4},{wch:11},{wch:16},{wch:22},{wch:32},{wch:40},{wch:32},{wch:28},{wch:32},{wch:13},{wch:40},{wch:22},{wch:11},{wch:11}];
+    XLSX.utils.book_append_sheet(wb, wsH, "4. Hallazgos");
+
+    // Papeles
+    const ptRows = [["PT N°", "Código prueba", "Fecha", "Tipo", "Descripción", "Muestra", "Resultado", "Ubicación", "Elaborado por"]];
+    state.papeles.forEach(p => {
+      ptRows.push([p.codigo, p.codigoPrueba, p.fecha, p.tipo, p.descripcion, p.muestra, p.resultado, p.ubicacion, p.elaborado]);
+    });
+    const wsPT = XLSX.utils.aoa_to_sheet(ptRows);
+    wsPT["!cols"] = [{wch:9},{wch:13},{wch:12},{wch:20},{wch:45},{wch:15},{wch:17},{wch:30},{wch:20}];
+    XLSX.utils.book_append_sheet(wb, wsPT, "5. Papeles de Trabajo");
+
+    const codigo = state.portada.codigo || "AUD";
+    const ciudad = (state.portada.ciudad || "Sin_ciudad").replace(/\s+/g, "_");
+    const filename = `${codigo}_${ciudad}.xlsx`;
+    XLSX.writeFile(wb, filename);
+    toast(`✓ Excel descargado: ${filename}`);
+  } catch (err) {
+    console.error(err);
+    toast("❌ Error exportando Excel");
+  }
+}
+
+// ========== IMPORTAR EXCEL ==========
+function importarExcel() {
+  $("#fileInput").click();
+}
+$("#fileInput").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    const data = await file.arrayBuffer();
+    const wb = XLSX.read(data);
+
+    // Portada
+    if (wb.SheetNames.includes("1. Portada")) {
+      const rows = XLSX.utils.sheet_to_json(wb.Sheets["1. Portada"], { header: 1 });
+      for (const row of rows) {
+        if (!row || row.length < 2) continue;
+        const [k, v] = row;
+        if (!v) continue;
+        if (k === "Código auditoría") state.portada.codigo = String(v);
+        if (k === "Semestre") state.portada.semestre = String(v);
+        if (k === "Auditor") state.portada.auditor = String(v);
+        if (k === "Código auditor") state.portada.auditorCod = String(v);
+        if (k === "Ciudad") state.portada.ciudad = String(v);
+        if (k === "Distrito") state.portada.distrito = String(v);
+        if (k === "Fecha inicio") state.portada.fechaIni = String(v);
+        if (k === "Fecha fin planeada") state.portada.fechaFin = String(v);
+        if (k === "Periodo auditado") state.portada.periodo = String(v);
+      }
+    }
+    // Ejecución
+    if (wb.SheetNames.includes("3. Ejecución")) {
+      const rows = XLSX.utils.sheet_to_json(wb.Sheets["3. Ejecución"], { header: 1 });
+      state.ejecucion = {};
+      for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        if (!row[0]) continue;
+        state.ejecucion[row[0]] = {
+          estado: row[6] || "Pendiente",
+          procedimiento: row[7] || "",
+          muestra: row[8] || "",
+          evidencia: row[9] || "",
+          observacion: row[10] || "",
+          fecha: row[11] || "",
+        };
+      }
+    }
+    // Hallazgos
+    if (wb.SheetNames.includes("4. Hallazgos")) {
+      const rows = XLSX.utils.sheet_to_json(wb.Sheets["4. Hallazgos"], { header: 1 });
+      state.hallazgos = [];
+      for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        if (!row[4]) continue; // sin título, saltamos
+        state.hallazgos.push({
+          id: uid(),
+          codigo: row[1] || "",
+          area: row[2] || "",
+          subarea: row[3] || "",
+          titulo: row[4] || "",
+          condicion: row[5] || "",
+          criterio: row[6] || "",
+          causa: row[7] || "",
+          efecto: row[8] || "",
+          clasificacion: row[9] || "Medio",
+          recomendacion: row[10] || "",
+          responsable: row[11] || "",
+          plazo: row[12] || "",
+          estado: row[13] || "Abierto",
+        });
+      }
+    }
+    // Papeles
+    if (wb.SheetNames.includes("5. Papeles de Trabajo")) {
+      const rows = XLSX.utils.sheet_to_json(wb.Sheets["5. Papeles de Trabajo"], { header: 1 });
+      state.papeles = [];
+      for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        if (!row[0]) continue;
+        state.papeles.push({
+          id: uid(),
+          codigo: row[0],
+          codigoPrueba: row[1] || "",
+          fecha: row[2] || "",
+          tipo: row[3] || "",
+          descripcion: row[4] || "",
+          muestra: row[5] || "",
+          resultado: row[6] || "",
+          ubicacion: row[7] || "",
+          elaborado: row[8] || "",
+        });
+      }
+    }
+    saveState();
+    initPortada();
+    updateHeader();
+    refreshSection(getCurrentSection());
+    toast("✓ Excel importado correctamente");
+  } catch (err) {
+    console.error(err);
+    toast("❌ Error importando Excel");
+  }
+  e.target.value = "";
+});
+
+function getCurrentSection() {
+  const active = document.querySelector(".section--active");
+  if (!active) return "portada";
+  return active.id.replace("section-", "");
+}
+
+// ========== GENERAR WORD ==========
+async function generarWord() {
+  try {
+    const d = docx;
+    toast("Generando informe Word…");
+
+    // Contadores
+    let cumple=0, nocumple=0, parcial=0, pendiente=0;
+    PRUEBAS_BASE.forEach(p => {
+      const e = getEjec(p.codigo).estado;
+      if (e==="Cumple") cumple++;
+      else if (e==="No Cumple") nocumple++;
+      else if (e==="Parcial") parcial++;
+      else pendiente++;
+    });
+    const ejecutadas = cumple+nocumple+parcial;
+    const cobertura = ejecutadas / PRUEBAS_BASE.length;
+
+    const halto = state.hallazgos.filter(h => h.clasificacion === "Alto").length;
+    const hmedio = state.hallazgos.filter(h => h.clasificacion === "Medio").length;
+    const hbajo = state.hallazgos.filter(h => h.clasificacion === "Bajo").length;
+
+    // Helpers
+    const run = (text, opts = {}) => new d.TextRun({ text: String(text || ""), font: "Calibri", ...opts });
+    const para = (text, opts = {}) => new d.Paragraph({ children: [run(text, opts.run || {})], ...opts });
+    const spacer = () => new d.Paragraph({ children: [run("")] });
+
+    const children = [];
+
+    // PORTADA
+    children.push(new d.Paragraph({ children: [run("")], spacing: { after: 400 } }));
+    children.push(new d.Paragraph({
+      alignment: d.AlignmentType.CENTER,
+      children: [run("DISPAPELES S.A.S.", { bold: true, size: 44, color: "1E2761" })],
+      spacing: { after: 200 }
+    }));
+    children.push(new d.Paragraph({
+      alignment: d.AlignmentType.CENTER,
+      children: [run("AUDITORÍA INTERNA", { bold: true, size: 24, color: "37474F" })],
+      spacing: { after: 800 }
+    }));
+    children.push(new d.Paragraph({
+      alignment: d.AlignmentType.CENTER,
+      children: [run("INFORME DE AUDITORÍA", { bold: true, size: 56, color: "1E2761" })],
+      spacing: { after: 240 }
+    }));
+    children.push(new d.Paragraph({
+      alignment: d.AlignmentType.CENTER,
+      children: [run(state.portada.ciudad || "Sin ciudad", { bold: true, size: 36, color: "C00000" })],
+      spacing: { after: 600 }
+    }));
+
+    // Tabla con datos
+    const infoTableRows = [
+      ["Código auditoría", state.portada.codigo || "—"],
+      ["Semestre", state.portada.semestre || "—"],
+      ["Auditor", state.portada.auditor || "—"],
+      ["Ciudad / Distrito", `${state.portada.ciudad || "—"} / ${state.portada.distrito || "—"}`],
+      ["Periodo auditado", state.portada.periodo || "—"],
+      ["Fechas (inicio - fin planeada)", `${state.portada.fechaIni || "—"}  →  ${state.portada.fechaFin || "—"}`],
+    ];
+    children.push(new d.Table({
+      width: { size: 9000, type: d.WidthType.DXA },
+      columnWidths: [3000, 6000],
+      rows: infoTableRows.map(([k, v]) => new d.TableRow({
+        children: [
+          new d.TableCell({
+            width: { size: 3000, type: d.WidthType.DXA },
+            shading: { fill: "1E2761", type: d.ShadingType.CLEAR },
+            margins: { top: 100, bottom: 100, left: 140, right: 140 },
+            children: [new d.Paragraph({ children: [run(k, { bold: true, color: "FFFFFF", size: 22 })] })]
+          }),
+          new d.TableCell({
+            width: { size: 6000, type: d.WidthType.DXA },
+            shading: { fill: "ECEFF1", type: d.ShadingType.CLEAR },
+            margins: { top: 100, bottom: 100, left: 140, right: 140 },
+            children: [new d.Paragraph({ children: [run(v, { size: 22 })] })]
+          }),
+        ]
+      }))
+    }));
+    children.push(new d.Paragraph({ children: [run("")], pageBreakBefore: true }));
+
+    // ===== 1. Resumen ejecutivo =====
+    children.push(new d.Paragraph({
+      children: [run("1. RESUMEN EJECUTIVO", { bold: true, size: 30, color: "FFFFFF" })],
+      shading: { fill: "1E2761", type: d.ShadingType.CLEAR },
+      spacing: { before: 200, after: 200 }
+    }));
+    children.push(new d.Paragraph({
+      children: [
+        run("Alcance y metodología. ", { bold: true, color: "1E2761", size: 22 }),
+        run(`La auditoría cubrió las cinco áreas operativas del distrito (Tesorería, Ventas, Logística, Cartera y Administración). De las ${PRUEBAS_BASE.length} pruebas planeadas, se ejecutaron ${ejecutadas}, alcanzando una cobertura del ${(cobertura*100).toFixed(1)}%.`, { size: 22 })
+      ],
+      spacing: { after: 140 }
+    }));
+    children.push(new d.Paragraph({
+      children: [
+        run("Resultados. ", { bold: true, color: "1E2761", size: 22 }),
+        run(`${cumple} pruebas cumplen, ${nocumple} no cumplen, ${parcial} cumplen parcialmente y ${pendiente} están pendientes de ejecución. `, { size: 22 }),
+        state.hallazgos.length > 0
+          ? run(`Se identificaron ${state.hallazgos.length} hallazgos (${halto} Alto, ${hmedio} Medio, ${hbajo} Bajo).`, { size: 22 })
+          : run("No se identificaron hallazgos en el alcance ejecutado.", { size: 22 })
+      ],
+      spacing: { after: 140 }
+    }));
+    children.push(new d.Paragraph({
+      children: [
+        run("Conclusión. ", { bold: true, color: "1E2761", size: 22 }),
+        run(halto > 0
+          ? "Se identifican debilidades de control clasificadas como ALTO riesgo que requieren atención inmediata por parte de la Gerencia Regional."
+          : (state.hallazgos.length > 0
+              ? "Se identifican oportunidades de mejora con plan de acción en el corto plazo."
+              : "En el alcance ejecutado no se identificaron debilidades de control significativas."), { size: 22 })
+      ],
+      spacing: { after: 200 }
+    }));
+
+    // ===== 2. Objetivo =====
+    children.push(new d.Paragraph({
+      children: [run("2. OBJETIVO", { bold: true, size: 26, color: "FFFFFF" })],
+      shading: { fill: "1E2761", type: d.ShadingType.CLEAR },
+      spacing: { before: 200, after: 160 }
+    }));
+    children.push(new d.Paragraph({
+      children: [run(`Evaluar el diseño y la efectividad de los controles internos en los procesos ejecutados en el ${state.portada.distrito || state.portada.ciudad}, identificando riesgos, vulnerabilidades y oportunidades de mejora que permitan fortalecer la gestión del distrito.`, { size: 22 })],
+      spacing: { after: 200 }
+    }));
+
+    // ===== 3. Resumen de cobertura =====
+    children.push(new d.Paragraph({
+      children: [run("3. RESUMEN DE COBERTURA", { bold: true, size: 26, color: "FFFFFF" })],
+      shading: { fill: "1E2761", type: d.ShadingType.CLEAR },
+      spacing: { before: 200, after: 160 }
+    }));
+    const areasData = {};
+    ["TESORERÍA","VENTAS","LOGÍSTICA","CARTERA","ADMINISTRACIÓN"].forEach(a => {
+      areasData[a] = { total:0, cumple:0, nocumple:0, parcial:0, pendiente:0 };
+    });
+    PRUEBAS_BASE.forEach(p => {
+      const e = getEjec(p.codigo).estado;
+      areasData[p.area].total++;
+      if (e==="Cumple") areasData[p.area].cumple++;
+      else if (e==="No Cumple") areasData[p.area].nocumple++;
+      else if (e==="Parcial") areasData[p.area].parcial++;
+      else areasData[p.area].pendiente++;
+    });
+    const tableHeaders = ["Área", "Total", "Cumple", "No Cumple", "Parcial", "Pendiente", "% Cobertura"];
+    const tableRows = [
+      new d.TableRow({
+        children: tableHeaders.map(h => new d.TableCell({
+          width: { size: Math.floor(9000/7), type: d.WidthType.DXA },
+          shading: { fill: "1E2761", type: d.ShadingType.CLEAR },
+          margins: { top: 80, bottom: 80, left: 100, right: 100 },
+          children: [new d.Paragraph({ alignment: d.AlignmentType.CENTER, children: [run(h, { bold: true, color: "FFFFFF", size: 18 })] })]
+        }))
+      })
+    ];
+    Object.keys(areasData).forEach(area => {
+      const d0 = areasData[area];
+      const ejec = d0.cumple+d0.nocumple+d0.parcial;
+      const cov = d0.total > 0 ? ((ejec/d0.total)*100).toFixed(0) + "%" : "0%";
+      const vals = [area, d0.total, d0.cumple, d0.nocumple, d0.parcial, d0.pendiente, cov];
+      tableRows.push(new d.TableRow({
+        children: vals.map((v, i) => new d.TableCell({
+          width: { size: Math.floor(9000/7), type: d.WidthType.DXA },
+          margins: { top: 70, bottom: 70, left: 100, right: 100 },
+          shading: { fill: i === 0 ? "E8EEF7" : "FFFFFF", type: d.ShadingType.CLEAR },
+          children: [new d.Paragraph({
+            alignment: i === 0 ? d.AlignmentType.LEFT : d.AlignmentType.CENTER,
+            children: [run(String(v), { bold: i === 0, size: 20, color: i === 0 ? "1E2761" : "384563" })]
+          })]
+        }))
+      }));
+    });
+    children.push(new d.Table({
+      width: { size: 9000, type: d.WidthType.DXA },
+      columnWidths: Array(7).fill(Math.floor(9000/7)),
+      rows: tableRows
+    }));
+    children.push(spacer());
+
+    // ===== 4. Hallazgos =====
+    children.push(new d.Paragraph({
+      children: [run("4. HALLAZGOS IDENTIFICADOS", { bold: true, size: 30, color: "FFFFFF" })],
+      shading: { fill: "C00000", type: d.ShadingType.CLEAR },
+      spacing: { before: 200, after: 160 },
+      pageBreakBefore: true
+    }));
+
+    if (state.hallazgos.length === 0) {
+      children.push(new d.Paragraph({
+        children: [run("En el alcance ejecutado no se identificaron hallazgos formales de auditoría.", { size: 22, italics: true })],
+        spacing: { after: 200 }
+      }));
+    } else {
+      const areas = ["TESORERÍA", "VENTAS", "LOGÍSTICA", "CARTERA", "ADMINISTRACIÓN"];
+      const byArea = {};
+      state.hallazgos.forEach(h => {
+        const a = h.area || "SIN ÁREA";
+        if (!byArea[a]) byArea[a] = [];
+        byArea[a].push(h);
+      });
+      let idxGlobal = 0;
+      areas.forEach((area, aIdx) => {
+        if (!byArea[area]) return;
+        children.push(new d.Paragraph({
+          children: [run(`4.${aIdx+1} ${area}`, { bold: true, size: 26, color: "1E2761" })],
+          spacing: { before: 200, after: 120 }
+        }));
+        byArea[area].forEach(h => {
+          idxGlobal++;
+          const clasColor = h.clasificacion === "Alto" ? "C62828" : (h.clasificacion === "Medio" ? "ED6C02" : "2E7D32");
+          // Barra título
+          children.push(new d.Table({
+            width: { size: 9000, type: d.WidthType.DXA },
+            columnWidths: [7000, 2000],
+            rows: [new d.TableRow({
+              children: [
+                new d.TableCell({
+                  width: { size: 7000, type: d.WidthType.DXA },
+                  shading: { fill: "1E2761", type: d.ShadingType.CLEAR },
+                  margins: { top: 120, bottom: 120, left: 140, right: 140 },
+                  children: [new d.Paragraph({ children: [run(`H-${idxGlobal}. ${h.titulo}`, { bold: true, size: 22, color: "FFFFFF" })] })]
+                }),
+                new d.TableCell({
+                  width: { size: 2000, type: d.WidthType.DXA },
+                  shading: { fill: clasColor, type: d.ShadingType.CLEAR },
+                  margins: { top: 120, bottom: 120, left: 140, right: 140 },
+                  children: [new d.Paragraph({ alignment: d.AlignmentType.CENTER, children: [run(`RIESGO: ${(h.clasificacion || '').toUpperCase()}`, { bold: true, size: 18, color: "FFFFFF" })] })]
+                })
+              ]
+            })]
+          }));
+          const campos = [
+            ["Subárea", h.subarea],
+            ["Condición", h.condicion],
+            ["Criterio", h.criterio],
+            ["Causa", h.causa],
+            ["Efecto / Riesgo", h.efecto],
+            ["Recomendación", h.recomendacion],
+            ["Responsable", h.responsable],
+            ["Plazo", h.plazo],
+          ];
+          campos.forEach(([k, v]) => {
+            if (!v) return;
+            children.push(new d.Paragraph({
+              children: [
+                run(`${k}. `, { bold: true, color: "1E2761", size: 20 }),
+                run(String(v), { size: 20 })
+              ],
+              spacing: { before: 60, after: 60 },
+              indent: { left: 100 }
+            }));
+          });
+          children.push(spacer());
+        });
+      });
+    }
+
+    // ===== 5. Firmas =====
+    children.push(new d.Paragraph({
+      children: [run("5. FIRMAS DE CIERRE", { bold: true, size: 26, color: "FFFFFF" })],
+      shading: { fill: "1E2761", type: d.ShadingType.CLEAR },
+      spacing: { before: 400, after: 400 },
+      pageBreakBefore: true
+    }));
+    for (let i = 0; i < 4; i++) children.push(spacer());
+    children.push(new d.Table({
+      width: { size: 9000, type: d.WidthType.DXA },
+      columnWidths: [3000, 3000, 3000],
+      rows: [
+        new d.TableRow({ children: ["____________________", "____________________", "____________________"].map(t => new d.TableCell({
+          width: { size: 3000, type: d.WidthType.DXA },
+          margins: { top: 100, bottom: 100, left: 120, right: 120 },
+          children: [new d.Paragraph({ alignment: d.AlignmentType.CENTER, children: [run(t, { size: 22 })] })]
+        })) }),
+        new d.TableRow({ children: ["Elaboró", "Revisó", "Aprobó"].map(t => new d.TableCell({
+          width: { size: 3000, type: d.WidthType.DXA },
+          margins: { top: 80, bottom: 80, left: 120, right: 120 },
+          children: [new d.Paragraph({ alignment: d.AlignmentType.CENTER, children: [run(t, { bold: true, size: 22, color: "1E2761" })] })]
+        })) }),
+        new d.TableRow({ children: [state.portada.auditor || "Auditor", "Gerencia Regional", "Contraloría"].map(t => new d.TableCell({
+          width: { size: 3000, type: d.WidthType.DXA },
+          margins: { top: 60, bottom: 60, left: 120, right: 120 },
+          children: [new d.Paragraph({ alignment: d.AlignmentType.CENTER, children: [run(t, { size: 20, color: "384563" })] })]
+        })) }),
+      ]
+    }));
+
+    const doc = new d.Document({
+      styles: {
+        default: { document: { run: { font: "Calibri", size: 22 } } }
+      },
+      sections: [{
+        properties: {
+          page: {
+            size: { width: 12240, height: 15840 },
+            margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 }
+          }
+        },
+        children: children
+      }]
+    });
+
+    const blob = await d.Packer.toBlob(doc);
+    const codigo = state.portada.codigo || "AUD";
+    const ciudad = (state.portada.ciudad || "Sin_ciudad").replace(/\s+/g, "_");
+    saveAs(blob, `Informe_${codigo}_${ciudad}.docx`);
+    toast("✓ Informe Word descargado");
+  } catch (err) {
+    console.error(err);
+    toast("❌ Error generando Word: " + err.message);
+  }
+}
+
+// ========== RESET ==========
+function resetAll() {
+  if (!confirm("⚠ ¿Reiniciar toda la auditoría? Se borrarán todos los datos del dispositivo (portada, ejecución, hallazgos, papeles).")) return;
+  state = defaultState();
+  saveState();
+  initPortada();
+  updateHeader();
+  showSection("portada");
+  toast("🔄 Auditoría reiniciada");
+}
+
+// ========== INIT ==========
+function init() {
+  // Navegación
+  $$(".nav__item").forEach(btn => {
+    btn.addEventListener("click", () => showSection(btn.dataset.section));
+  });
+  // Portada
+  initPortada();
+  updateHeader();
+  // Botones de header
+  $("#btnImportar").addEventListener("click", importarExcel);
+  $("#btnExportar").addEventListener("click", exportarExcel);
+  $("#btnInforme").addEventListener("click", generarWord);
+  // Botones dentro de secciones
+  $("#btnIrEjecucion").addEventListener("click", () => showSection("ejecucion"));
+  $("#btnResetAll").addEventListener("click", resetAll);
+  $("#btnNuevoHallazgo").addEventListener("click", () => openHallazgoModal());
+  $("#btnNuevoPT").addEventListener("click", () => openPapelModal());
+  $("#btnGenerarWord").addEventListener("click", generarWord);
+  $("#btnExportarExcel2").addEventListener("click", exportarExcel);
+  $("#btnImportarExcel2").addEventListener("click", importarExcel);
+  // Filtros
+  ["matrizSearch", "matrizArea", "matrizTipo", "matrizNivel"].forEach(id => {
+    $(`#${id}`).addEventListener("input", renderMatriz);
+    $(`#${id}`).addEventListener("change", renderMatriz);
+  });
+  ["ejecSearch", "ejecArea", "ejecEstado"].forEach(id => {
+    $(`#${id}`).addEventListener("input", renderEjecucion);
+    $(`#${id}`).addEventListener("change", renderEjecucion);
+  });
+  // ESC cierra modal
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeModal();
+  });
+  // Cargar inicial
+  showSection("portada");
+  console.log(`✅ App inicializada — ${PRUEBAS_BASE.length} pruebas cargadas`);
+}
+
+// Exponer funciones a window para onclick inline
+window.openEjecModal = openEjecModal;
+window.guardarEjec = guardarEjec;
+window.openHallazgoModal = openHallazgoModal;
+window.guardarHallazgo = guardarHallazgo;
+window.eliminarHallazgo = eliminarHallazgo;
+window.openPapelModal = openPapelModal;
+window.guardarPapel = guardarPapel;
+window.eliminarPapel = eliminarPapel;
+window.closeModal = closeModal;
+
+document.addEventListener("DOMContentLoaded", init);
+
+</script>
+</body>
+</html>
