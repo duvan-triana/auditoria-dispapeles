@@ -797,9 +797,313 @@ body {
   margin-top: 2px;
 }
 
+
+/* ========== LOGIN ========== */
+.login-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: linear-gradient(135deg, #1E2761 0%, #151a48 60%, #0a0e2e 100%);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; overflow-y: auto;
+}
+.login-overlay--hidden { display: none; }
+.login-decorative {
+  position: absolute; pointer-events: none; opacity: 0.045;
+  font-family: var(--font-display); font-weight: 900;
+  color: white; user-select: none;
+}
+.login-decorative--1 {
+  font-size: 22vw; top: -8vw; left: -3vw; line-height: 1; letter-spacing: -1vw;
+}
+.login-decorative--2 {
+  font-size: 13vw; bottom: -3vw; right: -2vw; line-height: 1;
+}
+.login-box {
+  background: white; border-radius: 20px; width: 100%; max-width: 460px;
+  padding: 36px 32px 30px; box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+  position: relative; z-index: 2;
+  animation: loginIn 0.4s ease;
+}
+@keyframes loginIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.login-brand {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+  padding-bottom: 20px; border-bottom: 1px solid var(--border);
+}
+.login-brand__mark {
+  width: 46px; height: 46px; background: var(--red); border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-weight: 900; font-size: 21px;
+}
+.login-brand__text {
+  font-family: var(--font-display); font-weight: 700; font-size: 19px;
+  line-height: 1.1; color: var(--ink);
+}
+.login-brand__sub {
+  font-size: 11px; color: var(--muted); letter-spacing: 0.5px;
+  text-transform: uppercase; margin-top: 2px;
+}
+.login-title {
+  font-family: var(--font-display); font-size: 26px; font-weight: 700;
+  letter-spacing: -0.4px; color: var(--ink); margin-bottom: 6px;
+}
+.login-subtitle { color: var(--ink-soft); font-size: 14px; margin-bottom: 22px; }
+.login-field { margin-bottom: 16px; }
+.login-field label {
+  display: block; font-size: 11px; font-weight: 700;
+  color: var(--ink-soft); text-transform: uppercase;
+  letter-spacing: 0.6px; margin-bottom: 6px;
+}
+.login-field input, .login-field select {
+  width: 100%; padding: 13px 14px; border: 1.5px solid var(--border);
+  border-radius: 10px; font-family: inherit; font-size: 15px;
+  background: white; color: var(--ink); transition: all 0.15s;
+}
+.login-field input:focus, .login-field select:focus {
+  outline: none; border-color: var(--navy);
+  box-shadow: 0 0 0 4px rgba(30, 39, 97, 0.1);
+}
+.login-password-wrap { position: relative; }
+.login-password-toggle {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; font-size: 16px;
+  color: var(--muted); padding: 6px 10px;
+}
+.login-error {
+  background: var(--danger-bg); color: var(--danger);
+  padding: 10px 14px; border-radius: 8px; font-size: 13px;
+  margin-bottom: 14px; display: none; border-left: 3px solid var(--danger);
+}
+.login-error--show { display: block; animation: shake 0.4s; }
+@keyframes shake {
+  0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-6px)}
+  40%,80%{transform:translateX(6px)}
+}
+.login-submit {
+  width: 100%; padding: 14px; background: var(--navy); color: white;
+  border: none; border-radius: 10px; font-family: inherit;
+  font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 6px;
+  transition: all 0.15s;
+}
+.login-submit:hover { background: var(--navy-dark); }
+.login-footer {
+  margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border);
+  text-align: center; font-size: 12px; color: var(--muted); line-height: 1.5;
+}
+.login-footer button {
+  background: none; border: none; color: var(--navy); font-weight: 600;
+  cursor: pointer; padding: 0; font-size: 12px; text-decoration: underline;
+  font-family: inherit;
+}
+
+/* User badge en header */
+.header__user-badge {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 20px; padding: 4px 10px 4px 4px;
+  display: flex; align-items: center; gap: 8px; cursor: pointer;
+  transition: all 0.15s;
+}
+.header__user-badge:hover { background: rgba(255,255,255,0.18); }
+.header__user-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 11px; color: white;
+}
+.header__user-avatar--auditor { background: var(--red); }
+.header__user-avatar--coordinador { background: #00897B; }
+.header__user-avatar--contralor { background: #6A1B9A; }
+.header__user-name { font-size: 12px; font-weight: 600; color: white; }
+.header__user-rol {
+  font-size: 9px; opacity: 0.7; text-transform: uppercase;
+  letter-spacing: 0.5px; line-height: 1;
+}
+
+.user-menu {
+  position: fixed; top: 64px; right: 12px;
+  background: white; border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(15, 26, 58, 0.25);
+  min-width: 260px; padding: 6px; z-index: 250;
+  display: none; border: 1px solid var(--border);
+}
+.user-menu--open { display: block; }
+.user-menu__header { padding: 12px 14px; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
+.user-menu__name {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 14px; color: var(--ink);
+}
+.user-menu__role { font-size: 11px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.4px; }
+.user-menu__session { font-size: 11px; color: var(--muted); margin-top: 6px; }
+.user-menu__item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; background: none; border: none;
+  width: 100%; text-align: left; font-family: inherit;
+  font-size: 13px; color: var(--ink); cursor: pointer;
+  border-radius: 6px;
+}
+.user-menu__item:hover { background: var(--ice); }
+.user-menu__item--danger { color: var(--danger); }
+.user-menu__item--danger:hover { background: var(--danger-bg); }
+.user-menu__divider { height: 1px; background: var(--border); margin: 4px 0; }
+
+@media (max-width: 640px) {
+  .header__user-rol, .header__user-name { display: none; }
+  .header__user-badge { padding: 3px; }
+}
+
+/* ========== VISTAS COORDINADOR Y CONTRALOR ========== */
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+.heatmap-cell {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px;
+  text-align: center; position: relative; overflow: hidden;
+  cursor: pointer; transition: all 0.15s;
+}
+.heatmap-cell:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.heatmap-cell__title { font-weight: 700; font-size: 13px; color: var(--ink); margin-bottom: 6px; }
+.heatmap-cell__value { font-family: var(--font-display); font-size: 28px; font-weight: 700; line-height: 1; }
+.heatmap-cell__sub { font-size: 10px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
+.heatmap-cell--low { background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); border-color: #2E7D32; }
+.heatmap-cell--mid { background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%); border-color: #ED6C02; }
+.heatmap-cell--high { background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%); border-color: #C62828; }
+.heatmap-cell--none { background: var(--ice); }
+
+.team-table th, .team-table td { font-size: 12px; }
+.semaphore { font-size: 18px; }
+
+.alert-card {
+  background: white; border-left: 4px solid var(--warning);
+  border-radius: var(--radius-md); padding: 14px 16px;
+  margin-bottom: 10px; box-shadow: var(--shadow-sm);
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.alert-card--danger { border-left-color: var(--danger); }
+.alert-card--info { border-left-color: var(--navy); }
+.alert-card__icon { font-size: 22px; flex-shrink: 0; }
+.alert-card__body { flex: 1; min-width: 0; }
+.alert-card__title { font-weight: 700; font-size: 13px; color: var(--ink); margin-bottom: 3px; }
+.alert-card__desc { font-size: 12px; color: var(--ink-soft); line-height: 1.4; }
+.alert-card__meta { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+.role-banner {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px; border-radius: 14px; font-size: 11px;
+  font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+  margin-bottom: 16px;
+}
+.role-banner--auditor { background: rgba(192, 0, 0, 0.12); color: var(--red); }
+.role-banner--coordinador { background: rgba(0, 137, 123, 0.12); color: #00695C; }
+.role-banner--contralor { background: rgba(106, 27, 154, 0.12); color: #4A148C; }
+
+.import-zone {
+  border: 2px dashed var(--border); border-radius: var(--radius-md);
+  padding: 28px; text-align: center; background: var(--surface);
+  cursor: pointer; transition: all 0.15s;
+}
+.import-zone:hover { border-color: var(--navy); background: var(--ice); }
+.import-zone__icon { font-size: 36px; margin-bottom: 8px; }
+.import-zone__title { font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.import-zone__sub { font-size: 12px; color: var(--muted); }
+
+.imported-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 8px;
+  margin-bottom: 6px; font-size: 13px;
+}
+.imported-item__cod { background: var(--navy); color: white; padding: 3px 8px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 11px; font-weight: 700; }
+
+/* Pestañas de admin (Coord/Contralor) */
+.subtabs {
+  display: flex; gap: 4px; border-bottom: 2px solid var(--border);
+  margin-bottom: 20px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.subtabs::-webkit-scrollbar { display: none; }
+.subtab {
+  background: none; border: none; padding: 12px 16px;
+  font-family: inherit; font-size: 13px; font-weight: 600;
+  color: var(--muted); cursor: pointer; white-space: nowrap;
+  border-bottom: 2px solid transparent; margin-bottom: -2px;
+  transition: all 0.15s;
+}
+.subtab:hover { color: var(--ink); }
+.subtab[aria-current="page"] { color: var(--navy); border-bottom-color: var(--navy); }
+
+.subview { display: none; }
+.subview--active { display: block; }
+
 </style>
 </head>
 <body>
+
+<!-- ============ LOGIN ============ -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-decorative login-decorative--1">D</div>
+  <div class="login-decorative login-decorative--2">Auditoría</div>
+
+  <div class="login-box">
+    <div class="login-brand">
+      <div class="login-brand__mark">D</div>
+      <div>
+        <div class="login-brand__text">Dispapeles</div>
+        <div class="login-brand__sub">Sistema de Auditoría Interna</div>
+      </div>
+    </div>
+
+    <h1 class="login-title" id="loginTitle">Bienvenido</h1>
+    <p class="login-subtitle" id="loginSubtitle">Ingrese sus credenciales para acceder al sistema.</p>
+
+    <div class="login-error" id="loginError"></div>
+
+    <form id="loginForm" autocomplete="on">
+      <div class="login-field">
+        <label for="loginUser">Usuario</label>
+        <select id="loginUser" required>
+          <option value="">Seleccione su nombre…</option>
+        </select>
+      </div>
+      <div class="login-field" id="loginPassWrap">
+        <label for="loginPass">Contraseña</label>
+        <div class="login-password-wrap">
+          <input type="password" id="loginPass" required autocomplete="current-password">
+          <button type="button" class="login-password-toggle" id="loginPassToggle" tabindex="-1">👁</button>
+        </div>
+      </div>
+      <div class="login-field" id="loginPassNewWrap" style="display:none;">
+        <label for="loginPassNew">Nueva contraseña</label>
+        <input type="password" id="loginPassNew">
+      </div>
+      <button type="submit" class="login-submit" id="loginSubmit">Iniciar sesión</button>
+    </form>
+
+    <div class="login-footer">
+      <div id="loginHelp">
+        ¿Problemas para acceder? Contacte al Coordinador de Auditoría.
+      </div>
+      <div style="margin-top: 10px;">
+        <button type="button" id="loginToggleMode">Cambiar mi contraseña</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Menú de usuario flotante -->
+<div class="user-menu" id="userMenu">
+  <div class="user-menu__header">
+    <div class="user-menu__name" id="userMenuName">—</div>
+    <div class="user-menu__role" id="userMenuRole">—</div>
+    <div class="user-menu__session" id="userMenuSession">Sesión iniciada</div>
+  </div>
+  <button class="user-menu__item" id="btnChangePass">🔑 Cambiar contraseña</button>
+  <div class="user-menu__divider"></div>
+  <button class="user-menu__item user-menu__item--danger" id="btnLogout">🚪 Cerrar sesión</button>
+</div>
+
 <div class="app" id="app">
 
 <!-- HEADER -->
@@ -817,6 +1121,13 @@ body {
       <span class="header__auditor-name" id="hAuditor">—</span>
       <span class="header__auditor-city" id="hCiudad">Sin auditoría activa</span>
     </div>
+    <button class="header__user-badge" id="userBadge" type="button" style="display:none;">
+      <span class="header__user-avatar" id="userBadgeAvatar">?</span>
+      <span>
+        <span class="header__user-name" id="userBadgeName">—</span>
+        <div class="header__user-rol" id="userBadgeRol">Rol</div>
+      </span>
+    </button>
     <div class="header__actions">
       <button class="btn-icon" id="btnImportar" title="Importar Excel">📥</button>
       <button class="btn-icon" id="btnExportar" title="Exportar Excel">📤</button>
@@ -1138,6 +1449,209 @@ body {
           automáticamente en el tablero del equipo.
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VISTAS DE COORDINADOR (solo para rol coordinador) ============ -->
+<section class="section" id="section-coord">
+  <div class="section__header">
+    <div>
+      <span class="role-banner role-banner--coordinador">👔 Vista de Coordinador</span>
+      <h1 class="section__title display-underline">Supervisión del Equipo</h1>
+      <p class="section__subtitle">Estado consolidado de las auditorías de su equipo</p>
+    </div>
+  </div>
+
+  <div class="subtabs" id="coordSubtabs">
+    <button class="subtab" data-sub="resumen" aria-current="page">📊 Resumen</button>
+    <button class="subtab" data-sub="equipo">👥 Mi Equipo</button>
+    <button class="subtab" data-sub="bandeja">📥 Bandeja</button>
+    <button class="subtab" data-sub="plan">📅 Plan Anual</button>
+    <button class="subtab" data-sub="hallazgos">🚩 Hallazgos</button>
+    <button class="subtab" data-sub="alertas">⚠ Alertas</button>
+  </div>
+
+  <div class="subview subview--active" id="coord-resumen">
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi__label">Auditores</div><div class="kpi__value" id="c-kpi-auditores">0</div></div>
+      <div class="kpi"><div class="kpi__label">Auditorías Importadas</div><div class="kpi__value" id="c-kpi-auds">0</div></div>
+      <div class="kpi"><div class="kpi__label">Hallazgos del Equipo</div><div class="kpi__value kpi__value--red" id="c-kpi-hallazgos">0</div></div>
+      <div class="kpi"><div class="kpi__label">Cobertura Promedio</div><div class="kpi__value" id="c-kpi-cob">0%</div></div>
+    </div>
+    <div class="card">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 17px; margin-bottom: 10px;">Acceso rápido</div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button class="btn btn--primary" onclick="setCoordSub('bandeja')">📥 Importar nueva auditoría</button>
+        <button class="btn btn--ghost" onclick="setCoordSub('equipo')">👥 Ver equipo</button>
+        <button class="btn btn--ghost" onclick="setCoordSub('alertas')">⚠ Ver alertas</button>
+        <button class="btn btn--danger" id="btnExportContralor">📤 Exportar reporte para Contralor</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="subview" id="coord-equipo">
+    <div class="table-wrap">
+      <table class="table team-table" id="tableEquipo">
+        <thead><tr>
+          <th>Auditor</th><th>Asignadas</th><th>Recibidas</th><th>Cobertura</th>
+          <th>Hallazgos</th><th>Alto</th><th>Medio</th><th>Bajo</th><th>Estado</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="subview" id="coord-bandeja">
+    <div class="import-zone" id="coordImportZone">
+      <div class="import-zone__icon">📥</div>
+      <div class="import-zone__title">Importar Excel de auditor</div>
+      <div class="import-zone__sub">Toca aquí o arrastra el archivo enviado por un auditor</div>
+    </div>
+    <div style="margin-top: 16px;">
+      <div style="font-weight: 700; color: var(--ink); margin-bottom: 10px;">Auditorías recibidas:</div>
+      <div id="bandejaList"></div>
+    </div>
+  </div>
+
+  <div class="subview" id="coord-plan">
+    <div class="card" style="margin-bottom: 12px;">
+      <div class="text-small text-muted">El Plan Anual lista las auditorías esperadas del semestre. Marca como recibidas las que ya importaste.</div>
+    </div>
+    <div class="table-wrap">
+      <table class="table" id="tablePlan">
+        <thead><tr>
+          <th>Código</th><th>Auditor</th><th>Ciudad</th><th>Distrito</th>
+          <th>Plan inicio</th><th>Plan fin</th><th>Estado</th><th>Cumplimiento</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="subview" id="coord-hallazgos">
+    <div class="filters">
+      <input class="filters__input" id="cHallazgoSearch" placeholder="Buscar por título, código...">
+      <select class="filters__select" id="cHallazgoArea">
+        <option value="">Todas las áreas</option>
+        <option>TESORERÍA</option><option>VENTAS</option>
+        <option>LOGÍSTICA</option><option>CARTERA</option><option>ADMINISTRACIÓN</option>
+      </select>
+      <select class="filters__select" id="cHallazgoNivel">
+        <option value="">Todos los niveles</option>
+        <option>Alto</option><option>Medio</option><option>Bajo</option>
+      </select>
+      <select class="filters__select" id="cHallazgoAuditor">
+        <option value="">Todos los auditores</option>
+      </select>
+    </div>
+    <div id="coordHallazgosList"></div>
+  </div>
+
+  <div class="subview" id="coord-alertas">
+    <div id="coordAlertasList"></div>
+  </div>
+</section>
+
+<!-- ============ VISTAS DE CONTRALOR ============ -->
+<section class="section" id="section-contralor">
+  <div class="section__header">
+    <div>
+      <span class="role-banner role-banner--contralor">🎩 Vista de Contralor</span>
+      <h1 class="section__title display-underline">Dashboard Ejecutivo</h1>
+      <p class="section__subtitle">Vista estratégica de auditoría · Visión consolidada</p>
+    </div>
+  </div>
+
+  <div class="subtabs" id="contraSubtabs">
+    <button class="subtab" data-sub="ejecutivo" aria-current="page">📊 Ejecutivo</button>
+    <button class="subtab" data-sub="riesgo">🗺 Mapa de Riesgo</button>
+    <button class="subtab" data-sub="criticos">🔥 Hallazgos Críticos</button>
+    <button class="subtab" data-sub="cumplimiento">✓ Cumplimiento</button>
+    <button class="subtab" data-sub="tendencias">📈 Tendencias</button>
+    <button class="subtab" data-sub="informe">📝 Informe Junta</button>
+  </div>
+
+  <div class="subview subview--active" id="contra-ejecutivo">
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi__label">Total Auditorías</div><div class="kpi__value" id="x-kpi-tot">0</div><div class="kpi__sub" id="x-kpi-tot-sub">0 ciudades cubiertas</div></div>
+      <div class="kpi"><div class="kpi__label">Hallazgos Críticos</div><div class="kpi__value kpi__value--red" id="x-kpi-altos">0</div><div class="kpi__sub">Nivel ALTO</div></div>
+      <div class="kpi"><div class="kpi__label">% Cumplim. Plan</div><div class="kpi__value" id="x-kpi-cump">0%</div><div class="kpi__sub">vs cronograma</div></div>
+      <div class="kpi"><div class="kpi__label">Cobertura Global</div><div class="kpi__value" id="x-kpi-cobg">0%</div><div class="kpi__sub">pruebas ejecutadas</div></div>
+    </div>
+    <div class="card">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 17px; margin-bottom: 10px;">Resumen ejecutivo</div>
+      <div id="contraResumen" style="font-size: 14px; line-height: 1.6;">Sin datos consolidados.</div>
+    </div>
+    <div class="card">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 17px; margin-bottom: 14px;">📈 Hallazgos por área</div>
+      <div id="contraAreasChart"></div>
+    </div>
+  </div>
+
+  <div class="subview" id="contra-riesgo">
+    <div class="card" style="margin-bottom: 14px;">
+      <div class="text-small text-muted">Cada distrito se colorea por su nivel de riesgo: rojo = hallazgos ALTO, ámbar = medio, verde = sin hallazgos críticos.</div>
+    </div>
+    <div class="heatmap-grid" id="riesgoHeatmap"></div>
+  </div>
+
+  <div class="subview" id="contra-criticos">
+    <div class="card" style="background: var(--danger-bg); border-color: var(--danger);">
+      <strong style="color: var(--danger);">⚠ Solo hallazgos de nivel ALTO</strong>
+      <div class="text-small" style="margin-top: 4px;">Estos requieren plan de acción inmediato de la Gerencia Regional.</div>
+    </div>
+    <div id="contraCriticosList" style="margin-top: 14px;"></div>
+  </div>
+
+  <div class="subview" id="contra-cumplimiento">
+    <div class="card">
+      <div class="kpi__label">% Cumplimiento del Plan Anual</div>
+      <div style="display: flex; align-items: center; gap: 16px; margin-top: 8px;">
+        <div class="kpi__value" id="cumpValor">0%</div>
+        <div style="flex: 1;">
+          <div class="progress-bar"><div class="progress-bar__fill" id="cumpBar" style="width:0%"></div></div>
+          <div class="text-small text-muted" style="margin-top: 6px;" id="cumpDetalle">—</div>
+        </div>
+      </div>
+    </div>
+    <div class="table-wrap" style="margin-top: 14px;">
+      <table class="table" id="cumpTable">
+        <thead><tr>
+          <th>Auditor</th><th>Asignadas</th><th>Recibidas</th><th>Pendientes</th>
+          <th>% Cumplimiento</th><th>Estado</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="subview" id="contra-tendencias">
+    <div class="card">
+      <div style="font-weight: 700; font-family: var(--font-display); font-size: 17px;">Áreas con mayor concentración de hallazgos</div>
+      <div id="tendenciasAreas" style="margin-top: 14px;"></div>
+    </div>
+    <div class="card">
+      <div style="font-weight: 700; font-family: var(--font-display); font-size: 17px;">Distritos con mayor riesgo</div>
+      <div id="tendenciasDistritos" style="margin-top: 14px;"></div>
+    </div>
+  </div>
+
+  <div class="subview" id="contra-informe">
+    <div class="card">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 18px;">📝 Informe Ejecutivo para Junta Directiva</div>
+      <div class="text-small text-muted" style="margin: 8px 0 16px 0;">
+        Genera un informe Word con la visión consolidada del sistema de auditoría interna.
+        Incluye: resumen ejecutivo, KPIs estratégicos, hallazgos críticos, mapa de riesgo y conclusiones.
+      </div>
+      <button class="btn btn--primary" id="btnInformeJunta">📄 Generar Informe Junta Directiva</button>
+    </div>
+    <div class="card card--accent">
+      <div style="font-family: var(--font-display); font-weight: 700;">Importar datos del Coordinador</div>
+      <div class="text-small text-muted" style="margin: 6px 0 12px 0;">
+        Si recibió un Excel consolidado del Coordinador, impórtelo aquí para alimentar el dashboard.
+      </div>
+      <button class="btn btn--ghost" id="btnImportContralor">📥 Importar Excel del Coordinador</button>
     </div>
   </div>
 </section>
@@ -2487,6 +3001,1154 @@ window.openPapelModal = openPapelModal;
 window.guardarPapel = guardarPapel;
 window.eliminarPapel = eliminarPapel;
 window.closeModal = closeModal;
+
+
+// ============================================================================
+//  SISTEMA DE AUTENTICACIÓN Y ROLES
+// ============================================================================
+const USERS = [
+  { user: "hbarco",    nombre: "Henry Alexander Barco",      rol: "contralor",   rolLabel: "Contralor",                pwdDefault: "Dispapeles2026.HB" },
+  { user: "etellez",   nombre: "Edison Orlando Téllez",      rol: "coordinador", rolLabel: "Coordinador de Auditoría", pwdDefault: "Dispapeles2026.ET" },
+  { user: "jarias",    nombre: "Juan David Arias",           rol: "auditor",     rolLabel: "Auditor Interno",          pwdDefault: "Audit2026.JA" },
+  { user: "dlopez",    nombre: "Diego López Suárez",         rol: "auditor",     rolLabel: "Auditor Interno",          pwdDefault: "Audit2026.DL" },
+  { user: "scandela",  nombre: "Sandra Milena Candela",      rol: "auditor",     rolLabel: "Auditor Interno",          pwdDefault: "Audit2026.SC" },
+  { user: "dtriana",   nombre: "Duván Andrés Triana",        rol: "auditor",     rolLabel: "Auditor Interno",          pwdDefault: "Audit2026.DT" },
+];
+
+const AUDITORS_ONLY = USERS.filter(u => u.rol === "auditor");
+const SESSION_KEY = "dispapeles_session_v1";
+const PWD_OVERRIDE_KEY = "dispapeles_pwd_overrides_v1";
+const SESSION_DURATION_MS = 8 * 60 * 60 * 1000; // 8 horas
+
+// Hash SHA-256 con Web Crypto
+async function sha256(text) {
+  const buf = new TextEncoder().encode(text);
+  const hashBuf = await crypto.subtle.digest("SHA-256", buf);
+  return Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2,"0")).join("");
+}
+
+function getPwdOverrides() {
+  try { return JSON.parse(localStorage.getItem(PWD_OVERRIDE_KEY) || "{}"); }
+  catch { return {}; }
+}
+function setPwdOverride(user, hash) {
+  const o = getPwdOverrides(); o[user] = hash;
+  localStorage.setItem(PWD_OVERRIDE_KEY, JSON.stringify(o));
+}
+
+async function verifyPassword(user, pwd) {
+  const u = USERS.find(x => x.user === user);
+  if (!u) return false;
+  const overrides = getPwdOverrides();
+  if (overrides[user]) {
+    const h = await sha256(pwd);
+    return h === overrides[user];
+  }
+  return pwd === u.pwdDefault;
+}
+
+function getSession() {
+  try {
+    const raw = localStorage.getItem(SESSION_KEY);
+    if (!raw) return null;
+    const s = JSON.parse(raw);
+    if (Date.now() > s.exp) { localStorage.removeItem(SESSION_KEY); return null; }
+    return s;
+  } catch { return null; }
+}
+function setSession(user) {
+  const u = USERS.find(x => x.user === user);
+  if (!u) return;
+  const s = { user: u.user, nombre: u.nombre, rol: u.rol, rolLabel: u.rolLabel,
+              start: Date.now(), exp: Date.now() + SESSION_DURATION_MS };
+  localStorage.setItem(SESSION_KEY, JSON.stringify(s));
+}
+function clearSession() { localStorage.removeItem(SESSION_KEY); }
+
+let currentUser = null; // se asigna en initLogin
+
+// ===== UI del login =====
+function populateUserDropdown() {
+  const sel = document.getElementById("loginUser");
+  sel.innerHTML = '<option value="">Seleccione su nombre…</option>';
+  USERS.forEach(u => {
+    const opt = document.createElement("option");
+    opt.value = u.user;
+    opt.textContent = `${u.nombre} — ${u.rolLabel}`;
+    sel.appendChild(opt);
+  });
+}
+
+let loginChangeMode = false;
+
+function showLoginError(msg) {
+  const e = document.getElementById("loginError");
+  e.textContent = msg;
+  e.classList.add("login-error--show");
+  setTimeout(() => e.classList.remove("login-error--show"), 4000);
+}
+
+function setupLoginUI() {
+  populateUserDropdown();
+  document.getElementById("loginPassToggle").addEventListener("click", () => {
+    const p = document.getElementById("loginPass");
+    p.type = p.type === "password" ? "text" : "password";
+  });
+  document.getElementById("loginToggleMode").addEventListener("click", () => {
+    loginChangeMode = !loginChangeMode;
+    document.getElementById("loginPassNewWrap").style.display = loginChangeMode ? "block" : "none";
+    document.getElementById("loginSubmit").textContent = loginChangeMode ? "Cambiar contraseña" : "Iniciar sesión";
+    document.getElementById("loginTitle").textContent = loginChangeMode ? "Cambiar contraseña" : "Bienvenido";
+    document.getElementById("loginSubtitle").textContent = loginChangeMode
+      ? "Ingrese su contraseña actual y la nueva."
+      : "Ingrese sus credenciales para acceder al sistema.";
+    document.getElementById("loginToggleMode").textContent = loginChangeMode ? "Volver al inicio de sesión" : "Cambiar mi contraseña";
+  });
+  document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const user = document.getElementById("loginUser").value;
+    const pwd = document.getElementById("loginPass").value;
+    if (!user) { showLoginError("Seleccione un usuario"); return; }
+    if (!pwd) { showLoginError("Ingrese su contraseña"); return; }
+    const ok = await verifyPassword(user, pwd);
+    if (!ok) { showLoginError("Usuario o contraseña incorrectos"); return; }
+
+    if (loginChangeMode) {
+      const newPwd = document.getElementById("loginPassNew").value;
+      if (!newPwd || newPwd.length < 6) {
+        showLoginError("La nueva contraseña debe tener al menos 6 caracteres");
+        return;
+      }
+      const h = await sha256(newPwd);
+      setPwdOverride(user, h);
+      showLoginError(""); // limpia
+      toast("✓ Contraseña actualizada. Inicia sesión con la nueva.");
+      loginChangeMode = false;
+      document.getElementById("loginPassNewWrap").style.display = "none";
+      document.getElementById("loginSubmit").textContent = "Iniciar sesión";
+      document.getElementById("loginTitle").textContent = "Bienvenido";
+      document.getElementById("loginToggleMode").textContent = "Cambiar mi contraseña";
+      document.getElementById("loginPass").value = "";
+      document.getElementById("loginPassNew").value = "";
+      return;
+    }
+
+    // Login OK
+    setSession(user);
+    currentUser = USERS.find(u => u.user === user);
+    hideLogin();
+    applyRoleUI();
+    toast(`Bienvenido, ${currentUser.nombre.split(" ")[0]} 👋`);
+  });
+}
+
+function showLogin() {
+  document.getElementById("loginOverlay").classList.remove("login-overlay--hidden");
+  document.getElementById("userBadge").style.display = "none";
+}
+function hideLogin() {
+  document.getElementById("loginOverlay").classList.add("login-overlay--hidden");
+}
+
+// ===== UI del usuario activo =====
+function applyRoleUI() {
+  if (!currentUser) return;
+  const badge = document.getElementById("userBadge");
+  badge.style.display = "flex";
+  const avatar = document.getElementById("userBadgeAvatar");
+  const initials = currentUser.nombre.split(" ").slice(0,2).map(w => w[0]).join("").toUpperCase();
+  avatar.textContent = initials;
+  avatar.className = "header__user-avatar header__user-avatar--" + currentUser.rol;
+  document.getElementById("userBadgeName").textContent = currentUser.nombre.split(" ").slice(0,2).join(" ");
+  document.getElementById("userBadgeRol").textContent = currentUser.rolLabel;
+
+  document.getElementById("userMenuName").textContent = currentUser.nombre;
+  document.getElementById("userMenuRole").textContent = currentUser.rolLabel;
+  updateSessionInfo();
+
+  // Ocultar el bloque header__auditor (datos de la auditoría) cuando NO es auditor
+  const headAud = document.querySelector(".header__auditor");
+  if (headAud) headAud.style.display = (currentUser.rol === "auditor") ? "flex" : "none";
+
+  // Configurar menú lateral según rol
+  configureNavForRole(currentUser.rol);
+
+  // Si es auditor, autocompletar nombre en portada si está vacío
+  if (currentUser.rol === "auditor") {
+    if (!state.portada.auditor) {
+      state.portada.auditor = currentUser.nombre;
+      // Código auditor: iniciales
+      state.portada.auditorCod = currentUser.nombre.split(" ").map(w => w[0]).join("").substring(0,3).toUpperCase();
+      saveState();
+      try { initPortada(); updateHeader(); } catch(e) {}
+    }
+    showSection("portada");
+  } else if (currentUser.rol === "coordinador") {
+    showSection("coord");
+    renderCoordDashboard();
+  } else if (currentUser.rol === "contralor") {
+    showSection("contralor");
+    renderContraloria();
+  }
+}
+
+function configureNavForRole(rol) {
+  const nav = document.querySelector(".nav");
+  const items = nav.querySelectorAll(".nav__item");
+  // Por defecto, todos los items son visibles
+  items.forEach(it => it.style.display = "");
+
+  if (rol === "auditor") {
+    // Ocultar coord y contralor
+    items.forEach(it => {
+      if (it.dataset.section === "coord" || it.dataset.section === "contralor") {
+        it.style.display = "none";
+      }
+    });
+  } else if (rol === "coordinador") {
+    // Ocultar contralor, mostrar coord
+    items.forEach(it => {
+      if (it.dataset.section === "contralor") it.style.display = "none";
+    });
+  } else if (rol === "contralor") {
+    // Mostrar todos
+  }
+}
+
+function updateSessionInfo() {
+  const s = getSession();
+  if (!s) return;
+  const remainingMs = s.exp - Date.now();
+  const remainingMin = Math.max(0, Math.floor(remainingMs / 60000));
+  const h = Math.floor(remainingMin / 60);
+  const m = remainingMin % 60;
+  document.getElementById("userMenuSession").textContent = `Sesión activa · ${h}h ${m}min restantes`;
+}
+setInterval(() => { if (currentUser) updateSessionInfo(); }, 60000);
+
+// Auto-logout cuando expira
+setInterval(() => {
+  if (!currentUser) return;
+  const s = getSession();
+  if (!s) {
+    currentUser = null;
+    showLogin();
+    toast("⏱ Sesión expirada. Vuelve a iniciar sesión.");
+  }
+}, 30000);
+
+function setupUserMenu() {
+  const badge = document.getElementById("userBadge");
+  const menu = document.getElementById("userMenu");
+  badge.addEventListener("click", (e) => {
+    e.stopPropagation();
+    menu.classList.toggle("user-menu--open");
+  });
+  document.addEventListener("click", (e) => {
+    if (!menu.contains(e.target) && e.target !== badge && !badge.contains(e.target)) {
+      menu.classList.remove("user-menu--open");
+    }
+  });
+  document.getElementById("btnLogout").addEventListener("click", () => {
+    if (!confirm("¿Cerrar sesión? Los datos de auditoría se mantendrán guardados en el dispositivo.")) return;
+    clearSession();
+    currentUser = null;
+    menu.classList.remove("user-menu--open");
+    // Resetear header
+    const headAud = document.querySelector(".header__auditor");
+    if (headAud) headAud.style.display = "";
+    showLogin();
+  });
+  document.getElementById("btnChangePass").addEventListener("click", () => {
+    menu.classList.remove("user-menu--open");
+    clearSession();
+    currentUser = null;
+    showLogin();
+    // activar modo cambio
+    setTimeout(() => document.getElementById("loginToggleMode").click(), 50);
+  });
+}
+
+// ============================================================================
+//  LÓGICA DEL COORDINADOR
+// ============================================================================
+const COORD_STORAGE = "dispapeles_coord_v1";
+
+function loadCoordState() {
+  try {
+    const raw = localStorage.getItem(COORD_STORAGE);
+    return raw ? JSON.parse(raw) : { auditorias: [] };
+  } catch { return { auditorias: [] }; }
+}
+function saveCoordState(s) { localStorage.setItem(COORD_STORAGE, JSON.stringify(s)); }
+
+// Plan anual hardcoded como referencia (lo puede ajustar el coordinador editando el código)
+const PLAN_ANUAL = [
+  { codigo: "AUD-2026-S1-001", auditor: "Juan David Arias",      ciudad: "Bogotá",       distrito: "Distrito A Bogotá",        planIni: "15/01/2026", planFin: "24/01/2026" },
+  { codigo: "AUD-2026-S1-002", auditor: "Juan David Arias",      ciudad: "Tunja",        distrito: "Distrito Tunja",           planIni: "05/02/2026", planFin: "12/02/2026" },
+  { codigo: "AUD-2026-S1-003", auditor: "Juan David Arias",      ciudad: "Pasto",        distrito: "Distrito Pasto",           planIni: "26/02/2026", planFin: "06/03/2026" },
+  { codigo: "AUD-2026-S1-004", auditor: "Juan David Arias",      ciudad: "Cartagena",    distrito: "Distrito Cartagena",       planIni: "19/03/2026", planFin: "27/03/2026" },
+  { codigo: "AUD-2026-S1-005", auditor: "Juan David Arias",      ciudad: "Barranquilla", distrito: "Distrito Barranquilla",    planIni: "09/04/2026", planFin: "17/04/2026" },
+  { codigo: "AUD-2026-S1-006", auditor: "Diego López Suárez",    ciudad: "Medellín",     distrito: "Distrito Medellín",        planIni: "15/01/2026", planFin: "24/01/2026" },
+  { codigo: "AUD-2026-S1-007", auditor: "Diego López Suárez",    ciudad: "Cali",         distrito: "Distrito Cali",            planIni: "05/02/2026", planFin: "13/02/2026" },
+  { codigo: "AUD-2026-S1-008", auditor: "Diego López Suárez",    ciudad: "Manizales",    distrito: "Distrito Manizales",       planIni: "26/02/2026", planFin: "05/03/2026" },
+  { codigo: "AUD-2026-S1-009", auditor: "Diego López Suárez",    ciudad: "Pereira",      distrito: "Distrito Pereira",         planIni: "19/03/2026", planFin: "27/03/2026" },
+  { codigo: "AUD-2026-S1-010", auditor: "Sandra Milena Candela", ciudad: "Bucaramanga",  distrito: "Distrito Bucaramanga",     planIni: "15/01/2026", planFin: "23/01/2026" },
+  { codigo: "AUD-2026-S1-011", auditor: "Sandra Milena Candela", ciudad: "Cúcuta",       distrito: "Distrito Cúcuta",          planIni: "05/02/2026", planFin: "13/02/2026" },
+  { codigo: "AUD-2026-S1-012", auditor: "Sandra Milena Candela", ciudad: "Valledupar",   distrito: "Distrito Valledupar",      planIni: "26/02/2026", planFin: "06/03/2026" },
+  { codigo: "AUD-2026-S1-013", auditor: "Sandra Milena Candela", ciudad: "Santa Marta",  distrito: "Distrito Santa Marta",     planIni: "19/03/2026", planFin: "27/03/2026" },
+  { codigo: "AUD-2026-S1-014", auditor: "Duván Andrés Triana",   ciudad: "Ibagué",       distrito: "Distrito Ibagué",          planIni: "15/01/2026", planFin: "23/01/2026" },
+  { codigo: "AUD-2026-S1-015", auditor: "Duván Andrés Triana",   ciudad: "Neiva",        distrito: "Distrito Neiva",           planIni: "05/02/2026", planFin: "12/02/2026" },
+  { codigo: "AUD-2026-S1-016", auditor: "Duván Andrés Triana",   ciudad: "Armenia",      distrito: "Distrito Armenia",         planIni: "26/02/2026", planFin: "05/03/2026" },
+  { codigo: "AUD-2026-S1-017", auditor: "Duván Andrés Triana",   ciudad: "Villavicencio",distrito: "Distrito B Villavicencio", planIni: "15/04/2026", planFin: "24/04/2026" },
+];
+
+let coordSubActive = "resumen";
+
+function setCoordSub(name) {
+  document.querySelectorAll("#coordSubtabs .subtab").forEach(t => {
+    t.removeAttribute("aria-current");
+    if (t.dataset.sub === name) t.setAttribute("aria-current", "page");
+  });
+  document.querySelectorAll("#section-coord .subview").forEach(v => v.classList.remove("subview--active"));
+  document.getElementById("coord-" + name).classList.add("subview--active");
+  coordSubActive = name;
+  renderCoordSub(name);
+}
+
+function renderCoordDashboard() {
+  setCoordSub("resumen");
+}
+
+function renderCoordSub(name) {
+  if (name === "resumen") renderCoordResumen();
+  if (name === "equipo") renderCoordEquipo();
+  if (name === "bandeja") renderCoordBandeja();
+  if (name === "plan") renderCoordPlan();
+  if (name === "hallazgos") renderCoordHallazgos();
+  if (name === "alertas") renderCoordAlertas();
+}
+
+function renderCoordResumen() {
+  const s = loadCoordState();
+  const auditores = AUDITORS_ONLY.length;
+  const auds = s.auditorias.length;
+  let hallazgos = 0;
+  let cobAvg = 0, cobCount = 0;
+  s.auditorias.forEach(a => {
+    hallazgos += (a.hallazgos || []).length;
+    if (a.cobertura !== undefined && a.cobertura !== null) { cobAvg += a.cobertura; cobCount++; }
+  });
+  const cob = cobCount > 0 ? (cobAvg / cobCount) : 0;
+  document.getElementById("c-kpi-auditores").textContent = auditores;
+  document.getElementById("c-kpi-auds").textContent = auds;
+  document.getElementById("c-kpi-hallazgos").textContent = hallazgos;
+  document.getElementById("c-kpi-cob").textContent = (cob * 100).toFixed(0) + "%";
+}
+
+function renderCoordEquipo() {
+  const s = loadCoordState();
+  const tbody = document.querySelector("#tableEquipo tbody");
+  tbody.innerHTML = "";
+  AUDITORS_ONLY.forEach(aud => {
+    const sus = s.auditorias.filter(a => a.auditor === aud.nombre);
+    const asig = PLAN_ANUAL.filter(p => p.auditor === aud.nombre).length;
+    const rec = sus.length;
+    const allHall = sus.flatMap(a => a.hallazgos || []);
+    const alto = allHall.filter(h => h.clasificacion === "Alto").length;
+    const medio = allHall.filter(h => h.clasificacion === "Medio").length;
+    const bajo = allHall.filter(h => h.clasificacion === "Bajo").length;
+    let cobSum = 0, cobN = 0;
+    sus.forEach(a => { if (a.cobertura != null) { cobSum += a.cobertura; cobN++; } });
+    const cob = cobN > 0 ? cobSum / cobN : 0;
+    const ratio = asig > 0 ? rec / asig : 0;
+    const sema = ratio >= 0.8 ? "🟢" : (ratio >= 0.4 ? "🟡" : (rec === 0 ? "⚪" : "🔴"));
+    tbody.innerHTML += `<tr>
+      <td><strong>${aud.nombre}</strong></td>
+      <td style="text-align:center;">${asig}</td>
+      <td style="text-align:center;"><strong>${rec}</strong></td>
+      <td style="text-align:center;">${(cob*100).toFixed(0)}%</td>
+      <td style="text-align:center;">${allHall.length}</td>
+      <td style="text-align:center; color: var(--danger); font-weight: 600;">${alto}</td>
+      <td style="text-align:center; color: var(--warning); font-weight: 600;">${medio}</td>
+      <td style="text-align:center; color: var(--success); font-weight: 600;">${bajo}</td>
+      <td style="text-align:center;" class="semaphore">${sema}</td>
+    </tr>`;
+  });
+}
+
+function renderCoordBandeja() {
+  const s = loadCoordState();
+  const list = document.getElementById("bandejaList");
+  if (s.auditorias.length === 0) {
+    list.innerHTML = `<div class="empty"><div class="empty__icon">📭</div><div class="empty__title">Sin auditorías importadas</div><div class="empty__sub">Cuando un auditor te envíe su Excel, impórtalo aquí y se consolidará en el sistema.</div></div>`;
+    return;
+  }
+  list.innerHTML = s.auditorias.map((a, i) => `
+    <div class="imported-item">
+      <span class="imported-item__cod">${a.codigo || "AUD"}</span>
+      <div style="flex:1;">
+        <div><strong>${escHtml(a.auditor || "Sin auditor")}</strong> — ${escHtml(a.ciudad || "sin ciudad")}</div>
+        <div class="text-small text-muted">${(a.hallazgos || []).length} hallazgos · cobertura ${((a.cobertura || 0) * 100).toFixed(0)}% · ${a.fechaImport || "—"}</div>
+      </div>
+      <button class="btn-icon" onclick="eliminarAuditoriaImportada(${i})" style="background:var(--danger-bg); color:var(--danger); border:none; width:32px; height:32px;">🗑</button>
+    </div>
+  `).join("");
+}
+
+function eliminarAuditoriaImportada(idx) {
+  if (!confirm("¿Eliminar esta auditoría importada del sistema?")) return;
+  const s = loadCoordState();
+  s.auditorias.splice(idx, 1);
+  saveCoordState(s);
+  renderCoordSub("bandeja");
+  renderCoordSub("resumen");
+}
+window.eliminarAuditoriaImportada = eliminarAuditoriaImportada;
+
+function renderCoordPlan() {
+  const s = loadCoordState();
+  const tbody = document.querySelector("#tablePlan tbody");
+  tbody.innerHTML = PLAN_ANUAL.map(p => {
+    const recib = s.auditorias.find(a => a.codigo === p.codigo);
+    const estado = recib ? "Recibida" : "Pendiente";
+    const cum = recib ? "✓ Recibida" : "—";
+    const color = recib ? "var(--success)" : "var(--muted)";
+    return `<tr>
+      <td><span class="mono" style="background: var(--ice); padding: 2px 6px; border-radius: 4px;">${p.codigo}</span></td>
+      <td>${escHtml(p.auditor)}</td>
+      <td><strong>${escHtml(p.ciudad)}</strong></td>
+      <td>${escHtml(p.distrito)}</td>
+      <td>${p.planIni}</td>
+      <td>${p.planFin}</td>
+      <td style="color: ${color}; font-weight: 600;">${estado}</td>
+      <td>${cum}</td>
+    </tr>`;
+  }).join("");
+}
+
+function renderCoordHallazgos() {
+  const s = loadCoordState();
+  // Llenar dropdown auditores
+  const sel = document.getElementById("cHallazgoAuditor");
+  if (sel.options.length <= 1) {
+    AUDITORS_ONLY.forEach(a => {
+      const o = document.createElement("option");
+      o.value = a.nombre; o.textContent = a.nombre;
+      sel.appendChild(o);
+    });
+  }
+  const search = (document.getElementById("cHallazgoSearch").value || "").toLowerCase();
+  const area = document.getElementById("cHallazgoArea").value;
+  const nivel = document.getElementById("cHallazgoNivel").value;
+  const auditor = document.getElementById("cHallazgoAuditor").value;
+
+  const allH = [];
+  s.auditorias.forEach(a => {
+    (a.hallazgos || []).forEach(h => {
+      allH.push({ ...h, auditor: a.auditor, ciudad: a.ciudad, codAud: a.codigo });
+    });
+  });
+  const filtered = allH.filter(h => {
+    if (area && h.area !== area) return false;
+    if (nivel && h.clasificacion !== nivel) return false;
+    if (auditor && h.auditor !== auditor) return false;
+    if (search) {
+      const hay = (h.titulo + " " + h.codigo + " " + (h.condicion||"")).toLowerCase();
+      if (!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  const list = document.getElementById("coordHallazgosList");
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="empty"><div class="empty__icon">🔍</div><div class="empty__title">Sin hallazgos</div></div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(h => {
+    const color = h.clasificacion === "Alto" ? "var(--red)" : (h.clasificacion === "Medio" ? "var(--warning)" : "var(--success)");
+    return `<div class="hallazgo-card">
+      <div class="hallazgo-card__head" style="background: ${color};">
+        <div class="hallazgo-card__titulo">${escHtml(h.titulo || "(sin título)")}</div>
+        <span class="badge badge--${(h.clasificacion || 'medio').toLowerCase()}" style="background: rgba(255,255,255,0.25); color: white;">${escHtml(h.clasificacion || "—")}</span>
+      </div>
+      <div class="hallazgo-card__body">
+        <div class="text-small text-muted" style="margin-bottom: 8px;">
+          <strong>${escHtml(h.auditor)}</strong> · ${escHtml(h.ciudad)} · ${escHtml(h.codAud)} · ${escHtml(h.area || "")}
+        </div>
+        ${h.condicion ? `<div class="hallazgo-card__field"><div class="hallazgo-card__field-label">Condición</div>${escHtml(h.condicion)}</div>` : ""}
+        ${h.recomendacion ? `<div class="hallazgo-card__field"><div class="hallazgo-card__field-label">Recomendación</div>${escHtml(h.recomendacion)}</div>` : ""}
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function renderCoordAlertas() {
+  const s = loadCoordState();
+  const alertas = [];
+
+  // 1) Auditores sin entregas
+  AUDITORS_ONLY.forEach(aud => {
+    const sus = s.auditorias.filter(a => a.auditor === aud.nombre);
+    if (sus.length === 0) {
+      alertas.push({
+        tipo: "warning",
+        icon: "📭",
+        titulo: `${aud.nombre} sin auditorías entregadas`,
+        desc: "No se ha recibido ningún archivo Excel de este auditor en el período actual.",
+        meta: "Acción: contactar al auditor"
+      });
+    }
+  });
+
+  // 2) Hallazgos ALTO abiertos
+  const altosAbiertos = [];
+  s.auditorias.forEach(a => {
+    (a.hallazgos || []).forEach(h => {
+      if (h.clasificacion === "Alto" && h.estado !== "Cerrado") {
+        altosAbiertos.push({ ...h, auditor: a.auditor, ciudad: a.ciudad });
+      }
+    });
+  });
+  if (altosAbiertos.length > 0) {
+    alertas.push({
+      tipo: "danger",
+      icon: "🔥",
+      titulo: `${altosAbiertos.length} hallazgo${altosAbiertos.length > 1 ? "s" : ""} de nivel ALTO sin cerrar`,
+      desc: altosAbiertos.slice(0, 3).map(h => `• ${h.titulo} (${h.ciudad})`).join("<br>") + (altosAbiertos.length > 3 ? `<br>... y ${altosAbiertos.length - 3} más` : ""),
+      meta: "Acción: seguimiento prioritario"
+    });
+  }
+
+  // 3) Pendientes del plan vs hoy
+  const pendientes = PLAN_ANUAL.filter(p => !s.auditorias.find(a => a.codigo === p.codigo));
+  if (pendientes.length > 0) {
+    alertas.push({
+      tipo: "info",
+      icon: "📅",
+      titulo: `${pendientes.length} auditoría${pendientes.length > 1 ? "s" : ""} del plan pendiente${pendientes.length > 1 ? "s" : ""}`,
+      desc: "Estas auditorías están en el plan anual pero aún no han sido recibidas en la bandeja.",
+      meta: "Revisar plan anual"
+    });
+  }
+
+  const list = document.getElementById("coordAlertasList");
+  if (alertas.length === 0) {
+    list.innerHTML = `<div class="empty"><div class="empty__icon">✅</div><div class="empty__title">Sin alertas</div><div class="empty__sub">El equipo va al día.</div></div>`;
+    return;
+  }
+  list.innerHTML = alertas.map(a => `
+    <div class="alert-card alert-card--${a.tipo}">
+      <div class="alert-card__icon">${a.icon}</div>
+      <div class="alert-card__body">
+        <div class="alert-card__title">${a.titulo}</div>
+        <div class="alert-card__desc">${a.desc}</div>
+        <div class="alert-card__meta">${a.meta}</div>
+      </div>
+    </div>
+  `).join("");
+}
+
+// ===== Import de Excel del auditor para el coordinador =====
+function setupCoordImport() {
+  const zone = document.getElementById("coordImportZone");
+  if (!zone) return;
+  const input = document.createElement("input");
+  input.type = "file"; input.accept = ".xlsx,.xls"; input.style.display = "none";
+  document.body.appendChild(input);
+  zone.addEventListener("click", () => input.click());
+  input.addEventListener("change", async (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    try {
+      const data = await file.arrayBuffer();
+      const wb = XLSX.read(data);
+      const aud = parseExcelAuditoria(wb);
+      const s = loadCoordState();
+      // Si ya existe ese código, reemplaza
+      const idx = s.auditorias.findIndex(x => x.codigo === aud.codigo);
+      if (idx >= 0) s.auditorias[idx] = aud;
+      else s.auditorias.push(aud);
+      saveCoordState(s);
+      renderCoordSub("bandeja");
+      renderCoordSub("resumen");
+      toast(`✓ Importado: ${aud.codigo} - ${aud.ciudad}`);
+    } catch(err) {
+      console.error(err);
+      toast("❌ No se pudo importar el archivo");
+    }
+    e.target.value = "";
+  });
+}
+
+function parseExcelAuditoria(wb) {
+  const result = { codigo: "", auditor: "", ciudad: "", distrito: "", semestre: "", hallazgos: [], pruebas: [], cobertura: 0, fechaImport: new Date().toLocaleString("es-CO") };
+
+  if (wb.SheetNames.includes("1. Portada")) {
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets["1. Portada"], { header: 1 });
+    for (const row of rows) {
+      if (!row || row.length < 2) continue;
+      const [k, v] = row;
+      if (!v) continue;
+      if (k === "Código auditoría") result.codigo = String(v);
+      if (k === "Semestre") result.semestre = String(v);
+      if (k === "Auditor") result.auditor = String(v);
+      if (k === "Ciudad") result.ciudad = String(v);
+      if (k === "Distrito") result.distrito = String(v);
+    }
+  }
+  if (wb.SheetNames.includes("3. Ejecución")) {
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets["3. Ejecución"], { header: 1 });
+    let tot = 0, ejec = 0;
+    for (let i = 1; i < rows.length; i++) {
+      const r = rows[i]; if (!r[0]) continue;
+      tot++;
+      const estado = r[6];
+      if (estado && estado !== "Pendiente") ejec++;
+      result.pruebas.push({ codigo: r[0], area: r[1], estado: r[6] });
+    }
+    result.cobertura = tot > 0 ? ejec / tot : 0;
+  }
+  if (wb.SheetNames.includes("4. Hallazgos")) {
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets["4. Hallazgos"], { header: 1 });
+    for (let i = 1; i < rows.length; i++) {
+      const r = rows[i]; if (!r[4]) continue;
+      result.hallazgos.push({
+        codigo: r[1] || "", area: r[2] || "", subarea: r[3] || "",
+        titulo: r[4] || "", condicion: r[5] || "", criterio: r[6] || "",
+        causa: r[7] || "", efecto: r[8] || "", clasificacion: r[9] || "Medio",
+        recomendacion: r[10] || "", responsable: r[11] || "", plazo: r[12] || "",
+        estado: r[13] || "Abierto"
+      });
+    }
+  }
+  return result;
+}
+
+function setupCoordTabs() {
+  document.querySelectorAll("#coordSubtabs .subtab").forEach(t => {
+    t.addEventListener("click", () => setCoordSub(t.dataset.sub));
+  });
+  ["cHallazgoSearch","cHallazgoArea","cHallazgoNivel","cHallazgoAuditor"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.addEventListener("input", renderCoordHallazgos); el.addEventListener("change", renderCoordHallazgos); }
+  });
+  const btnExp = document.getElementById("btnExportContralor");
+  if (btnExp) btnExp.addEventListener("click", exportContralorReporte);
+}
+window.setCoordSub = setCoordSub;
+
+// Exportar reporte para contralor (genera Excel con datos consolidados)
+function exportContralorReporte() {
+  const s = loadCoordState();
+  if (s.auditorias.length === 0) { toast("⚠ No hay auditorías para exportar"); return; }
+  const wb = XLSX.utils.book_new();
+
+  // Hoja 1: Resumen
+  const resumen = [["REPORTE EJECUTIVO PARA CONTRALOR"], [],
+    ["Generado", new Date().toLocaleString("es-CO")],
+    ["Coordinador", currentUser ? currentUser.nombre : ""],
+    ["Total auditorías", s.auditorias.length],
+    ["Total hallazgos", s.auditorias.reduce((a,b) => a + (b.hallazgos||[]).length, 0)],
+  ];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(resumen), "Resumen");
+
+  // Hoja 2: Equipo
+  const equipoRows = [["Auditor","Asignadas","Recibidas","Hallazgos","Alto","Medio","Bajo","Cobertura%"]];
+  AUDITORS_ONLY.forEach(aud => {
+    const sus = s.auditorias.filter(a => a.auditor === aud.nombre);
+    const asig = PLAN_ANUAL.filter(p => p.auditor === aud.nombre).length;
+    const allH = sus.flatMap(a => a.hallazgos || []);
+    const cobN = sus.filter(a => a.cobertura != null);
+    const cob = cobN.length > 0 ? (cobN.reduce((x,a) => x + a.cobertura, 0) / cobN.length * 100).toFixed(1) : 0;
+    equipoRows.push([aud.nombre, asig, sus.length, allH.length,
+      allH.filter(h => h.clasificacion === "Alto").length,
+      allH.filter(h => h.clasificacion === "Medio").length,
+      allH.filter(h => h.clasificacion === "Bajo").length, cob]);
+  });
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(equipoRows), "Equipo");
+
+  // Hoja 3: Hallazgos
+  const hallRows = [["Auditoría","Auditor","Ciudad","Área","Subárea","Título","Nivel","Estado","Condición","Recomendación"]];
+  s.auditorias.forEach(a => {
+    (a.hallazgos || []).forEach(h => {
+      hallRows.push([a.codigo, a.auditor, a.ciudad, h.area, h.subarea, h.titulo, h.clasificacion, h.estado, h.condicion, h.recomendacion]);
+    });
+  });
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(hallRows), "Hallazgos");
+
+  XLSX.writeFile(wb, `Reporte_Contralor_${new Date().toISOString().split("T")[0]}.xlsx`);
+  toast("✓ Reporte para Contralor descargado");
+}
+
+// ============================================================================
+//  LÓGICA DEL CONTRALOR
+// ============================================================================
+const CONTRA_STORAGE = "dispapeles_contralor_v1";
+
+function loadContraState() {
+  try {
+    const raw = localStorage.getItem(CONTRA_STORAGE);
+    return raw ? JSON.parse(raw) : { datos: null };
+  } catch { return { datos: null }; }
+}
+function saveContraState(s) { localStorage.setItem(CONTRA_STORAGE, JSON.stringify(s)); }
+
+// Si en el mismo dispositivo está la sesión del coordinador, podemos usar sus datos
+function getContraData() {
+  // Usa los datos del coordinador si existen en el mismo navegador
+  const coord = loadCoordState();
+  if (coord.auditorias && coord.auditorias.length > 0) return coord;
+  // Si no, usa lo importado por el contralor
+  const ctr = loadContraState();
+  return ctr.datos || { auditorias: [] };
+}
+
+let contraSubActive = "ejecutivo";
+function setContraSub(name) {
+  document.querySelectorAll("#contraSubtabs .subtab").forEach(t => {
+    t.removeAttribute("aria-current");
+    if (t.dataset.sub === name) t.setAttribute("aria-current", "page");
+  });
+  document.querySelectorAll("#section-contralor .subview").forEach(v => v.classList.remove("subview--active"));
+  document.getElementById("contra-" + name).classList.add("subview--active");
+  contraSubActive = name;
+  renderContraSub(name);
+}
+window.setContraSub = setContraSub;
+
+function renderContraloria() {
+  setContraSub("ejecutivo");
+}
+
+function renderContraSub(name) {
+  if (name === "ejecutivo") renderContraEjecutivo();
+  if (name === "riesgo") renderContraRiesgo();
+  if (name === "criticos") renderContraCriticos();
+  if (name === "cumplimiento") renderContraCumplimiento();
+  if (name === "tendencias") renderContraTendencias();
+}
+
+function renderContraEjecutivo() {
+  const data = getContraData();
+  const auds = data.auditorias || [];
+  const ciudades = new Set(auds.map(a => a.ciudad));
+  const allH = auds.flatMap(a => a.hallazgos || []);
+  const altos = allH.filter(h => h.clasificacion === "Alto").length;
+  const cumpPct = PLAN_ANUAL.length > 0 ? (auds.length / PLAN_ANUAL.length * 100) : 0;
+  const cobN = auds.filter(a => a.cobertura != null);
+  const cobGlobal = cobN.length > 0 ? (cobN.reduce((x,a) => x + a.cobertura, 0) / cobN.length * 100) : 0;
+
+  document.getElementById("x-kpi-tot").textContent = auds.length;
+  document.getElementById("x-kpi-tot-sub").textContent = `${ciudades.size} ciudades cubiertas`;
+  document.getElementById("x-kpi-altos").textContent = altos;
+  document.getElementById("x-kpi-cump").textContent = cumpPct.toFixed(0) + "%";
+  document.getElementById("x-kpi-cobg").textContent = cobGlobal.toFixed(0) + "%";
+
+  let resumen = "";
+  if (auds.length === 0) {
+    resumen = "<em style='color: var(--muted);'>No hay datos consolidados aún. Importe el reporte enviado por el Coordinador para activar el dashboard.</em>";
+  } else {
+    const semaforo = altos === 0 ? "🟢" : (altos <= 3 ? "🟡" : "🔴");
+    const tono = altos === 0
+      ? "El sistema de auditoría interna opera sin hallazgos críticos en el alcance ejecutado."
+      : `El sistema de auditoría interna ha identificado <strong>${altos} hallazgo${altos > 1 ? "s" : ""} de nivel ALTO</strong> que requieren atención de la Gerencia.`;
+    resumen = `${semaforo} ${tono}<br><br>
+      <strong>Cobertura del plan:</strong> ${cumpPct.toFixed(0)}% (${auds.length} de ${PLAN_ANUAL.length} auditorías recibidas)<br>
+      <strong>Cobertura técnica:</strong> ${cobGlobal.toFixed(0)}% de las pruebas planeadas ejecutadas en promedio<br>
+      <strong>Distribución de hallazgos:</strong> ${altos} Alto · ${allH.filter(h => h.clasificacion === "Medio").length} Medio · ${allH.filter(h => h.clasificacion === "Bajo").length} Bajo`;
+  }
+  document.getElementById("contraResumen").innerHTML = resumen;
+
+  // Mini gráfico de barras por área
+  const areas = ["TESORERÍA","VENTAS","LOGÍSTICA","CARTERA","ADMINISTRACIÓN"];
+  const counts = areas.map(a => allH.filter(h => h.area === a).length);
+  const maxC = Math.max(1, ...counts);
+  const chartHtml = areas.map((a, i) => {
+    const c = counts[i];
+    const w = (c / maxC) * 100;
+    return `<div style="margin-bottom: 10px;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 3px; font-size: 12px;">
+        <span style="font-weight: 600;">${a}</span>
+        <span style="color: var(--muted);">${c} hallazgo${c !== 1 ? "s" : ""}</span>
+      </div>
+      <div style="height: 16px; background: var(--ice); border-radius: 8px; overflow: hidden;">
+        <div style="height: 100%; width: ${w}%; background: linear-gradient(90deg, var(--navy), var(--red)); border-radius: 8px; transition: width 0.4s;"></div>
+      </div>
+    </div>`;
+  }).join("");
+  document.getElementById("contraAreasChart").innerHTML = chartHtml || "<em>Sin datos</em>";
+}
+
+function renderContraRiesgo() {
+  const data = getContraData();
+  const auds = data.auditorias || [];
+  // Heatmap: por cada ciudad del PLAN ANUAL
+  const html = PLAN_ANUAL.map(p => {
+    const found = auds.find(a => a.codigo === p.codigo);
+    if (!found) return `<div class="heatmap-cell heatmap-cell--none">
+      <div class="heatmap-cell__title">${p.ciudad}</div>
+      <div class="heatmap-cell__value" style="color: var(--muted);">—</div>
+      <div class="heatmap-cell__sub">No recibida</div>
+    </div>`;
+    const altos = (found.hallazgos || []).filter(h => h.clasificacion === "Alto").length;
+    const total = (found.hallazgos || []).length;
+    const clase = altos > 0 ? "high" : (total > 0 ? "mid" : "low");
+    const color = altos > 0 ? "#C62828" : (total > 0 ? "#ED6C02" : "#2E7D32");
+    return `<div class="heatmap-cell heatmap-cell--${clase}">
+      <div class="heatmap-cell__title">${p.ciudad}</div>
+      <div class="heatmap-cell__value" style="color: ${color};">${altos}</div>
+      <div class="heatmap-cell__sub">${total} hallazgo${total !== 1 ? "s" : ""} · ${altos} ALTO</div>
+    </div>`;
+  }).join("");
+  document.getElementById("riesgoHeatmap").innerHTML = html;
+}
+
+function renderContraCriticos() {
+  const data = getContraData();
+  const altos = [];
+  (data.auditorias || []).forEach(a => {
+    (a.hallazgos || []).forEach(h => {
+      if (h.clasificacion === "Alto") altos.push({ ...h, ciudad: a.ciudad, auditor: a.auditor, codAud: a.codigo });
+    });
+  });
+  const list = document.getElementById("contraCriticosList");
+  if (altos.length === 0) {
+    list.innerHTML = `<div class="empty"><div class="empty__icon">✅</div><div class="empty__title">Sin hallazgos críticos</div><div class="empty__sub">El sistema no ha identificado hallazgos de nivel ALTO.</div></div>`;
+    return;
+  }
+  list.innerHTML = altos.map(h => `
+    <div class="hallazgo-card">
+      <div class="hallazgo-card__head" style="background: var(--red);">
+        <div class="hallazgo-card__titulo">${escHtml(h.titulo)}</div>
+        <span class="badge badge--alto" style="background: rgba(255,255,255,0.25); color: white;">RIESGO ALTO</span>
+      </div>
+      <div class="hallazgo-card__body">
+        <div class="text-small text-muted" style="margin-bottom: 8px;">
+          <strong>${escHtml(h.ciudad)}</strong> · ${escHtml(h.area)} · Auditor: ${escHtml(h.auditor)}
+        </div>
+        ${h.condicion ? `<div class="hallazgo-card__field"><div class="hallazgo-card__field-label">Condición</div>${escHtml(h.condicion)}</div>` : ""}
+        ${h.efecto ? `<div class="hallazgo-card__field"><div class="hallazgo-card__field-label">Efecto</div>${escHtml(h.efecto)}</div>` : ""}
+        ${h.recomendacion ? `<div class="hallazgo-card__field"><div class="hallazgo-card__field-label">Recomendación</div>${escHtml(h.recomendacion)}</div>` : ""}
+      </div>
+    </div>
+  `).join("");
+}
+
+function renderContraCumplimiento() {
+  const data = getContraData();
+  const auds = data.auditorias || [];
+  const pct = PLAN_ANUAL.length > 0 ? (auds.length / PLAN_ANUAL.length * 100) : 0;
+  document.getElementById("cumpValor").textContent = pct.toFixed(0) + "%";
+  document.getElementById("cumpBar").style.width = pct + "%";
+  document.getElementById("cumpDetalle").textContent = `${auds.length} de ${PLAN_ANUAL.length} auditorías recibidas del plan`;
+
+  const tbody = document.querySelector("#cumpTable tbody");
+  tbody.innerHTML = AUDITORS_ONLY.map(aud => {
+    const sus = auds.filter(a => a.auditor === aud.nombre);
+    const asig = PLAN_ANUAL.filter(p => p.auditor === aud.nombre).length;
+    const pend = asig - sus.length;
+    const c = asig > 0 ? (sus.length / asig * 100).toFixed(0) : 0;
+    const estado = c >= 80 ? "🟢 Al día" : (c >= 40 ? "🟡 En curso" : "🔴 Atrasado");
+    return `<tr>
+      <td>${escHtml(aud.nombre)}</td>
+      <td style="text-align:center;">${asig}</td>
+      <td style="text-align:center;"><strong>${sus.length}</strong></td>
+      <td style="text-align:center;">${pend}</td>
+      <td style="text-align:center;"><strong>${c}%</strong></td>
+      <td>${estado}</td>
+    </tr>`;
+  }).join("");
+}
+
+function renderContraTendencias() {
+  const data = getContraData();
+  const allH = (data.auditorias || []).flatMap(a => (a.hallazgos || []).map(h => ({ ...h, ciudad: a.ciudad })));
+  // Áreas
+  const areas = ["TESORERÍA","VENTAS","LOGÍSTICA","CARTERA","ADMINISTRACIÓN"];
+  const areaCounts = areas.map(a => ({
+    area: a,
+    total: allH.filter(h => h.area === a).length,
+    altos: allH.filter(h => h.area === a && h.clasificacion === "Alto").length,
+  })).sort((a,b) => b.altos - a.altos || b.total - a.total);
+
+  document.getElementById("tendenciasAreas").innerHTML = areaCounts.map(a => {
+    const max = Math.max(1, ...areaCounts.map(x => x.total));
+    const w = (a.total / max * 100);
+    return `<div style="margin-bottom: 10px;">
+      <div style="display:flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px;">
+        <strong>${a.area}</strong>
+        <span>${a.total} · <span style="color: var(--danger); font-weight: 700;">${a.altos} altos</span></span>
+      </div>
+      <div style="height: 14px; background: var(--ice); border-radius: 7px; overflow: hidden;">
+        <div style="height: 100%; width: ${w}%; background: var(--navy);"></div>
+      </div>
+    </div>`;
+  }).join("");
+
+  // Distritos
+  const distritos = {};
+  allH.forEach(h => {
+    if (!distritos[h.ciudad]) distritos[h.ciudad] = { total: 0, altos: 0 };
+    distritos[h.ciudad].total++;
+    if (h.clasificacion === "Alto") distritos[h.ciudad].altos++;
+  });
+  const sorted = Object.entries(distritos).sort((a,b) => b[1].altos - a[1].altos || b[1].total - a[1].total).slice(0, 10);
+  if (sorted.length === 0) {
+    document.getElementById("tendenciasDistritos").innerHTML = "<em>Sin datos</em>";
+  } else {
+    document.getElementById("tendenciasDistritos").innerHTML = sorted.map(([ciudad, d]) => `
+      <div style="display:flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px;">
+        <strong>${escHtml(ciudad)}</strong>
+        <span>${d.total} hallazgos · <span style="color: var(--danger); font-weight: 700;">${d.altos} altos</span></span>
+      </div>`).join("");
+  }
+}
+
+function setupContraTabs() {
+  document.querySelectorAll("#contraSubtabs .subtab").forEach(t => {
+    t.addEventListener("click", () => setContraSub(t.dataset.sub));
+  });
+  const imp = document.getElementById("btnImportContralor");
+  if (imp) {
+    const input = document.createElement("input");
+    input.type = "file"; input.accept = ".xlsx,.xls"; input.style.display = "none";
+    document.body.appendChild(input);
+    imp.addEventListener("click", () => input.click());
+    input.addEventListener("change", async (e) => {
+      const file = e.target.files[0]; if (!file) return;
+      try {
+        const data = await file.arrayBuffer();
+        const wb = XLSX.read(data);
+        // El Excel del coordinador tiene hojas Resumen, Equipo, Hallazgos
+        // Reconstruimos un objeto compatible
+        const auditorias = [];
+        if (wb.SheetNames.includes("Hallazgos")) {
+          const rows = XLSX.utils.sheet_to_json(wb.Sheets["Hallazgos"], { header: 1 });
+          const byAud = {};
+          for (let i = 1; i < rows.length; i++) {
+            const r = rows[i]; if (!r[0]) continue;
+            const k = r[0]; // código auditoría
+            if (!byAud[k]) byAud[k] = { codigo: k, auditor: r[1], ciudad: r[2], hallazgos: [] };
+            byAud[k].hallazgos.push({
+              area: r[3], subarea: r[4], titulo: r[5],
+              clasificacion: r[6], estado: r[7], condicion: r[8], recomendacion: r[9]
+            });
+          }
+          auditorias.push(...Object.values(byAud));
+        }
+        saveContraState({ datos: { auditorias } });
+        renderContraSub(contraSubActive);
+        toast(`✓ ${auditorias.length} auditorías cargadas`);
+      } catch(err) {
+        console.error(err);
+        toast("❌ No se pudo importar");
+      }
+      e.target.value = "";
+    });
+  }
+  const inf = document.getElementById("btnInformeJunta");
+  if (inf) inf.addEventListener("click", generarInformeJunta);
+}
+
+async function generarInformeJunta() {
+  try {
+    const d = docx;
+    const data = getContraData();
+    const auds = data.auditorias || [];
+    const allH = auds.flatMap(a => a.hallazgos || []);
+    const altos = allH.filter(h => h.clasificacion === "Alto").length;
+    const cumpPct = PLAN_ANUAL.length > 0 ? (auds.length / PLAN_ANUAL.length * 100) : 0;
+
+    const run = (t, opts = {}) => new d.TextRun({ text: String(t || ""), font: "Calibri", ...opts });
+    const children = [];
+
+    children.push(new d.Paragraph({
+      alignment: d.AlignmentType.CENTER,
+      children: [run("DISPAPELES S.A.S.", { bold: true, size: 44, color: "1E2761" })],
+      spacing: { after: 200 }
+    }));
+    children.push(new d.Paragraph({
+      alignment: d.AlignmentType.CENTER,
+      children: [run("CONTRALORÍA INTERNA", { bold: true, size: 22, color: "37474F" })],
+      spacing: { after: 600 }
+    }));
+    children.push(new d.Paragraph({
+      alignment: d.AlignmentType.CENTER,
+      children: [run("INFORME EJECUTIVO", { bold: true, size: 52, color: "1E2761" })],
+      spacing: { after: 200 }
+    }));
+    children.push(new d.Paragraph({
+      alignment: d.AlignmentType.CENTER,
+      children: [run("Sistema de Auditoría Interna", { bold: true, size: 32, color: "C00000" })],
+      spacing: { after: 400 }
+    }));
+    children.push(new d.Paragraph({
+      alignment: d.AlignmentType.CENTER,
+      children: [run("Presentado a la Junta Directiva", { size: 20, color: "37474F" })],
+      spacing: { after: 200 }
+    }));
+    children.push(new d.Paragraph({
+      alignment: d.AlignmentType.CENTER,
+      children: [run(new Date().toLocaleDateString("es-CO", { year: "numeric", month: "long" }).toUpperCase(), { bold: true, size: 22, color: "1E2761" })],
+      spacing: { after: 200 }
+    }));
+    children.push(new d.Paragraph({ children: [run("")], pageBreakBefore: true }));
+
+    // Resumen
+    children.push(new d.Paragraph({
+      children: [run("1. RESUMEN EJECUTIVO", { bold: true, size: 30, color: "FFFFFF" })],
+      shading: { fill: "1E2761", type: d.ShadingType.CLEAR },
+      spacing: { before: 200, after: 200 }
+    }));
+    children.push(new d.Paragraph({
+      children: [run(`En el período evaluado se han ejecutado ${auds.length} auditorías de las ${PLAN_ANUAL.length} planeadas (${cumpPct.toFixed(0)}% de cumplimiento), identificando un total de ${allH.length} hallazgos, de los cuales ${altos} fueron clasificados como de riesgo ALTO.`, { size: 22 })],
+      spacing: { after: 160 }
+    }));
+
+    if (altos > 0) {
+      children.push(new d.Paragraph({
+        children: [run(`Se solicita a la Junta Directiva atención prioritaria sobre los ${altos} hallazgos de riesgo ALTO identificados, que requieren plan de acción inmediato por parte de la Gerencia Regional.`, { size: 22, bold: true, color: "C00000" })],
+        spacing: { after: 200 }
+      }));
+    }
+
+    // KPIs
+    children.push(new d.Paragraph({
+      children: [run("2. INDICADORES CLAVE", { bold: true, size: 30, color: "FFFFFF" })],
+      shading: { fill: "1E2761", type: d.ShadingType.CLEAR },
+      spacing: { before: 200, after: 200 }
+    }));
+    const kpiRows = [
+      ["Auditorías ejecutadas", `${auds.length} de ${PLAN_ANUAL.length}`],
+      ["Cumplimiento del plan", `${cumpPct.toFixed(0)}%`],
+      ["Hallazgos identificados", `${allH.length}`],
+      ["Hallazgos ALTO", `${altos}`],
+      ["Ciudades cubiertas", `${new Set(auds.map(a => a.ciudad)).size}`],
+    ];
+    children.push(new d.Table({
+      width: { size: 9000, type: d.WidthType.DXA },
+      columnWidths: [4500, 4500],
+      rows: kpiRows.map(([k, v]) => new d.TableRow({
+        children: [
+          new d.TableCell({
+            shading: { fill: "1E2761", type: d.ShadingType.CLEAR },
+            margins: { top: 100, bottom: 100, left: 140, right: 140 },
+            children: [new d.Paragraph({ children: [run(k, { bold: true, color: "FFFFFF", size: 22 })] })]
+          }),
+          new d.TableCell({
+            shading: { fill: "ECEFF1", type: d.ShadingType.CLEAR },
+            margins: { top: 100, bottom: 100, left: 140, right: 140 },
+            children: [new d.Paragraph({ children: [run(v, { size: 22, bold: true })] })]
+          }),
+        ]
+      }))
+    }));
+
+    // Hallazgos críticos
+    if (altos > 0) {
+      children.push(new d.Paragraph({
+        children: [run("3. HALLAZGOS CRÍTICOS", { bold: true, size: 30, color: "FFFFFF" })],
+        shading: { fill: "C00000", type: d.ShadingType.CLEAR },
+        spacing: { before: 400, after: 200 },
+        pageBreakBefore: true
+      }));
+      allH.filter(h => h.clasificacion === "Alto").forEach((h, i) => {
+        children.push(new d.Paragraph({
+          children: [run(`H-${i+1}. ${h.titulo}`, { bold: true, size: 22, color: "C00000" })],
+          spacing: { before: 200, after: 80 }
+        }));
+        ["condicion","criterio","efecto","recomendacion"].forEach(campo => {
+          if (h[campo]) {
+            const lbl = { condicion: "Condición", criterio: "Criterio", efecto: "Efecto", recomendacion: "Recomendación" }[campo];
+            children.push(new d.Paragraph({
+              children: [
+                run(`${lbl}. `, { bold: true, color: "1E2761", size: 20 }),
+                run(String(h[campo]), { size: 20 })
+              ],
+              spacing: { after: 60 },
+              indent: { left: 100 }
+            }));
+          }
+        });
+      });
+    }
+
+    // Conclusión
+    children.push(new d.Paragraph({
+      children: [run("4. CONCLUSIÓN", { bold: true, size: 30, color: "FFFFFF" })],
+      shading: { fill: "1E2761", type: d.ShadingType.CLEAR },
+      spacing: { before: 400, after: 200 },
+      pageBreakBefore: true
+    }));
+    children.push(new d.Paragraph({
+      children: [run(altos > 0
+        ? `El sistema de auditoría interna ha cumplido su función de identificar oportunamente las debilidades de control. Se requiere acción ejecutiva sobre los hallazgos críticos.`
+        : `El sistema de auditoría interna opera de forma satisfactoria en el alcance ejecutado.`, { size: 22 })],
+      spacing: { after: 200 }
+    }));
+
+    const doc = new d.Document({
+      sections: [{
+        properties: { page: { size: { width: 12240, height: 15840 }, margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 } } },
+        children
+      }]
+    });
+
+    const blob = await d.Packer.toBlob(doc);
+    saveAs(blob, `Informe_Junta_Directiva_${new Date().toISOString().split("T")[0]}.docx`);
+    toast("✓ Informe Junta Directiva generado");
+  } catch (err) {
+    console.error(err);
+    toast("❌ Error: " + err.message);
+  }
+}
+
+// ============================================================================
+//  INICIALIZACIÓN MAESTRA — extiende el init original
+// ============================================================================
+function initAuthSystem() {
+  setupLoginUI();
+  setupUserMenu();
+  setupCoordTabs();
+  setupCoordImport();
+  setupContraTabs();
+
+  // Agregar items de navegación coord y contralor
+  const nav = document.querySelector(".nav");
+  const itemCoord = document.createElement("button");
+  itemCoord.className = "nav__item";
+  itemCoord.dataset.section = "coord";
+  itemCoord.style.display = "none";
+  itemCoord.innerHTML = '<span class="nav__item-icon">👔</span><span>Supervisión</span>';
+  itemCoord.addEventListener("click", () => showSection("coord"));
+  nav.appendChild(itemCoord);
+
+  const itemContra = document.createElement("button");
+  itemContra.className = "nav__item";
+  itemContra.dataset.section = "contralor";
+  itemContra.style.display = "none";
+  itemContra.innerHTML = '<span class="nav__item-icon">🎩</span><span>Contraloría</span>';
+  itemContra.addEventListener("click", () => showSection("contralor"));
+  nav.appendChild(itemContra);
+
+  // Verificar sesión existente
+  const s = getSession();
+  if (s) {
+    currentUser = USERS.find(u => u.user === s.user);
+    hideLogin();
+    applyRoleUI();
+  } else {
+    showLogin();
+  }
+}
+
+// Llamar initAuthSystem después del init original
+const _origInit = init;
+init = function() {
+  _origInit();
+  initAuthSystem();
+};
+
 
 document.addEventListener("DOMContentLoaded", init);
 
