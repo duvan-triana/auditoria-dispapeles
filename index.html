@@ -1037,6 +1037,255 @@ body {
 .subview { display: none; }
 .subview--active { display: block; }
 
+
+/* ========== V3: WORKFLOW DE APROBACIÓN ========== */
+.status-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 12px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.4px; white-space: nowrap;
+}
+.status-badge--revision { background: #FFF3E0; color: #E65100; }
+.status-badge--aprobada { background: #E8F5E9; color: #1B5E20; }
+.status-badge--devuelta { background: #FFEBEE; color: #B71C1C; }
+.status-badge--pendiente { background: #ECEFF1; color: #455A64; }
+
+.audit-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 12px; align-items: center;
+  padding: 14px 16px; background: white;
+  border: 1px solid var(--border); border-radius: 10px;
+  margin-bottom: 8px; transition: all 0.15s;
+  cursor: pointer;
+}
+.audit-row:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.audit-row__cod {
+  background: var(--navy); color: white;
+  padding: 4px 9px; border-radius: 5px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px; font-weight: 700;
+}
+.audit-row__main { min-width: 0; }
+.audit-row__title { font-weight: 600; font-size: 14px; color: var(--ink); }
+.audit-row__sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.audit-row__meta { text-align: right; font-size: 11px; color: var(--muted); }
+
+/* Detalle de auditor (drill-down) */
+.auditor-detail-card {
+  background: linear-gradient(135deg, var(--ice) 0%, #F5F0EC 100%);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 20px; margin-bottom: 16px;
+}
+.auditor-detail-card__head {
+  display: flex; gap: 14px; align-items: center; margin-bottom: 14px;
+}
+.auditor-detail-card__avatar {
+  width: 54px; height: 54px;
+  background: var(--red); color: white;
+  border-radius: 50%; display: flex;
+  align-items: center; justify-content: center;
+  font-weight: 800; font-size: 18px;
+}
+.auditor-detail-card__name {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 19px; color: var(--ink);
+}
+.auditor-detail-card__role { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.auditor-detail-card__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+}
+.auditor-detail-card__stat {
+  background: white; border-radius: 10px;
+  padding: 10px; text-align: center;
+}
+.auditor-detail-card__stat-label {
+  font-size: 10px; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.auditor-detail-card__stat-value {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 22px; color: var(--navy);
+}
+
+/* Calendario visual */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: 200px repeat(6, 1fr);
+  gap: 2px; background: var(--border);
+  border-radius: 10px; overflow: hidden;
+  margin-bottom: 10px;
+}
+.calendar-cell {
+  background: white; padding: 10px 8px;
+  font-size: 11px; min-height: 36px;
+  display: flex; align-items: center;
+}
+.calendar-cell--head {
+  background: var(--navy); color: white;
+  font-weight: 700; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  justify-content: center;
+}
+.calendar-cell--auditor {
+  font-weight: 600; color: var(--ink);
+  background: var(--ice);
+}
+.calendar-cell--planeada {
+  background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+  color: #0D47A1; font-weight: 600;
+}
+.calendar-cell--recibida {
+  background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+  color: #1B5E20; font-weight: 600;
+}
+.calendar-cell--atrasada {
+  background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
+  color: #B71C1C; font-weight: 600;
+}
+
+/* Comentarios */
+.comment-box {
+  background: #FFF9E6; border-left: 3px solid var(--warning);
+  padding: 10px 14px; border-radius: 6px;
+  font-size: 13px; margin-top: 8px;
+}
+.comment-box__author {
+  font-size: 11px; font-weight: 700; color: var(--warning);
+  margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.3px;
+}
+
+/* Gráfico de dona simple */
+.donut-chart {
+  display: flex; align-items: center; gap: 20px;
+}
+.donut-svg { flex-shrink: 0; }
+.donut-legend { font-size: 13px; flex: 1; }
+.donut-legend__item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 0; border-bottom: 1px solid var(--border);
+}
+.donut-legend__item:last-child { border-bottom: none; }
+.donut-legend__dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  flex-shrink: 0;
+}
+.donut-legend__label { flex: 1; font-weight: 500; }
+.donut-legend__value { font-weight: 700; color: var(--ink); }
+
+/* Top hallazgos */
+.top-hallazgo {
+  display: grid;
+  grid-template-columns: 32px 1fr auto;
+  gap: 12px; align-items: center;
+  padding: 12px 14px; background: white;
+  border: 1px solid var(--border); border-radius: 10px;
+  margin-bottom: 8px;
+}
+.top-hallazgo__rank {
+  background: linear-gradient(135deg, var(--navy), var(--red));
+  color: white; border-radius: 50%;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 14px;
+}
+.top-hallazgo__title {
+  font-weight: 600; font-size: 13px; color: var(--ink);
+  line-height: 1.3; margin-bottom: 3px;
+}
+.top-hallazgo__meta {
+  font-size: 11px; color: var(--muted);
+}
+
+/* Indicador de madurez */
+.madurez-card {
+  background: linear-gradient(135deg, #1E2761 0%, #2d3a85 100%);
+  color: white; border-radius: 16px;
+  padding: 24px; margin-bottom: 16px;
+  position: relative; overflow: hidden;
+}
+.madurez-card__label {
+  font-size: 11px; opacity: 0.7;
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.madurez-card__value {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 56px; line-height: 1;
+}
+.madurez-card__nivel {
+  font-size: 14px; font-weight: 600; margin-top: 6px;
+  opacity: 0.9;
+}
+.madurez-bar {
+  height: 8px; background: rgba(255,255,255,0.15);
+  border-radius: 4px; margin-top: 14px; overflow: hidden;
+}
+.madurez-bar__fill {
+  height: 100%; background: linear-gradient(90deg, #FFC107, #4CAF50);
+  border-radius: 4px;
+}
+
+/* Comparativo barras horizontales */
+.compare-bar {
+  display: grid;
+  grid-template-columns: 180px 1fr auto;
+  gap: 12px; align-items: center;
+  margin-bottom: 8px; font-size: 13px;
+}
+.compare-bar__name { font-weight: 600; color: var(--ink); }
+.compare-bar__track {
+  height: 22px; background: var(--ice);
+  border-radius: 11px; overflow: hidden;
+  position: relative;
+}
+.compare-bar__fill {
+  height: 100%; border-radius: 11px;
+  background: linear-gradient(90deg, var(--navy), #4054B5);
+  display: flex; align-items: center;
+  padding-left: 10px; color: white;
+  font-weight: 700; font-size: 11px;
+  transition: width 0.5s;
+}
+.compare-bar__value {
+  font-weight: 700; color: var(--ink);
+  min-width: 40px; text-align: right;
+}
+
+/* Tabs por período (historial) */
+.period-tabs {
+  display: flex; gap: 6px; margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.period-tab {
+  padding: 6px 14px; border-radius: 16px;
+  background: var(--ice); border: none;
+  font-family: inherit; font-size: 12px; font-weight: 600;
+  color: var(--ink-soft); cursor: pointer;
+  transition: all 0.15s;
+}
+.period-tab[aria-current="page"] {
+  background: var(--navy); color: white;
+}
+
+/* Modal de detalle de auditoría */
+.audit-detail-modal .modal__body { padding: 0; }
+.audit-detail-section {
+  padding: 16px 22px; border-bottom: 1px solid var(--border);
+}
+.audit-detail-section:last-child { border-bottom: none; }
+.audit-detail-section__title {
+  font-weight: 700; font-size: 13px;
+  text-transform: uppercase; letter-spacing: 0.4px;
+  color: var(--navy); margin-bottom: 10px;
+}
+.action-row {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+
 </style>
 </head>
 <body>
@@ -1453,79 +1702,97 @@ body {
   </div>
 </section>
 
-<!-- ============ VISTAS DE COORDINADOR (solo para rol coordinador) ============ -->
+
+<!-- ============ VISTAS DE COORDINADOR (MEJORADAS V3) ============ -->
 <section class="section" id="section-coord">
   <div class="section__header">
     <div>
-      <span class="role-banner role-banner--coordinador">👔 Vista de Coordinador</span>
-      <h1 class="section__title display-underline">Supervisión del Equipo</h1>
-      <p class="section__subtitle">Estado consolidado de las auditorías de su equipo</p>
+      <span class="role-banner role-banner--coordinador">👔 Coordinador de Auditoría</span>
+      <h1 class="section__title display-underline">Centro de Supervisión</h1>
+      <p class="section__subtitle">Gestión integral del equipo y aprobación de auditorías</p>
     </div>
   </div>
 
   <div class="subtabs" id="coordSubtabs">
     <button class="subtab" data-sub="resumen" aria-current="page">📊 Resumen</button>
-    <button class="subtab" data-sub="equipo">👥 Mi Equipo</button>
     <button class="subtab" data-sub="bandeja">📥 Bandeja</button>
-    <button class="subtab" data-sub="plan">📅 Plan Anual</button>
+    <button class="subtab" data-sub="equipo">👥 Mi Equipo</button>
+    <button class="subtab" data-sub="calendario">📅 Calendario</button>
     <button class="subtab" data-sub="hallazgos">🚩 Hallazgos</button>
     <button class="subtab" data-sub="alertas">⚠ Alertas</button>
+    <button class="subtab" data-sub="informe">📝 Informes</button>
   </div>
 
   <div class="subview subview--active" id="coord-resumen">
     <div class="kpi-grid">
-      <div class="kpi"><div class="kpi__label">Auditores</div><div class="kpi__value" id="c-kpi-auditores">0</div></div>
-      <div class="kpi"><div class="kpi__label">Auditorías Importadas</div><div class="kpi__value" id="c-kpi-auds">0</div></div>
-      <div class="kpi"><div class="kpi__label">Hallazgos del Equipo</div><div class="kpi__value kpi__value--red" id="c-kpi-hallazgos">0</div></div>
-      <div class="kpi"><div class="kpi__label">Cobertura Promedio</div><div class="kpi__value" id="c-kpi-cob">0%</div></div>
+      <div class="kpi"><div class="kpi__label">Auditores Activos</div><div class="kpi__value" id="c-kpi-auditores">0</div></div>
+      <div class="kpi"><div class="kpi__label">Por Revisar</div><div class="kpi__value kpi__value--amber" id="c-kpi-revision">0</div></div>
+      <div class="kpi"><div class="kpi__label">Aprobadas</div><div class="kpi__value kpi__value--green" id="c-kpi-aprobadas">0</div></div>
+      <div class="kpi"><div class="kpi__label">Devueltas</div><div class="kpi__value kpi__value--red" id="c-kpi-devueltas">0</div></div>
     </div>
+
     <div class="card">
-      <div style="font-family: var(--font-display); font-weight: 700; font-size: 17px; margin-bottom: 10px;">Acceso rápido</div>
-      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-        <button class="btn btn--primary" onclick="setCoordSub('bandeja')">📥 Importar nueva auditoría</button>
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 17px; margin-bottom: 12px;">📊 Comparativo de desempeño del equipo</div>
+      <div id="coordCompare"></div>
+    </div>
+
+    <div class="card">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 17px; margin-bottom: 10px;">⚡ Acciones rápidas</div>
+      <div class="action-row">
+        <button class="btn btn--primary" onclick="setCoordSub('bandeja')">📥 Revisar bandeja</button>
         <button class="btn btn--ghost" onclick="setCoordSub('equipo')">👥 Ver equipo</button>
-        <button class="btn btn--ghost" onclick="setCoordSub('alertas')">⚠ Ver alertas</button>
-        <button class="btn btn--danger" id="btnExportContralor">📤 Exportar reporte para Contralor</button>
+        <button class="btn btn--ghost" onclick="setCoordSub('calendario')">📅 Calendario</button>
+        <button class="btn btn--danger" onclick="setCoordSub('informe')">📝 Generar informe</button>
       </div>
     </div>
   </div>
 
-  <div class="subview" id="coord-equipo">
-    <div class="table-wrap">
-      <table class="table team-table" id="tableEquipo">
-        <thead><tr>
-          <th>Auditor</th><th>Asignadas</th><th>Recibidas</th><th>Cobertura</th>
-          <th>Hallazgos</th><th>Alto</th><th>Medio</th><th>Bajo</th><th>Estado</th>
-        </tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
-
   <div class="subview" id="coord-bandeja">
+    <div class="card" style="margin-bottom: 14px;">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 16px; margin-bottom: 4px;">Bandeja de Auditorías</div>
+      <div class="text-small text-muted">Importe los archivos Excel recibidos por sus auditores y gestione el flujo de aprobación.</div>
+    </div>
+
     <div class="import-zone" id="coordImportZone">
       <div class="import-zone__icon">📥</div>
       <div class="import-zone__title">Importar Excel de auditor</div>
-      <div class="import-zone__sub">Toca aquí o arrastra el archivo enviado por un auditor</div>
+      <div class="import-zone__sub">Toque aquí para seleccionar el archivo</div>
     </div>
-    <div style="margin-top: 16px;">
-      <div style="font-weight: 700; color: var(--ink); margin-bottom: 10px;">Auditorías recibidas:</div>
+
+    <div style="margin-top: 18px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <div style="font-weight: 700; color: var(--ink);">Auditorías recibidas</div>
+        <select class="filters__select" id="bandejaFilter" style="width: auto;">
+          <option value="">Todos los estados</option>
+          <option>En revisión</option>
+          <option>Aprobada</option>
+          <option>Devuelta</option>
+        </select>
+      </div>
       <div id="bandejaList"></div>
     </div>
   </div>
 
-  <div class="subview" id="coord-plan">
-    <div class="card" style="margin-bottom: 12px;">
-      <div class="text-small text-muted">El Plan Anual lista las auditorías esperadas del semestre. Marca como recibidas las que ya importaste.</div>
+  <div class="subview" id="coord-equipo">
+    <div class="card" style="margin-bottom: 14px;">
+      <div class="text-small text-muted">Toque el nombre de un auditor para ver sus auditorías en detalle.</div>
     </div>
-    <div class="table-wrap">
-      <table class="table" id="tablePlan">
-        <thead><tr>
-          <th>Código</th><th>Auditor</th><th>Ciudad</th><th>Distrito</th>
-          <th>Plan inicio</th><th>Plan fin</th><th>Estado</th><th>Cumplimiento</th>
-        </tr></thead>
-        <tbody></tbody>
-      </table>
+    <div id="equipoCards"></div>
+    <div id="equipoDetalle" style="display: none;"></div>
+  </div>
+
+  <div class="subview" id="coord-calendario">
+    <div class="card" style="margin-bottom: 14px;">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 16px;">📅 Calendario del Semestre 2026-S1</div>
+      <div class="text-small text-muted" style="margin-top: 4px;">Vista visual del cronograma planeado vs ejecutado por cada auditor.</div>
+    </div>
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+      <div id="calendarVisual"></div>
+    </div>
+    <div style="margin-top: 12px; display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px;">
+      <span><span style="display:inline-block; width:14px; height:14px; background:linear-gradient(135deg,#E3F2FD,#BBDEFB); border-radius:3px; vertical-align:middle;"></span> Planeada</span>
+      <span><span style="display:inline-block; width:14px; height:14px; background:linear-gradient(135deg,#E8F5E9,#C8E6C9); border-radius:3px; vertical-align:middle;"></span> Recibida</span>
+      <span><span style="display:inline-block; width:14px; height:14px; background:linear-gradient(135deg,#FFEBEE,#FFCDD2); border-radius:3px; vertical-align:middle;"></span> Atrasada</span>
     </div>
   </div>
 
@@ -1551,37 +1818,62 @@ body {
   <div class="subview" id="coord-alertas">
     <div id="coordAlertasList"></div>
   </div>
+
+  <div class="subview" id="coord-informe">
+    <div class="card">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 18px;">📝 Informe de Supervisión del Coordinador</div>
+      <div class="text-small text-muted" style="margin: 8px 0 16px 0;">
+        Genera el informe ejecutivo para entregar al Contralor, con resumen del equipo,
+        estadísticas, hallazgos consolidados y observaciones de supervisión.
+      </div>
+      <div class="action-row">
+        <button class="btn btn--primary" id="btnInformeCoordWord">📄 Generar Informe Word</button>
+        <button class="btn btn--ghost" id="btnExportContralor">📤 Exportar Excel para Contralor</button>
+      </div>
+    </div>
+
+    <div class="card card--accent">
+      <div style="font-family: var(--font-display); font-weight: 700;">Vista previa del informe</div>
+      <div class="text-small text-muted" style="margin: 6px 0 12px 0;">
+        El informe incluirá automáticamente todos los datos consolidados al momento de generarlo.
+      </div>
+      <div id="coordInformePreview" style="font-size: 13px; line-height: 1.6;"></div>
+    </div>
+  </div>
 </section>
 
-<!-- ============ VISTAS DE CONTRALOR ============ -->
+
+<!-- ============ VISTAS DE CONTRALOR (MEJORADAS V3) ============ -->
 <section class="section" id="section-contralor">
   <div class="section__header">
     <div>
-      <span class="role-banner role-banner--contralor">🎩 Vista de Contralor</span>
-      <h1 class="section__title display-underline">Dashboard Ejecutivo</h1>
-      <p class="section__subtitle">Vista estratégica de auditoría · Visión consolidada</p>
+      <span class="role-banner role-banner--contralor">🎩 Contralor</span>
+      <h1 class="section__title display-underline">Centro Estratégico de Auditoría</h1>
+      <p class="section__subtitle">Visión consolidada del sistema de auditoría interna</p>
     </div>
   </div>
 
   <div class="subtabs" id="contraSubtabs">
     <button class="subtab" data-sub="ejecutivo" aria-current="page">📊 Ejecutivo</button>
+    <button class="subtab" data-sub="madurez">🎯 Madurez</button>
     <button class="subtab" data-sub="riesgo">🗺 Mapa de Riesgo</button>
-    <button class="subtab" data-sub="criticos">🔥 Hallazgos Críticos</button>
+    <button class="subtab" data-sub="criticos">🔥 Top Críticos</button>
+    <button class="subtab" data-sub="distribucion">📊 Distribución</button>
+    <button class="subtab" data-sub="historico">📈 Histórico</button>
     <button class="subtab" data-sub="cumplimiento">✓ Cumplimiento</button>
-    <button class="subtab" data-sub="tendencias">📈 Tendencias</button>
     <button class="subtab" data-sub="informe">📝 Informe Junta</button>
   </div>
 
   <div class="subview subview--active" id="contra-ejecutivo">
     <div class="kpi-grid">
-      <div class="kpi"><div class="kpi__label">Total Auditorías</div><div class="kpi__value" id="x-kpi-tot">0</div><div class="kpi__sub" id="x-kpi-tot-sub">0 ciudades cubiertas</div></div>
+      <div class="kpi"><div class="kpi__label">Total Auditorías</div><div class="kpi__value" id="x-kpi-tot">0</div><div class="kpi__sub" id="x-kpi-tot-sub">0 ciudades</div></div>
       <div class="kpi"><div class="kpi__label">Hallazgos Críticos</div><div class="kpi__value kpi__value--red" id="x-kpi-altos">0</div><div class="kpi__sub">Nivel ALTO</div></div>
       <div class="kpi"><div class="kpi__label">% Cumplim. Plan</div><div class="kpi__value" id="x-kpi-cump">0%</div><div class="kpi__sub">vs cronograma</div></div>
-      <div class="kpi"><div class="kpi__label">Cobertura Global</div><div class="kpi__value" id="x-kpi-cobg">0%</div><div class="kpi__sub">pruebas ejecutadas</div></div>
+      <div class="kpi"><div class="kpi__label">Madurez Sistema</div><div class="kpi__value" id="x-kpi-madurez">—</div><div class="kpi__sub">Nivel global</div></div>
     </div>
     <div class="card">
-      <div style="font-family: var(--font-display); font-weight: 700; font-size: 17px; margin-bottom: 10px;">Resumen ejecutivo</div>
-      <div id="contraResumen" style="font-size: 14px; line-height: 1.6;">Sin datos consolidados.</div>
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 17px; margin-bottom: 10px;">📋 Resumen ejecutivo</div>
+      <div id="contraResumen" style="font-size: 14px; line-height: 1.65;">Sin datos consolidados.</div>
     </div>
     <div class="card">
       <div style="font-family: var(--font-display); font-weight: 700; font-size: 17px; margin-bottom: 14px;">📈 Hallazgos por área</div>
@@ -1589,19 +1881,79 @@ body {
     </div>
   </div>
 
+  <div class="subview" id="contra-madurez">
+    <div class="madurez-card">
+      <div class="madurez-card__label">Índice de Madurez del Sistema de Auditoría Interna</div>
+      <div class="madurez-card__value" id="madurezScore">—</div>
+      <div class="madurez-card__nivel" id="madurezNivel">Sin datos suficientes</div>
+      <div class="madurez-bar"><div class="madurez-bar__fill" id="madurezBar" style="width:0%"></div></div>
+      <div class="text-small" style="margin-top: 14px; opacity: 0.85;" id="madurezDesc">
+        El índice se calcula a partir de la cobertura del plan, ejecución de pruebas sustantivas,
+        proporción de hallazgos críticos sin cerrar y oportunidad en la entrega.
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 16px; margin-bottom: 10px;">Componentes del índice</div>
+      <div id="madurezComponentes"></div>
+    </div>
+  </div>
+
   <div class="subview" id="contra-riesgo">
     <div class="card" style="margin-bottom: 14px;">
-      <div class="text-small text-muted">Cada distrito se colorea por su nivel de riesgo: rojo = hallazgos ALTO, ámbar = medio, verde = sin hallazgos críticos.</div>
+      <div class="text-small text-muted">Cada distrito se colorea por su nivel de riesgo según hallazgos identificados.</div>
     </div>
     <div class="heatmap-grid" id="riesgoHeatmap"></div>
   </div>
 
   <div class="subview" id="contra-criticos">
-    <div class="card" style="background: var(--danger-bg); border-color: var(--danger);">
-      <strong style="color: var(--danger);">⚠ Solo hallazgos de nivel ALTO</strong>
-      <div class="text-small" style="margin-top: 4px;">Estos requieren plan de acción inmediato de la Gerencia Regional.</div>
+    <div class="card" style="background: var(--danger-bg); border-color: var(--danger); margin-bottom: 14px;">
+      <strong style="color: var(--danger);">🔥 Top 10 Hallazgos Críticos</strong>
+      <div class="text-small" style="margin-top: 4px;">Estos hallazgos requieren plan de acción inmediato.</div>
     </div>
-    <div id="contraCriticosList" style="margin-top: 14px;"></div>
+    <div id="contraCriticosList"></div>
+  </div>
+
+  <div class="subview" id="contra-distribucion">
+    <div class="card">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 16px; margin-bottom: 14px;">Distribución por nivel de riesgo</div>
+      <div id="distribucionNivel"></div>
+    </div>
+    <div class="card">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 16px; margin-bottom: 14px;">Distribución por área operativa</div>
+      <div id="distribucionArea"></div>
+    </div>
+  </div>
+
+  <div class="subview" id="contra-historico">
+    <div class="card" style="margin-bottom: 14px;">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 16px;">📈 Evolución temporal</div>
+      <div class="text-small text-muted" style="margin-top: 4px;">Indicadores históricos por período. Los semestres anteriores requieren importación manual.</div>
+    </div>
+
+    <div class="period-tabs" id="periodTabs">
+      <button class="period-tab" data-period="2025-S1">2025-S1</button>
+      <button class="period-tab" data-period="2025-S2">2025-S2</button>
+      <button class="period-tab" data-period="2026-S1" aria-current="page">2026-S1 (actual)</button>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi__label">Auditorías ejecutadas</div><div class="kpi__value" id="h-kpi-auds">0</div></div>
+      <div class="kpi"><div class="kpi__label">Hallazgos totales</div><div class="kpi__value" id="h-kpi-hall">0</div></div>
+      <div class="kpi"><div class="kpi__label">Críticos (Alto)</div><div class="kpi__value kpi__value--red" id="h-kpi-altos">0</div></div>
+      <div class="kpi"><div class="kpi__label">% Cumplimiento</div><div class="kpi__value" id="h-kpi-cump">0%</div></div>
+    </div>
+
+    <div class="card">
+      <div style="font-family: var(--font-display); font-weight: 700; font-size: 16px; margin-bottom: 14px;">Comparativo entre períodos</div>
+      <div id="historicoCompare"></div>
+    </div>
+
+    <div class="card">
+      <div style="font-weight: 700; margin-bottom: 8px;">📦 Importar período histórico</div>
+      <div class="text-small text-muted" style="margin-bottom: 10px;">Cargue un Excel consolidado de un semestre anterior para registrarlo en el histórico.</div>
+      <button class="btn btn--ghost" id="btnImportHistorico">📥 Cargar período anterior</button>
+    </div>
   </div>
 
   <div class="subview" id="contra-cumplimiento">
@@ -1618,22 +1970,11 @@ body {
     <div class="table-wrap" style="margin-top: 14px;">
       <table class="table" id="cumpTable">
         <thead><tr>
-          <th>Auditor</th><th>Asignadas</th><th>Recibidas</th><th>Pendientes</th>
-          <th>% Cumplimiento</th><th>Estado</th>
+          <th>Auditor</th><th>Asignadas</th><th>Recibidas</th>
+          <th>Aprobadas</th><th>% Cumplim.</th><th>Estado</th>
         </tr></thead>
         <tbody></tbody>
       </table>
-    </div>
-  </div>
-
-  <div class="subview" id="contra-tendencias">
-    <div class="card">
-      <div style="font-weight: 700; font-family: var(--font-display); font-size: 17px;">Áreas con mayor concentración de hallazgos</div>
-      <div id="tendenciasAreas" style="margin-top: 14px;"></div>
-    </div>
-    <div class="card">
-      <div style="font-weight: 700; font-family: var(--font-display); font-size: 17px;">Distritos con mayor riesgo</div>
-      <div id="tendenciasDistritos" style="margin-top: 14px;"></div>
     </div>
   </div>
 
@@ -1641,21 +1982,20 @@ body {
     <div class="card">
       <div style="font-family: var(--font-display); font-weight: 700; font-size: 18px;">📝 Informe Ejecutivo para Junta Directiva</div>
       <div class="text-small text-muted" style="margin: 8px 0 16px 0;">
-        Genera un informe Word con la visión consolidada del sistema de auditoría interna.
-        Incluye: resumen ejecutivo, KPIs estratégicos, hallazgos críticos, mapa de riesgo y conclusiones.
+        Genera un informe Word con narrativa profesional, KPIs estratégicos,
+        hallazgos críticos, índice de madurez y recomendaciones de gobierno.
       </div>
       <button class="btn btn--primary" id="btnInformeJunta">📄 Generar Informe Junta Directiva</button>
     </div>
     <div class="card card--accent">
-      <div style="font-family: var(--font-display); font-weight: 700;">Importar datos del Coordinador</div>
+      <div style="font-family: var(--font-display); font-weight: 700;">📥 Cargar datos del Coordinador</div>
       <div class="text-small text-muted" style="margin: 6px 0 12px 0;">
-        Si recibió un Excel consolidado del Coordinador, impórtelo aquí para alimentar el dashboard.
+        Si recibió un Excel consolidado del Coordinador, impórtelo aquí para alimentar todos los dashboards.
       </div>
       <button class="btn btn--ghost" id="btnImportContralor">📥 Importar Excel del Coordinador</button>
     </div>
   </div>
 </section>
-
 </main>
 </div>
 </div>
@@ -3177,16 +3517,17 @@ function applyRoleUI() {
   if (currentUser.rol === "auditor") {
     if (!state.portada.auditor) {
       state.portada.auditor = currentUser.nombre;
-      // Código auditor: iniciales
       state.portada.auditorCod = currentUser.nombre.split(" ").map(w => w[0]).join("").substring(0,3).toUpperCase();
       saveState();
       try { initPortada(); updateHeader(); } catch(e) {}
     }
     showSection("portada");
   } else if (currentUser.rol === "coordinador") {
+    // El coordinador NO trabaja auditorías personales, solo supervisa
     showSection("coord");
     renderCoordDashboard();
   } else if (currentUser.rol === "contralor") {
+    // El contralor NO trabaja auditorías personales, solo vista ejecutiva
     showSection("contralor");
     renderContraloria();
   }
@@ -3195,24 +3536,23 @@ function applyRoleUI() {
 function configureNavForRole(rol) {
   const nav = document.querySelector(".nav");
   const items = nav.querySelectorAll(".nav__item");
-  // Por defecto, todos los items son visibles
-  items.forEach(it => it.style.display = "");
+  const AUDITOR_SECTIONS = ["portada", "matriz", "ejecucion", "hallazgos", "papeles", "dashboard", "informe"];
 
-  if (rol === "auditor") {
-    // Ocultar coord y contralor
-    items.forEach(it => {
-      if (it.dataset.section === "coord" || it.dataset.section === "contralor") {
-        it.style.display = "none";
-      }
-    });
-  } else if (rol === "coordinador") {
-    // Ocultar contralor, mostrar coord
-    items.forEach(it => {
-      if (it.dataset.section === "contralor") it.style.display = "none";
-    });
-  } else if (rol === "contralor") {
-    // Mostrar todos
-  }
+  items.forEach(it => {
+    const sec = it.dataset.section;
+    if (rol === "auditor") {
+      // Auditor: solo ve las 7 secciones de auditor (oculta coord y contralor)
+      it.style.display = (AUDITOR_SECTIONS.includes(sec)) ? "" : "none";
+    } else if (rol === "coordinador") {
+      // Coordinador: SOLO ve su panel de supervisión (oculta todo lo de auditor y oculta contralor)
+      if (sec === "coord") it.style.display = "";
+      else it.style.display = "none";
+    } else if (rol === "contralor") {
+      // Contralor: SOLO ve su panel ejecutivo (oculta todo lo demás)
+      if (sec === "contralor") it.style.display = "";
+      else it.style.display = "none";
+    }
+  });
 }
 
 function updateSessionInfo() {
@@ -3277,7 +3617,14 @@ const COORD_STORAGE = "dispapeles_coord_v1";
 function loadCoordState() {
   try {
     const raw = localStorage.getItem(COORD_STORAGE);
-    return raw ? JSON.parse(raw) : { auditorias: [] };
+    const parsed = raw ? JSON.parse(raw) : { auditorias: [] };
+    // Migrar: añadir estado si no existe
+    parsed.auditorias = (parsed.auditorias || []).map(a => ({
+      ...a,
+      estadoRevision: a.estadoRevision || "En revisión",
+      comentarios: a.comentarios || []
+    }));
+    return parsed;
   } catch { return { auditorias: [] }; }
 }
 function saveCoordState(s) { localStorage.setItem(COORD_STORAGE, JSON.stringify(s)); }
@@ -3324,77 +3671,292 @@ function renderCoordSub(name) {
   if (name === "resumen") renderCoordResumen();
   if (name === "equipo") renderCoordEquipo();
   if (name === "bandeja") renderCoordBandeja();
-  if (name === "plan") renderCoordPlan();
+  if (name === "calendario") renderCoordCalendario();
   if (name === "hallazgos") renderCoordHallazgos();
   if (name === "alertas") renderCoordAlertas();
+  if (name === "informe") renderCoordInforme();
 }
 
 function renderCoordResumen() {
   const s = loadCoordState();
   const auditores = AUDITORS_ONLY.length;
-  const auds = s.auditorias.length;
-  let hallazgos = 0;
-  let cobAvg = 0, cobCount = 0;
-  s.auditorias.forEach(a => {
-    hallazgos += (a.hallazgos || []).length;
-    if (a.cobertura !== undefined && a.cobertura !== null) { cobAvg += a.cobertura; cobCount++; }
-  });
-  const cob = cobCount > 0 ? (cobAvg / cobCount) : 0;
+  const revision = s.auditorias.filter(a => a.estadoRevision === "En revisión").length;
+  const aprobadas = s.auditorias.filter(a => a.estadoRevision === "Aprobada").length;
+  const devueltas = s.auditorias.filter(a => a.estadoRevision === "Devuelta").length;
+
   document.getElementById("c-kpi-auditores").textContent = auditores;
-  document.getElementById("c-kpi-auds").textContent = auds;
-  document.getElementById("c-kpi-hallazgos").textContent = hallazgos;
-  document.getElementById("c-kpi-cob").textContent = (cob * 100).toFixed(0) + "%";
+  document.getElementById("c-kpi-revision").textContent = revision;
+  document.getElementById("c-kpi-aprobadas").textContent = aprobadas;
+  document.getElementById("c-kpi-devueltas").textContent = devueltas;
+
+  // Comparativo de desempeño
+  const compare = document.getElementById("coordCompare");
+  const maxAsig = Math.max(1, ...AUDITORS_ONLY.map(aud => PLAN_ANUAL.filter(p => p.auditor === aud.nombre).length));
+  const html = AUDITORS_ONLY.map(aud => {
+    const asig = PLAN_ANUAL.filter(p => p.auditor === aud.nombre).length;
+    const recibidas = s.auditorias.filter(a => a.auditor === aud.nombre).length;
+    const aprob = s.auditorias.filter(a => a.auditor === aud.nombre && a.estadoRevision === "Aprobada").length;
+    const pct = asig > 0 ? (aprob / asig * 100) : 0;
+    const w = (aprob / maxAsig) * 100;
+    return `<div class="compare-bar">
+      <div class="compare-bar__name">${aud.nombre.split(" ").slice(0,2).join(" ")}</div>
+      <div class="compare-bar__track"><div class="compare-bar__fill" style="width:${Math.max(w, 5)}%;">${aprob}/${asig}</div></div>
+      <div class="compare-bar__value">${pct.toFixed(0)}%</div>
+    </div>`;
+  }).join("");
+  compare.innerHTML = html;
 }
 
 function renderCoordEquipo() {
   const s = loadCoordState();
-  const tbody = document.querySelector("#tableEquipo tbody");
-  tbody.innerHTML = "";
-  AUDITORS_ONLY.forEach(aud => {
+  const cont = document.getElementById("equipoCards");
+  document.getElementById("equipoDetalle").style.display = "none";
+  cont.innerHTML = AUDITORS_ONLY.map(aud => {
     const sus = s.auditorias.filter(a => a.auditor === aud.nombre);
     const asig = PLAN_ANUAL.filter(p => p.auditor === aud.nombre).length;
-    const rec = sus.length;
-    const allHall = sus.flatMap(a => a.hallazgos || []);
-    const alto = allHall.filter(h => h.clasificacion === "Alto").length;
-    const medio = allHall.filter(h => h.clasificacion === "Medio").length;
-    const bajo = allHall.filter(h => h.clasificacion === "Bajo").length;
-    let cobSum = 0, cobN = 0;
-    sus.forEach(a => { if (a.cobertura != null) { cobSum += a.cobertura; cobN++; } });
-    const cob = cobN > 0 ? cobSum / cobN : 0;
-    const ratio = asig > 0 ? rec / asig : 0;
-    const sema = ratio >= 0.8 ? "🟢" : (ratio >= 0.4 ? "🟡" : (rec === 0 ? "⚪" : "🔴"));
-    tbody.innerHTML += `<tr>
-      <td><strong>${aud.nombre}</strong></td>
-      <td style="text-align:center;">${asig}</td>
-      <td style="text-align:center;"><strong>${rec}</strong></td>
-      <td style="text-align:center;">${(cob*100).toFixed(0)}%</td>
-      <td style="text-align:center;">${allHall.length}</td>
-      <td style="text-align:center; color: var(--danger); font-weight: 600;">${alto}</td>
-      <td style="text-align:center; color: var(--warning); font-weight: 600;">${medio}</td>
-      <td style="text-align:center; color: var(--success); font-weight: 600;">${bajo}</td>
-      <td style="text-align:center;" class="semaphore">${sema}</td>
-    </tr>`;
-  });
+    const aprobadas = sus.filter(a => a.estadoRevision === "Aprobada").length;
+    const revision = sus.filter(a => a.estadoRevision === "En revisión").length;
+    const devueltas = sus.filter(a => a.estadoRevision === "Devuelta").length;
+    const allH = sus.flatMap(a => a.hallazgos || []);
+    const altos = allH.filter(h => h.clasificacion === "Alto").length;
+    const iniciales = aud.nombre.split(" ").slice(0,2).map(w => w[0]).join("").toUpperCase();
+
+    return `<div class="auditor-detail-card" onclick="showAuditorDetail('${aud.user}')">
+      <div class="auditor-detail-card__head">
+        <div class="auditor-detail-card__avatar">${iniciales}</div>
+        <div style="flex:1;">
+          <div class="auditor-detail-card__name">${aud.nombre}</div>
+          <div class="auditor-detail-card__role">${aud.rolLabel} · Click para ver detalle</div>
+        </div>
+        <button class="btn btn--ghost btn--sm" onclick="event.stopPropagation(); showAuditorDetail('${aud.user}')">Ver →</button>
+      </div>
+      <div class="auditor-detail-card__stats">
+        <div class="auditor-detail-card__stat">
+          <div class="auditor-detail-card__stat-label">Asignadas</div>
+          <div class="auditor-detail-card__stat-value">${asig}</div>
+        </div>
+        <div class="auditor-detail-card__stat">
+          <div class="auditor-detail-card__stat-label">Aprobadas</div>
+          <div class="auditor-detail-card__stat-value" style="color:#2E7D32;">${aprobadas}</div>
+        </div>
+        <div class="auditor-detail-card__stat">
+          <div class="auditor-detail-card__stat-label">En revisión</div>
+          <div class="auditor-detail-card__stat-value" style="color:#E65100;">${revision}</div>
+        </div>
+        <div class="auditor-detail-card__stat">
+          <div class="auditor-detail-card__stat-label">Devueltas</div>
+          <div class="auditor-detail-card__stat-value" style="color:#C62828;">${devueltas}</div>
+        </div>
+        <div class="auditor-detail-card__stat">
+          <div class="auditor-detail-card__stat-label">Hallazgos</div>
+          <div class="auditor-detail-card__stat-value">${allH.length}</div>
+        </div>
+        <div class="auditor-detail-card__stat">
+          <div class="auditor-detail-card__stat-label">Críticos</div>
+          <div class="auditor-detail-card__stat-value" style="color:var(--red);">${altos}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
 }
+
+function showAuditorDetail(userKey) {
+  const aud = AUDITORS_ONLY.find(a => a.user === userKey);
+  if (!aud) return;
+  const s = loadCoordState();
+  const sus = s.auditorias.filter(a => a.auditor === aud.nombre);
+  const asig = PLAN_ANUAL.filter(p => p.auditor === aud.nombre);
+
+  document.getElementById("equipoCards").style.display = "none";
+  const det = document.getElementById("equipoDetalle");
+  det.style.display = "block";
+
+  // Lista de auditorías asignadas con estado
+  const lista = asig.map(p => {
+    const recib = sus.find(a => a.codigo === p.codigo);
+    let estado = "Pendiente", cls = "pendiente";
+    if (recib) {
+      estado = recib.estadoRevision || "En revisión";
+      cls = estado.toLowerCase().replace("ó","o").replace(" ","");
+    }
+    const halls = recib ? (recib.hallazgos || []).length : 0;
+    return `<div class="audit-row" ${recib ? `onclick="openAuditDetail('${p.codigo}')"` : ''}>
+      <span class="audit-row__cod">${p.codigo}</span>
+      <div class="audit-row__main">
+        <div class="audit-row__title">${p.ciudad}</div>
+        <div class="audit-row__sub">${p.distrito} · ${recib ? `${halls} hallazgos · cob ${((recib.cobertura||0)*100).toFixed(0)}%` : 'Sin recibir'}</div>
+      </div>
+      <span class="status-badge status-badge--${cls}">${estado}</span>
+      <div class="audit-row__meta">${recib ? recib.fechaImport : p.planIni}</div>
+    </div>`;
+  }).join("");
+
+  const ini = aud.nombre.split(" ").slice(0,2).map(w => w[0]).join("");
+  det.innerHTML = `
+    <button class="btn btn--ghost btn--sm" onclick="renderCoordEquipo()" style="margin-bottom:14px;">← Volver al equipo</button>
+    <div class="auditor-detail-card">
+      <div class="auditor-detail-card__head">
+        <div class="auditor-detail-card__avatar">${ini}</div>
+        <div style="flex:1;">
+          <div class="auditor-detail-card__name">${aud.nombre}</div>
+          <div class="auditor-detail-card__role">${aud.rolLabel}</div>
+        </div>
+      </div>
+    </div>
+    <div style="font-weight:700; margin: 18px 0 10px 0; color:var(--ink);">Auditorías asignadas (${asig.length})</div>
+    ${lista || '<div class="empty">Sin asignaciones</div>'}
+  `;
+}
+window.showAuditorDetail = showAuditorDetail;
+window.openAuditDetail = openAuditDetail; // declarado abajo
 
 function renderCoordBandeja() {
   const s = loadCoordState();
+  const filter = document.getElementById("bandejaFilter").value;
   const list = document.getElementById("bandejaList");
-  if (s.auditorias.length === 0) {
-    list.innerHTML = `<div class="empty"><div class="empty__icon">📭</div><div class="empty__title">Sin auditorías importadas</div><div class="empty__sub">Cuando un auditor te envíe su Excel, impórtalo aquí y se consolidará en el sistema.</div></div>`;
+
+  const filtered = filter ? s.auditorias.filter(a => a.estadoRevision === filter) : s.auditorias;
+
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="empty"><div class="empty__icon">📭</div><div class="empty__title">Sin auditorías ${filter ? "con ese estado" : "importadas"}</div><div class="empty__sub">Importe el Excel que le envíen los auditores para iniciar el proceso de revisión.</div></div>`;
     return;
   }
-  list.innerHTML = s.auditorias.map((a, i) => `
-    <div class="imported-item">
-      <span class="imported-item__cod">${a.codigo || "AUD"}</span>
-      <div style="flex:1;">
-        <div><strong>${escHtml(a.auditor || "Sin auditor")}</strong> — ${escHtml(a.ciudad || "sin ciudad")}</div>
-        <div class="text-small text-muted">${(a.hallazgos || []).length} hallazgos · cobertura ${((a.cobertura || 0) * 100).toFixed(0)}% · ${a.fechaImport || "—"}</div>
+
+  list.innerHTML = filtered.map((a) => {
+    const idx = s.auditorias.indexOf(a);
+    const estado = a.estadoRevision || "En revisión";
+    const cls = estado.toLowerCase().replace("ó","o").replace(" ","");
+    const halls = (a.hallazgos || []).length;
+    const altos = (a.hallazgos || []).filter(h => h.clasificacion === "Alto").length;
+    return `<div class="audit-row" onclick="openAuditDetail('${a.codigo}')">
+      <span class="audit-row__cod">${a.codigo}</span>
+      <div class="audit-row__main">
+        <div class="audit-row__title">${escHtml(a.auditor)} — ${escHtml(a.ciudad)}</div>
+        <div class="audit-row__sub">${halls} hallazgos${altos > 0 ? ` (<strong style="color:var(--red);">${altos} críticos</strong>)` : ""} · cob ${((a.cobertura || 0) * 100).toFixed(0)}% · ${a.fechaImport || "—"}</div>
       </div>
-      <button class="btn-icon" onclick="eliminarAuditoriaImportada(${i})" style="background:var(--danger-bg); color:var(--danger); border:none; width:32px; height:32px;">🗑</button>
-    </div>
-  `).join("");
+      <span class="status-badge status-badge--${cls}">${estado}</span>
+      <button class="btn-icon" onclick="event.stopPropagation(); eliminarAuditoriaImportada(${idx})" style="background:var(--danger-bg); color:var(--danger); border:none; width:32px; height:32px;">🗑</button>
+    </div>`;
+  }).join("");
 }
+
+// Modal de detalle de auditoría con workflow
+function openAuditDetail(codigo) {
+  const s = loadCoordState();
+  const a = s.auditorias.find(x => x.codigo === codigo);
+  if (!a) return;
+  const halls = a.hallazgos || [];
+  const altos = halls.filter(h => h.clasificacion === "Alto");
+  const estado = a.estadoRevision || "En revisión";
+  const cls = estado.toLowerCase().replace("ó","o").replace(" ","");
+
+  document.getElementById("modalContent").innerHTML = `
+    <div class="modal__header">
+      <div>
+        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+          <span class="prueba-card__codigo">${a.codigo}</span>
+          <span class="status-badge status-badge--${cls}">${estado}</span>
+        </div>
+        <div class="modal__title">${escHtml(a.ciudad || "")}</div>
+        <div class="text-small text-muted">${escHtml(a.auditor || "")} · Importada: ${a.fechaImport || "—"}</div>
+      </div>
+      <button class="modal__close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal__body audit-detail-modal" style="padding:0;">
+      <div class="audit-detail-section">
+        <div class="audit-detail-section__title">📊 Resumen</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); gap:10px;">
+          <div class="auditor-detail-card__stat">
+            <div class="auditor-detail-card__stat-label">Hallazgos</div>
+            <div class="auditor-detail-card__stat-value">${halls.length}</div>
+          </div>
+          <div class="auditor-detail-card__stat">
+            <div class="auditor-detail-card__stat-label">Críticos</div>
+            <div class="auditor-detail-card__stat-value" style="color:var(--red);">${altos.length}</div>
+          </div>
+          <div class="auditor-detail-card__stat">
+            <div class="auditor-detail-card__stat-label">Cobertura</div>
+            <div class="auditor-detail-card__stat-value">${((a.cobertura||0)*100).toFixed(0)}%</div>
+          </div>
+        </div>
+      </div>
+
+      ${halls.length > 0 ? `
+        <div class="audit-detail-section">
+          <div class="audit-detail-section__title">🚩 Hallazgos identificados</div>
+          ${halls.map((h, i) => {
+            const c = h.clasificacion === "Alto" ? "var(--red)" : (h.clasificacion === "Medio" ? "var(--warning)" : "var(--success)");
+            return `<div style="padding: 10px 12px; border-left: 3px solid ${c}; background: var(--ice); border-radius: 6px; margin-bottom: 8px;">
+              <div style="font-weight:600; font-size:13px;">H-${i+1}. ${escHtml(h.titulo || "")}</div>
+              <div class="text-small text-muted">${escHtml(h.area || "")} · <strong style="color:${c};">${h.clasificacion}</strong></div>
+            </div>`;
+          }).join("")}
+        </div>
+      ` : ""}
+
+      <div class="audit-detail-section">
+        <div class="audit-detail-section__title">💬 Comentarios de supervisión</div>
+        ${(a.comentarios || []).length > 0
+          ? (a.comentarios || []).map(c => `
+              <div class="comment-box">
+                <div class="comment-box__author">${escHtml(c.author)} · ${c.fecha}</div>
+                ${escHtml(c.texto)}
+              </div>`).join("")
+          : '<div class="text-small text-muted">Sin comentarios aún.</div>'}
+        <textarea class="field__textarea" id="newComment" placeholder="Escriba un comentario de supervisión..." style="margin-top: 10px;"></textarea>
+        <button class="btn btn--ghost btn--sm" onclick="addComment('${codigo}')" style="margin-top: 6px;">+ Agregar comentario</button>
+      </div>
+
+      <div class="audit-detail-section">
+        <div class="audit-detail-section__title">⚙ Cambiar estado de revisión</div>
+        <div class="action-row">
+          <button class="btn btn--ghost" onclick="cambiarEstado('${codigo}', 'En revisión')" style="background: ${estado === 'En revisión' ? 'var(--warning-bg)' : 'transparent'};">🔍 En revisión</button>
+          <button class="btn btn--primary" onclick="cambiarEstado('${codigo}', 'Aprobada')" style="background: ${estado === 'Aprobada' ? 'var(--success)' : 'var(--navy)'};">✓ Aprobar</button>
+          <button class="btn btn--danger" onclick="cambiarEstado('${codigo}', 'Devuelta')">↩ Devolver al auditor</button>
+        </div>
+      </div>
+    </div>
+  `;
+  openModal();
+}
+
+function cambiarEstado(codigo, nuevoEstado) {
+  const s = loadCoordState();
+  const a = s.auditorias.find(x => x.codigo === codigo);
+  if (!a) return;
+  a.estadoRevision = nuevoEstado;
+  // Registrar comentario automático
+  a.comentarios = a.comentarios || [];
+  a.comentarios.push({
+    author: currentUser ? currentUser.nombre : "Coordinador",
+    fecha: new Date().toLocaleString("es-CO"),
+    texto: `Estado cambiado a: ${nuevoEstado}`
+  });
+  saveCoordState(s);
+  closeModal();
+  renderCoordSub(coordSubActive);
+  toast(`✓ Auditoría ${codigo}: ${nuevoEstado}`);
+}
+
+function addComment(codigo) {
+  const txt = document.getElementById("newComment").value.trim();
+  if (!txt) { toast("⚠ Escriba un comentario"); return; }
+  const s = loadCoordState();
+  const a = s.auditorias.find(x => x.codigo === codigo);
+  if (!a) return;
+  a.comentarios = a.comentarios || [];
+  a.comentarios.push({
+    author: currentUser ? currentUser.nombre : "Coordinador",
+    fecha: new Date().toLocaleString("es-CO"),
+    texto: txt
+  });
+  saveCoordState(s);
+  openAuditDetail(codigo); // refresh
+  toast("✓ Comentario agregado");
+}
+window.openAuditDetail = openAuditDetail;
+window.cambiarEstado = cambiarEstado;
+window.addComment = addComment;
 
 function eliminarAuditoriaImportada(idx) {
   if (!confirm("¿Eliminar esta auditoría importada del sistema?")) return;
@@ -3406,25 +3968,46 @@ function eliminarAuditoriaImportada(idx) {
 }
 window.eliminarAuditoriaImportada = eliminarAuditoriaImportada;
 
-function renderCoordPlan() {
+function renderCoordCalendario() {
   const s = loadCoordState();
-  const tbody = document.querySelector("#tablePlan tbody");
-  tbody.innerHTML = PLAN_ANUAL.map(p => {
-    const recib = s.auditorias.find(a => a.codigo === p.codigo);
-    const estado = recib ? "Recibida" : "Pendiente";
-    const cum = recib ? "✓ Recibida" : "—";
-    const color = recib ? "var(--success)" : "var(--muted)";
-    return `<tr>
-      <td><span class="mono" style="background: var(--ice); padding: 2px 6px; border-radius: 4px;">${p.codigo}</span></td>
-      <td>${escHtml(p.auditor)}</td>
-      <td><strong>${escHtml(p.ciudad)}</strong></td>
-      <td>${escHtml(p.distrito)}</td>
-      <td>${p.planIni}</td>
-      <td>${p.planFin}</td>
-      <td style="color: ${color}; font-weight: 600;">${estado}</td>
-      <td>${cum}</td>
-    </tr>`;
-  }).join("");
+  const meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun"];
+  // Construimos una matriz auditor x mes
+  let html = '<div class="calendar-grid">';
+  // Cabecera
+  html += '<div class="calendar-cell calendar-cell--head">Auditor</div>';
+  meses.forEach(m => html += `<div class="calendar-cell calendar-cell--head">${m}</div>`);
+
+  AUDITORS_ONLY.forEach(aud => {
+    html += `<div class="calendar-cell calendar-cell--auditor">${aud.nombre.split(" ").slice(0,2).join(" ")}</div>`;
+    for (let mes = 0; mes < 6; mes++) {
+      const planMes = PLAN_ANUAL.filter(p => {
+        if (p.auditor !== aud.nombre) return false;
+        const [dd, mm, yyyy] = p.planIni.split("/");
+        return parseInt(mm) === mes + 1;
+      });
+      if (planMes.length === 0) {
+        html += '<div class="calendar-cell"></div>';
+      } else {
+        const ciudadesEnMes = planMes.map(p => {
+          const recib = s.auditorias.find(a => a.codigo === p.codigo);
+          if (recib && recib.estadoRevision === "Aprobada") return { ciudad: p.ciudad, tipo: "recibida" };
+          if (recib) return { ciudad: p.ciudad, tipo: "recibida" };
+          // Si estamos en mes posterior al planeado y no se recibió: atrasada
+          const hoy = new Date();
+          const planDate = new Date(2026, mes, 15);
+          if (hoy > planDate && !recib) return { ciudad: p.ciudad, tipo: "atrasada" };
+          return { ciudad: p.ciudad, tipo: "planeada" };
+        });
+        // Si hay varias, mostrar el peor caso
+        const tipo = ciudadesEnMes.find(c => c.tipo === "atrasada") ? "atrasada"
+                  : ciudadesEnMes.find(c => c.tipo === "recibida") ? "recibida" : "planeada";
+        const ciudades = ciudadesEnMes.map(c => c.ciudad).join(", ");
+        html += `<div class="calendar-cell calendar-cell--${tipo}" title="${ciudades}">${ciudades}</div>`;
+      }
+    }
+  });
+  html += '</div>';
+  document.getElementById("calendarVisual").innerHTML = html;
 }
 
 function renderCoordHallazgos() {
@@ -3549,6 +4132,121 @@ function renderCoordAlertas() {
   `).join("");
 }
 
+
+function renderCoordInforme() {
+  const s = loadCoordState();
+  const total = s.auditorias.length;
+  const aprob = s.auditorias.filter(a => a.estadoRevision === "Aprobada").length;
+  const rev = s.auditorias.filter(a => a.estadoRevision === "En revisión").length;
+  const dev = s.auditorias.filter(a => a.estadoRevision === "Devuelta").length;
+  const allH = s.auditorias.flatMap(a => a.hallazgos || []);
+  const altos = allH.filter(h => h.clasificacion === "Alto").length;
+
+  document.getElementById("coordInformePreview").innerHTML = `
+    <div><strong>Período:</strong> 2026-S1</div>
+    <div><strong>Auditores activos:</strong> ${AUDITORS_ONLY.length}</div>
+    <div><strong>Auditorías recibidas:</strong> ${total} (de ${PLAN_ANUAL.length} planeadas — ${(total / PLAN_ANUAL.length * 100).toFixed(0)}%)</div>
+    <div><strong>Estado de revisión:</strong> ${aprob} aprobadas · ${rev} en revisión · ${dev} devueltas</div>
+    <div><strong>Hallazgos consolidados:</strong> ${allH.length} totales (<span style="color:var(--red); font-weight:600;">${altos} críticos</span>)</div>
+    <div><strong>Generado por:</strong> ${currentUser ? currentUser.nombre : "—"}</div>
+  `;
+}
+
+async function generarInformeCoordWord() {
+  try {
+    const d = docx;
+    toast("Generando informe del Coordinador…");
+    const s = loadCoordState();
+    const allH = s.auditorias.flatMap(a => (a.hallazgos || []).map(h => ({...h, codAud: a.codigo, ciudad: a.ciudad, auditor: a.auditor})));
+    const altos = allH.filter(h => h.clasificacion === "Alto");
+    const aprob = s.auditorias.filter(a => a.estadoRevision === "Aprobada").length;
+    const cumpPct = PLAN_ANUAL.length > 0 ? (aprob / PLAN_ANUAL.length * 100) : 0;
+
+    const run = (t, opts={}) => new d.TextRun({text: String(t||""), font:"Calibri", ...opts});
+    const c = [];
+
+    // Portada
+    c.push(new d.Paragraph({alignment:d.AlignmentType.CENTER, children:[run("DISPAPELES S.A.S.", {bold:true, size:44, color:"1E2761"})], spacing:{after:200}}));
+    c.push(new d.Paragraph({alignment:d.AlignmentType.CENTER, children:[run("COORDINACIÓN DE AUDITORÍA INTERNA", {bold:true, size:22, color:"00695C"})], spacing:{after:600}}));
+    c.push(new d.Paragraph({alignment:d.AlignmentType.CENTER, children:[run("INFORME DE SUPERVISIÓN", {bold:true, size:48, color:"1E2761"})], spacing:{after:200}}));
+    c.push(new d.Paragraph({alignment:d.AlignmentType.CENTER, children:[run("Semestre 2026-S1", {bold:true, size:28, color:"C00000"})], spacing:{after:400}}));
+    c.push(new d.Paragraph({alignment:d.AlignmentType.CENTER, children:[run("Presentado al Contralor", {size:20, color:"37474F"})], spacing:{after:200}}));
+    c.push(new d.Paragraph({alignment:d.AlignmentType.CENTER, children:[run(new Date().toLocaleDateString("es-CO", {year:"numeric", month:"long", day:"numeric"}), {bold:true, size:20, color:"1E2761"})]}));
+    c.push(new d.Paragraph({children:[run("")], pageBreakBefore:true}));
+
+    // Resumen ejecutivo
+    c.push(new d.Paragraph({children:[run("1. RESUMEN EJECUTIVO", {bold:true, size:30, color:"FFFFFF"})], shading:{fill:"00695C", type:d.ShadingType.CLEAR}, spacing:{before:200, after:200}}));
+    c.push(new d.Paragraph({children:[run(`En el período 2026-S1, este Coordinador supervisó el trabajo de ${AUDITORS_ONLY.length} auditores internos, recibiendo ${s.auditorias.length} de las ${PLAN_ANUAL.length} auditorías planeadas (${cumpPct.toFixed(0)}% de avance del plan). Se aprobaron ${aprob} auditorías y se identificaron ${allH.length} hallazgos consolidados, de los cuales ${altos.length} fueron clasificados como de riesgo ALTO.`, {size:22})], spacing:{after:160}}));
+
+    // Estado del equipo
+    c.push(new d.Paragraph({children:[run("2. ESTADO DEL EQUIPO", {bold:true, size:30, color:"FFFFFF"})], shading:{fill:"00695C", type:d.ShadingType.CLEAR}, spacing:{before:200, after:200}}));
+    const headers = ["Auditor","Asignadas","Aprobadas","En revisión","Devueltas","Hallazgos","Críticos"];
+    const rows = [new d.TableRow({children: headers.map(h => new d.TableCell({
+      shading:{fill:"00695C", type:d.ShadingType.CLEAR},
+      margins:{top:80, bottom:80, left:100, right:100},
+      children:[new d.Paragraph({alignment:d.AlignmentType.CENTER, children:[run(h, {bold:true, color:"FFFFFF", size:18})]})]
+    }))})];
+    AUDITORS_ONLY.forEach(aud => {
+      const sus = s.auditorias.filter(a => a.auditor === aud.nombre);
+      const asig = PLAN_ANUAL.filter(p => p.auditor === aud.nombre).length;
+      const ap = sus.filter(a => a.estadoRevision === "Aprobada").length;
+      const rv = sus.filter(a => a.estadoRevision === "En revisión").length;
+      const dv = sus.filter(a => a.estadoRevision === "Devuelta").length;
+      const hl = sus.flatMap(a => a.hallazgos || []);
+      const al = hl.filter(h => h.clasificacion === "Alto").length;
+      const vals = [aud.nombre, asig, ap, rv, dv, hl.length, al];
+      rows.push(new d.TableRow({children: vals.map((v, i) => new d.TableCell({
+        margins:{top:60, bottom:60, left:100, right:100},
+        children:[new d.Paragraph({alignment: i === 0 ? d.AlignmentType.LEFT : d.AlignmentType.CENTER, children:[run(String(v), {bold:i===0, size:20})]})]
+      }))}));
+    });
+    c.push(new d.Table({width:{size:9000, type:d.WidthType.DXA}, rows}));
+
+    // Hallazgos por área
+    c.push(new d.Paragraph({children:[run("3. HALLAZGOS CONSOLIDADOS POR ÁREA", {bold:true, size:30, color:"FFFFFF"})], shading:{fill:"00695C", type:d.ShadingType.CLEAR}, spacing:{before:300, after:200}}));
+    ["TESORERÍA","VENTAS","LOGÍSTICA","CARTERA","ADMINISTRACIÓN"].forEach(area => {
+      const hA = allH.filter(h => h.area === area);
+      if (hA.length === 0) return;
+      c.push(new d.Paragraph({children:[run(area, {bold:true, size:24, color:"1E2761"})], spacing:{before:160, after:80}}));
+      hA.forEach((h, i) => {
+        const col = h.clasificacion === "Alto" ? "C62828" : (h.clasificacion === "Medio" ? "ED6C02" : "2E7D32");
+        c.push(new d.Paragraph({children:[
+          run(`H-${i+1}. `, {bold:true, color:col, size:20}),
+          run(`[${h.clasificacion}] `, {bold:true, color:col, size:18}),
+          run(escHtmlNoTag(h.titulo || ""), {bold:true, size:20}),
+          run(` · ${h.ciudad} (${h.auditor})`, {size:18, color:"757575"})
+        ], spacing:{before:40, after:40}, indent:{left:100}}));
+      });
+    });
+
+    // Conclusión
+    c.push(new d.Paragraph({children:[run("4. OBSERVACIONES Y CONCLUSIONES", {bold:true, size:30, color:"FFFFFF"})], shading:{fill:"00695C", type:d.ShadingType.CLEAR}, spacing:{before:300, after:200}, pageBreakBefore:true}));
+    c.push(new d.Paragraph({children:[run("El equipo de auditoría interna ha cumplido con sus tareas asignadas dentro del cronograma del semestre. Los hallazgos identificados han sido revisados y clasificados conforme a los criterios establecidos.", {size:22})], spacing:{after:160}}));
+    if (altos.length > 0) {
+      c.push(new d.Paragraph({children:[run(`Se recomienda al Contralor priorizar la atención de los ${altos.length} hallazgos clasificados como de riesgo ALTO, los cuales requieren plan de acción inmediato por parte de la Gerencia Regional.`, {size:22, bold:true})], spacing:{after:200}}));
+    }
+
+    // Firma
+    for (let i = 0; i < 4; i++) c.push(new d.Paragraph({children:[run("")]}));
+    c.push(new d.Paragraph({alignment:d.AlignmentType.CENTER, children:[run("____________________________", {size:22})]}));
+    c.push(new d.Paragraph({alignment:d.AlignmentType.CENTER, children:[run(currentUser ? currentUser.nombre : "Coordinador", {bold:true, size:22, color:"1E2761"})]}));
+    c.push(new d.Paragraph({alignment:d.AlignmentType.CENTER, children:[run("Coordinador de Auditoría Interna", {size:20, color:"37474F"})]}));
+
+    const doc = new d.Document({sections:[{properties:{page:{margin:{top:1440, right:1440, bottom:1440, left:1440}}}, children:c}]});
+    const blob = await d.Packer.toBlob(doc);
+    saveAs(blob, `Informe_Coordinador_${new Date().toISOString().split("T")[0]}.docx`);
+    toast("✓ Informe Word del Coordinador generado");
+  } catch(err) {
+    console.error(err);
+    toast("❌ Error: " + err.message);
+  }
+}
+
+function escHtmlNoTag(s) {
+  if (!s) return "";
+  return String(s).replace(/<[^>]*>/g, "");
+}
+
 // ===== Import de Excel del auditor para el coordinador =====
 function setupCoordImport() {
   const zone = document.getElementById("coordImportZone");
@@ -3634,6 +4332,10 @@ function setupCoordTabs() {
   });
   const btnExp = document.getElementById("btnExportContralor");
   if (btnExp) btnExp.addEventListener("click", exportContralorReporte);
+  const btnInfW = document.getElementById("btnInformeCoordWord");
+  if (btnInfW) btnInfW.addEventListener("click", generarInformeCoordWord);
+  const bf = document.getElementById("bandejaFilter");
+  if (bf) bf.addEventListener("change", () => renderCoordSub("bandeja"));
 }
 window.setCoordSub = setCoordSub;
 
@@ -3722,10 +4424,37 @@ function renderContraloria() {
 
 function renderContraSub(name) {
   if (name === "ejecutivo") renderContraEjecutivo();
+  if (name === "madurez") renderContraMadurez();
   if (name === "riesgo") renderContraRiesgo();
   if (name === "criticos") renderContraCriticos();
+  if (name === "distribucion") renderContraDistribucion();
+  if (name === "historico") renderContraHistorico();
   if (name === "cumplimiento") renderContraCumplimiento();
-  if (name === "tendencias") renderContraTendencias();
+}
+
+function calcularMadurez(auds, allH) {
+  const altos = allH.filter(h => h.clasificacion === "Alto");
+  const altosAbiertos = altos.filter(h => h.estado !== "Cerrado").length;
+  const cumpPct = PLAN_ANUAL.length > 0 ? (auds.length / PLAN_ANUAL.length) : 0;
+  const cobN = auds.filter(a => a.cobertura != null);
+  const cobAvg = cobN.length > 0 ? (cobN.reduce((x,a) => x + a.cobertura, 0) / cobN.length) : 0;
+  const ratioAltos = allH.length > 0 ? altosAbiertos / allH.length : 0;
+
+  // Cuatro componentes: 25% cada uno
+  const c1 = cumpPct * 25;                                       // Cumplimiento del plan
+  const c2 = cobAvg * 25;                                        // Cobertura técnica
+  const c3 = Math.max(0, (1 - ratioAltos)) * 25;                 // Calidad (menos altos abiertos = mejor)
+  const c4 = (auds.length > 0 ? 1 : 0) * 25;                     // Existencia de datos
+
+  return {
+    score: Math.round(c1 + c2 + c3 + c4),
+    componentes: {
+      cumplimiento: Math.round(c1 * 4),
+      cobertura: Math.round(c2 * 4),
+      calidad: Math.round(c3 * 4),
+      operatividad: Math.round(c4 * 4)
+    }
+  };
 }
 
 function renderContraEjecutivo() {
@@ -3737,12 +4466,13 @@ function renderContraEjecutivo() {
   const cumpPct = PLAN_ANUAL.length > 0 ? (auds.length / PLAN_ANUAL.length * 100) : 0;
   const cobN = auds.filter(a => a.cobertura != null);
   const cobGlobal = cobN.length > 0 ? (cobN.reduce((x,a) => x + a.cobertura, 0) / cobN.length * 100) : 0;
+  const madurez = calcularMadurez(auds, allH);
 
   document.getElementById("x-kpi-tot").textContent = auds.length;
   document.getElementById("x-kpi-tot-sub").textContent = `${ciudades.size} ciudades cubiertas`;
   document.getElementById("x-kpi-altos").textContent = altos;
   document.getElementById("x-kpi-cump").textContent = cumpPct.toFixed(0) + "%";
-  document.getElementById("x-kpi-cobg").textContent = cobGlobal.toFixed(0) + "%";
+  document.getElementById("x-kpi-madurez").textContent = madurez.score + "/100";
 
   let resumen = "";
   if (auds.length === 0) {
@@ -3904,10 +4634,232 @@ function renderContraTendencias() {
   }
 }
 
+function renderContraMadurez() {
+  const data = getContraData();
+  const auds = data.auditorias || [];
+  const allH = auds.flatMap(a => a.hallazgos || []);
+  const m = calcularMadurez(auds, allH);
+
+  document.getElementById("madurezScore").textContent = m.score + "/100";
+  document.getElementById("madurezBar").style.width = m.score + "%";
+
+  let nivel = "Sin datos";
+  let desc = "Aún no hay datos suficientes para calcular el índice.";
+  if (auds.length > 0) {
+    if (m.score >= 80) { nivel = "🟢 OPTIMIZADO"; desc = "El sistema de auditoría interna opera de manera eficiente y madura."; }
+    else if (m.score >= 60) { nivel = "🟡 GESTIONADO"; desc = "El sistema está consolidado pero tiene áreas de oportunidad."; }
+    else if (m.score >= 40) { nivel = "🟠 DEFINIDO"; desc = "El sistema está formalizado pero requiere mejoras significativas."; }
+    else if (m.score >= 20) { nivel = "🔴 INICIAL"; desc = "El sistema requiere fortalecimiento estructural."; }
+    else { nivel = "⚫ INSUFICIENTE"; desc = "El sistema necesita intervención urgente."; }
+  }
+  document.getElementById("madurezNivel").textContent = nivel;
+  document.getElementById("madurezDesc").textContent = desc;
+
+  const comp = [
+    {label: "Cumplimiento del plan", value: m.componentes.cumplimiento, color: "#1E2761"},
+    {label: "Cobertura técnica de pruebas", value: m.componentes.cobertura, color: "#00897B"},
+    {label: "Calidad (gestión de hallazgos críticos)", value: m.componentes.calidad, color: "#ED6C02"},
+    {label: "Operatividad del sistema", value: m.componentes.operatividad, color: "#6A1B9A"},
+  ];
+  document.getElementById("madurezComponentes").innerHTML = comp.map(c => `
+    <div class="compare-bar">
+      <div class="compare-bar__name">${c.label}</div>
+      <div class="compare-bar__track"><div class="compare-bar__fill" style="width:${Math.max(c.value, 3)}%; background: ${c.color};">${c.value}%</div></div>
+      <div class="compare-bar__value">${c.value}%</div>
+    </div>
+  `).join("");
+}
+
+function renderContraCriticos() {
+  const data = getContraData();
+  const altos = [];
+  (data.auditorias || []).forEach(a => {
+    (a.hallazgos || []).forEach(h => {
+      if (h.clasificacion === "Alto") altos.push({...h, ciudad: a.ciudad, auditor: a.auditor, codAud: a.codigo});
+    });
+  });
+  // Tomar top 10
+  const top = altos.slice(0, 10);
+  const list = document.getElementById("contraCriticosList");
+  if (top.length === 0) {
+    list.innerHTML = `<div class="empty"><div class="empty__icon">✅</div><div class="empty__title">Sin hallazgos críticos</div></div>`;
+    return;
+  }
+  list.innerHTML = top.map((h, i) => `
+    <div class="top-hallazgo">
+      <div class="top-hallazgo__rank">${i+1}</div>
+      <div>
+        <div class="top-hallazgo__title">${escHtml(h.titulo || "")}</div>
+        <div class="top-hallazgo__meta">${escHtml(h.area || "")} · ${escHtml(h.ciudad || "")} · ${escHtml(h.auditor || "")}</div>
+      </div>
+      <span class="badge badge--alto">ALTO</span>
+    </div>
+  `).join("");
+
+  // Si hay más de 10
+  if (altos.length > 10) {
+    list.innerHTML += `<div class="text-small text-muted" style="text-align:center; margin-top:14px;">+ ${altos.length - 10} hallazgos críticos adicionales no mostrados</div>`;
+  }
+}
+
+function renderContraDistribucion() {
+  const data = getContraData();
+  const allH = (data.auditorias || []).flatMap(a => a.hallazgos || []);
+  const altos = allH.filter(h => h.clasificacion === "Alto").length;
+  const medios = allH.filter(h => h.clasificacion === "Medio").length;
+  const bajos = allH.filter(h => h.clasificacion === "Bajo").length;
+  const total = altos + medios + bajos;
+
+  // Dona nivel (SVG)
+  const datos = [
+    {label: "Alto", value: altos, color: "#C62828"},
+    {label: "Medio", value: medios, color: "#ED6C02"},
+    {label: "Bajo", value: bajos, color: "#2E7D32"},
+  ];
+  document.getElementById("distribucionNivel").innerHTML = renderDonut(datos);
+
+  // Por área
+  const areas = ["TESORERÍA","VENTAS","LOGÍSTICA","CARTERA","ADMINISTRACIÓN"];
+  const colores = ["#1E2761","#C00000","#ED6C02","#00897B","#6A1B9A"];
+  const datosA = areas.map((a, i) => ({label: a, value: allH.filter(h => h.area === a).length, color: colores[i]})).filter(x => x.value > 0);
+  document.getElementById("distribucionArea").innerHTML = datosA.length > 0 ? renderDonut(datosA) : "<em>Sin datos</em>";
+}
+
+function renderDonut(datos) {
+  const total = datos.reduce((s, d) => s + d.value, 0);
+  if (total === 0) return "<em>Sin datos</em>";
+  const r = 60, cx = 80, cy = 80, strokeW = 24;
+  const C = 2 * Math.PI * r;
+  let offset = 0;
+  const segments = datos.map(d => {
+    const frac = d.value / total;
+    const len = C * frac;
+    const seg = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${d.color}" stroke-width="${strokeW}" stroke-dasharray="${len} ${C}" stroke-dashoffset="${-offset}" transform="rotate(-90 ${cx} ${cy})" />`;
+    offset += len;
+    return seg;
+  }).join("");
+
+  const legend = datos.map(d => `
+    <div class="donut-legend__item">
+      <div class="donut-legend__dot" style="background:${d.color};"></div>
+      <div class="donut-legend__label">${d.label}</div>
+      <div class="donut-legend__value">${d.value} (${(d.value/total*100).toFixed(0)}%)</div>
+    </div>
+  `).join("");
+
+  return `<div class="donut-chart">
+    <svg class="donut-svg" width="160" height="160" viewBox="0 0 160 160">
+      ${segments}
+      <text x="${cx}" y="${cy - 4}" text-anchor="middle" font-family="Inter, sans-serif" font-weight="700" font-size="24" fill="#1E2761">${total}</text>
+      <text x="${cx}" y="${cy + 16}" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" fill="#8892B0">hallazgos</text>
+    </svg>
+    <div class="donut-legend">${legend}</div>
+  </div>`;
+}
+
+function renderContraHistorico() {
+  const period = document.querySelector("#periodTabs .period-tab[aria-current='page']").dataset.period;
+  let datos = null;
+  if (period === "2026-S1") {
+    datos = getContraData();
+  } else {
+    // Buscar en almacenamiento histórico
+    const stored = JSON.parse(localStorage.getItem("dispapeles_historico_v1") || "{}");
+    datos = stored[period] || null;
+  }
+
+  if (!datos || !datos.auditorias || datos.auditorias.length === 0) {
+    document.getElementById("h-kpi-auds").textContent = "—";
+    document.getElementById("h-kpi-hall").textContent = "—";
+    document.getElementById("h-kpi-altos").textContent = "—";
+    document.getElementById("h-kpi-cump").textContent = "—";
+    document.getElementById("historicoCompare").innerHTML = "<em style='color:var(--muted);'>Sin datos para este período. Cárguelos abajo si tiene un Excel histórico.</em>";
+    return;
+  }
+
+  const auds = datos.auditorias;
+  const allH = auds.flatMap(a => a.hallazgos || []);
+  const altos = allH.filter(h => h.clasificacion === "Alto").length;
+  const cumpPct = PLAN_ANUAL.length > 0 ? (auds.length / PLAN_ANUAL.length * 100) : 0;
+
+  document.getElementById("h-kpi-auds").textContent = auds.length;
+  document.getElementById("h-kpi-hall").textContent = allH.length;
+  document.getElementById("h-kpi-altos").textContent = altos;
+  document.getElementById("h-kpi-cump").textContent = cumpPct.toFixed(0) + "%";
+
+  // Comparativo
+  const stored = JSON.parse(localStorage.getItem("dispapeles_historico_v1") || "{}");
+  stored["2026-S1"] = getContraData();
+  const periodos = ["2025-S1","2025-S2","2026-S1"];
+  const comp = periodos.map(p => {
+    const d = stored[p];
+    return {
+      label: p,
+      auds: d ? d.auditorias.length : 0,
+      hall: d ? d.auditorias.flatMap(a => a.hallazgos || []).length : 0,
+      altos: d ? d.auditorias.flatMap(a => a.hallazgos || []).filter(h => h.clasificacion === "Alto").length : 0
+    };
+  });
+  const maxV = Math.max(1, ...comp.map(c => c.hall));
+  document.getElementById("historicoCompare").innerHTML = comp.map(c => `
+    <div class="compare-bar">
+      <div class="compare-bar__name">${c.label}</div>
+      <div class="compare-bar__track"><div class="compare-bar__fill" style="width:${Math.max(c.hall/maxV*100, 3)}%;">${c.hall} hallazgos</div></div>
+      <div class="compare-bar__value">${c.altos} altos</div>
+    </div>
+  `).join("");
+}
+
+function importHistorico() {
+  const input = document.createElement("input");
+  input.type = "file"; input.accept = ".xlsx,.xls";
+  input.onchange = async (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    const period = prompt("¿A qué período corresponde? (ej. 2025-S1, 2025-S2)", "2025-S2");
+    if (!period) return;
+    try {
+      const data = await file.arrayBuffer();
+      const wb = XLSX.read(data);
+      const auditorias = [];
+      if (wb.SheetNames.includes("Hallazgos")) {
+        const rows = XLSX.utils.sheet_to_json(wb.Sheets["Hallazgos"], {header:1});
+        const byAud = {};
+        for (let i = 1; i < rows.length; i++) {
+          const r = rows[i]; if (!r[0]) continue;
+          const k = r[0];
+          if (!byAud[k]) byAud[k] = {codigo:k, auditor:r[1], ciudad:r[2], hallazgos:[]};
+          byAud[k].hallazgos.push({area:r[3], titulo:r[5], clasificacion:r[6]});
+        }
+        auditorias.push(...Object.values(byAud));
+      }
+      const stored = JSON.parse(localStorage.getItem("dispapeles_historico_v1") || "{}");
+      stored[period] = {auditorias};
+      localStorage.setItem("dispapeles_historico_v1", JSON.stringify(stored));
+      toast(`✓ Período ${period} cargado: ${auditorias.length} auditorías`);
+      renderContraHistorico();
+    } catch(err) {
+      console.error(err);
+      toast("❌ Error al importar");
+    }
+  };
+  input.click();
+}
+window.importHistorico = importHistorico;
+
 function setupContraTabs() {
   document.querySelectorAll("#contraSubtabs .subtab").forEach(t => {
     t.addEventListener("click", () => setContraSub(t.dataset.sub));
   });
+  // Period tabs
+  document.querySelectorAll("#periodTabs .period-tab").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll("#periodTabs .period-tab").forEach(x => x.removeAttribute("aria-current"));
+      t.setAttribute("aria-current", "page");
+      renderContraHistorico();
+    });
+  });
+  const btnHist = document.getElementById("btnImportHistorico");
+  if (btnHist) btnHist.addEventListener("click", importHistorico);
   const imp = document.getElementById("btnImportContralor");
   if (imp) {
     const input = document.createElement("input");
@@ -3953,147 +4905,121 @@ function setupContraTabs() {
 async function generarInformeJunta() {
   try {
     const d = docx;
+    toast("Generando informe para Junta…");
     const data = getContraData();
     const auds = data.auditorias || [];
-    const allH = auds.flatMap(a => a.hallazgos || []);
-    const altos = allH.filter(h => h.clasificacion === "Alto").length;
+    const allH = auds.flatMap(a => (a.hallazgos || []).map(h => ({...h, ciudad: a.ciudad, auditor: a.auditor})));
+    const altos = allH.filter(h => h.clasificacion === "Alto");
+    const medios = allH.filter(h => h.clasificacion === "Medio");
+    const bajos = allH.filter(h => h.clasificacion === "Bajo");
     const cumpPct = PLAN_ANUAL.length > 0 ? (auds.length / PLAN_ANUAL.length * 100) : 0;
+    const madurez = calcularMadurez(auds, allH);
+    const cobN = auds.filter(a => a.cobertura != null);
+    const cobAvg = cobN.length > 0 ? (cobN.reduce((x,a) => x + a.cobertura, 0) / cobN.length * 100) : 0;
 
-    const run = (t, opts = {}) => new d.TextRun({ text: String(t || ""), font: "Calibri", ...opts });
-    const children = [];
+    const run = (t, opts={}) => new d.TextRun({text: String(t||""), font:"Calibri", ...opts});
+    const c = [];
 
-    children.push(new d.Paragraph({
-      alignment: d.AlignmentType.CENTER,
-      children: [run("DISPAPELES S.A.S.", { bold: true, size: 44, color: "1E2761" })],
-      spacing: { after: 200 }
-    }));
-    children.push(new d.Paragraph({
-      alignment: d.AlignmentType.CENTER,
-      children: [run("CONTRALORÍA INTERNA", { bold: true, size: 22, color: "37474F" })],
-      spacing: { after: 600 }
-    }));
-    children.push(new d.Paragraph({
-      alignment: d.AlignmentType.CENTER,
-      children: [run("INFORME EJECUTIVO", { bold: true, size: 52, color: "1E2761" })],
-      spacing: { after: 200 }
-    }));
-    children.push(new d.Paragraph({
-      alignment: d.AlignmentType.CENTER,
-      children: [run("Sistema de Auditoría Interna", { bold: true, size: 32, color: "C00000" })],
-      spacing: { after: 400 }
-    }));
-    children.push(new d.Paragraph({
-      alignment: d.AlignmentType.CENTER,
-      children: [run("Presentado a la Junta Directiva", { size: 20, color: "37474F" })],
-      spacing: { after: 200 }
-    }));
-    children.push(new d.Paragraph({
-      alignment: d.AlignmentType.CENTER,
-      children: [run(new Date().toLocaleDateString("es-CO", { year: "numeric", month: "long" }).toUpperCase(), { bold: true, size: 22, color: "1E2761" })],
-      spacing: { after: 200 }
-    }));
-    children.push(new d.Paragraph({ children: [run("")], pageBreakBefore: true }));
+    // Portada profesional
+    c.push(new d.Paragraph({children:[run("")], spacing:{after:400}}));
+    c.push(new d.Paragraph({alignment:d.AlignmentType.CENTER, children:[run("DISPAPELES S.A.S.", {bold:true, size:48, color:"1E2761"})], spacing:{after:200}}));
+    c.push(new d.Paragraph({alignment:d.AlignmentType.CENTER, children:[run("CONTRALORÍA INTERNA", {bold:true, size:24, color:"6A1B9A"})], spacing:{after:800}}));
+    c.push(new d.Paragraph({alignment:d.AlignmentType.CENTER, children:[run("INFORME EJECUTIVO", {bold:true, size:56, color:"1E2761"})], spacing:{after:240}}));
+    c.push(new d.Paragraph({alignment:d.AlignmentType.CENTER, children:[run("DEL SISTEMA DE AUDITORÍA INTERNA", {bold:true, size:28, color:"C00000"})], spacing:{after:400}}));
+    c.push(new d.Paragraph({alignment:d.AlignmentType.CENTER, children:[run("Presentado a la H. Junta Directiva", {italics:true, size:22, color:"37474F"})], spacing:{after:300}}));
+    c.push(new d.Paragraph({alignment:d.AlignmentType.CENTER, children:[run(new Date().toLocaleDateString("es-CO", {year:"numeric", month:"long", day:"numeric"}).toUpperCase(), {bold:true, size:22, color:"1E2761"})]}));
+    c.push(new d.Paragraph({children:[run("")], pageBreakBefore:true}));
 
-    // Resumen
-    children.push(new d.Paragraph({
-      children: [run("1. RESUMEN EJECUTIVO", { bold: true, size: 30, color: "FFFFFF" })],
-      shading: { fill: "1E2761", type: d.ShadingType.CLEAR },
-      spacing: { before: 200, after: 200 }
-    }));
-    children.push(new d.Paragraph({
-      children: [run(`En el período evaluado se han ejecutado ${auds.length} auditorías de las ${PLAN_ANUAL.length} planeadas (${cumpPct.toFixed(0)}% de cumplimiento), identificando un total de ${allH.length} hallazgos, de los cuales ${altos} fueron clasificados como de riesgo ALTO.`, { size: 22 })],
-      spacing: { after: 160 }
-    }));
+    // 1. CARTA EJECUTIVA
+    c.push(new d.Paragraph({children:[run("SEÑORES MIEMBROS DE LA JUNTA DIRECTIVA", {bold:true, size:22, color:"1E2761"})], spacing:{after:200}}));
+    c.push(new d.Paragraph({children:[run("Cordial saludo.", {size:22})], spacing:{after:120}}));
+    c.push(new d.Paragraph({children:[run(`En cumplimiento de las funciones asignadas a la Contraloría Interna, me permito presentar a la Junta Directiva el Informe Ejecutivo del Sistema de Auditoría Interna correspondiente al período en evaluación.`, {size:22})], spacing:{after:120}}));
+    c.push(new d.Paragraph({children:[run(`Durante el período se ejecutaron ${auds.length} auditorías de las ${PLAN_ANUAL.length} planeadas, alcanzando un nivel de cumplimiento del ${cumpPct.toFixed(0)}% sobre el plan anual aprobado. El Sistema de Auditoría Interna ha alcanzado un Índice de Madurez de ${madurez.score}/100, ubicándose en el nivel ${madurez.score >= 60 ? "satisfactorio" : "que requiere fortalecimiento"}.`, {size:22})], spacing:{after:200}}));
 
-    if (altos > 0) {
-      children.push(new d.Paragraph({
-        children: [run(`Se solicita a la Junta Directiva atención prioritaria sobre los ${altos} hallazgos de riesgo ALTO identificados, que requieren plan de acción inmediato por parte de la Gerencia Regional.`, { size: 22, bold: true, color: "C00000" })],
-        spacing: { after: 200 }
-      }));
+    // 2. RESUMEN EJECUTIVO
+    c.push(new d.Paragraph({children:[run("1. RESUMEN EJECUTIVO", {bold:true, size:30, color:"FFFFFF"})], shading:{fill:"1E2761", type:d.ShadingType.CLEAR}, spacing:{before:200, after:200}}));
+
+    if (altos.length === 0 && auds.length > 0) {
+      c.push(new d.Paragraph({children:[run("El sistema de control interno opera de manera satisfactoria en el alcance ejecutado, sin hallazgos críticos identificados.", {size:22})], spacing:{after:160}}));
+    } else if (altos.length > 0) {
+      c.push(new d.Paragraph({children:[
+        run("Esta Contraloría ha identificado ", {size:22}),
+        run(`${altos.length} hallazgo${altos.length>1?"s":""} de nivel ALTO`, {bold:true, color:"C00000", size:22}),
+        run(` que requieren atención inmediata por parte de la Gerencia y aprobación de planes de acción por la Junta Directiva.`, {size:22})
+      ], spacing:{after:160}}));
     }
 
-    // KPIs
-    children.push(new d.Paragraph({
-      children: [run("2. INDICADORES CLAVE", { bold: true, size: 30, color: "FFFFFF" })],
-      shading: { fill: "1E2761", type: d.ShadingType.CLEAR },
-      spacing: { before: 200, after: 200 }
-    }));
-    const kpiRows = [
+    // 3. INDICADORES CLAVE
+    c.push(new d.Paragraph({children:[run("2. INDICADORES CLAVE DE GESTIÓN", {bold:true, size:30, color:"FFFFFF"})], shading:{fill:"1E2761", type:d.ShadingType.CLEAR}, spacing:{before:200, after:200}}));
+    const kpis = [
       ["Auditorías ejecutadas", `${auds.length} de ${PLAN_ANUAL.length}`],
       ["Cumplimiento del plan", `${cumpPct.toFixed(0)}%`],
-      ["Hallazgos identificados", `${allH.length}`],
-      ["Hallazgos ALTO", `${altos}`],
+      ["Cobertura técnica promedio", `${cobAvg.toFixed(0)}%`],
+      ["Total de hallazgos", `${allH.length}`],
+      ["Hallazgos críticos (ALTO)", `${altos.length}`],
+      ["Hallazgos importantes (MEDIO)", `${medios.length}`],
+      ["Oportunidades de mejora (BAJO)", `${bajos.length}`],
       ["Ciudades cubiertas", `${new Set(auds.map(a => a.ciudad)).size}`],
+      ["Índice de Madurez", `${madurez.score}/100`],
     ];
-    children.push(new d.Table({
-      width: { size: 9000, type: d.WidthType.DXA },
-      columnWidths: [4500, 4500],
-      rows: kpiRows.map(([k, v]) => new d.TableRow({
-        children: [
-          new d.TableCell({
-            shading: { fill: "1E2761", type: d.ShadingType.CLEAR },
-            margins: { top: 100, bottom: 100, left: 140, right: 140 },
-            children: [new d.Paragraph({ children: [run(k, { bold: true, color: "FFFFFF", size: 22 })] })]
-          }),
-          new d.TableCell({
-            shading: { fill: "ECEFF1", type: d.ShadingType.CLEAR },
-            margins: { top: 100, bottom: 100, left: 140, right: 140 },
-            children: [new d.Paragraph({ children: [run(v, { size: 22, bold: true })] })]
-          }),
-        ]
-      }))
+    c.push(new d.Table({
+      width:{size:9000, type:d.WidthType.DXA},
+      rows: kpis.map(([k,v]) => new d.TableRow({children:[
+        new d.TableCell({shading:{fill:"1E2761", type:d.ShadingType.CLEAR}, margins:{top:100, bottom:100, left:140, right:140}, children:[new d.Paragraph({children:[run(k, {bold:true, color:"FFFFFF", size:22})]})]}),
+        new d.TableCell({shading:{fill:"ECEFF1", type:d.ShadingType.CLEAR}, margins:{top:100, bottom:100, left:140, right:140}, children:[new d.Paragraph({children:[run(v, {bold:true, size:22})]})]})
+      ]}))
     }));
 
-    // Hallazgos críticos
-    if (altos > 0) {
-      children.push(new d.Paragraph({
-        children: [run("3. HALLAZGOS CRÍTICOS", { bold: true, size: 30, color: "FFFFFF" })],
-        shading: { fill: "C00000", type: d.ShadingType.CLEAR },
-        spacing: { before: 400, after: 200 },
-        pageBreakBefore: true
-      }));
-      allH.filter(h => h.clasificacion === "Alto").forEach((h, i) => {
-        children.push(new d.Paragraph({
-          children: [run(`H-${i+1}. ${h.titulo}`, { bold: true, size: 22, color: "C00000" })],
-          spacing: { before: 200, after: 80 }
-        }));
-        ["condicion","criterio","efecto","recomendacion"].forEach(campo => {
-          if (h[campo]) {
-            const lbl = { condicion: "Condición", criterio: "Criterio", efecto: "Efecto", recomendacion: "Recomendación" }[campo];
-            children.push(new d.Paragraph({
-              children: [
-                run(`${lbl}. `, { bold: true, color: "1E2761", size: 20 }),
-                run(String(h[campo]), { size: 20 })
-              ],
-              spacing: { after: 60 },
-              indent: { left: 100 }
-            }));
-          }
-        });
+    // 4. ÍNDICE DE MADUREZ
+    c.push(new d.Paragraph({children:[run("3. ÍNDICE DE MADUREZ DEL SISTEMA", {bold:true, size:30, color:"FFFFFF"})], shading:{fill:"1E2761", type:d.ShadingType.CLEAR}, spacing:{before:300, after:200}, pageBreakBefore:true}));
+    c.push(new d.Paragraph({children:[run(`El Índice de Madurez del Sistema de Auditoría Interna se calcula con base en cuatro componentes: cumplimiento del plan anual, cobertura técnica de pruebas, calidad en la gestión de hallazgos críticos y operatividad del sistema. Para el período evaluado, el índice es ${madurez.score}/100.`, {size:22})], spacing:{after:160}}));
+    Object.entries(madurez.componentes).forEach(([k,v]) => {
+      const labels = {cumplimiento:"Cumplimiento del plan", cobertura:"Cobertura técnica", calidad:"Calidad (gestión de críticos)", operatividad:"Operatividad del sistema"};
+      c.push(new d.Paragraph({children:[
+        run(`${labels[k]}: `, {bold:true, color:"1E2761", size:20}),
+        run(`${v}%`, {size:20})
+      ], spacing:{after:60}, indent:{left:100}}));
+    });
+
+    // 5. HALLAZGOS CRÍTICOS
+    if (altos.length > 0) {
+      c.push(new d.Paragraph({children:[run("4. HALLAZGOS CRÍTICOS QUE REQUIEREN ATENCIÓN DE LA JUNTA", {bold:true, size:30, color:"FFFFFF"})], shading:{fill:"C00000", type:d.ShadingType.CLEAR}, spacing:{before:300, after:200}, pageBreakBefore:true}));
+      altos.slice(0, 10).forEach((h, i) => {
+        c.push(new d.Paragraph({children:[run(`H-${i+1}. ${h.titulo}`, {bold:true, size:22, color:"C00000"})], spacing:{before:160, after:80}}));
+        c.push(new d.Paragraph({children:[
+          run("Ubicación: ", {bold:true, color:"1E2761", size:20}),
+          run(`${h.ciudad || "—"} · Auditor: ${h.auditor || "—"}`, {size:20})
+        ], spacing:{after:40}, indent:{left:100}}));
+        if (h.condicion) c.push(new d.Paragraph({children:[run("Condición. ", {bold:true, color:"1E2761", size:20}), run(escHtmlNoTag(h.condicion), {size:20})], spacing:{after:40}, indent:{left:100}}));
+        if (h.efecto) c.push(new d.Paragraph({children:[run("Efecto. ", {bold:true, color:"1E2761", size:20}), run(escHtmlNoTag(h.efecto), {size:20})], spacing:{after:40}, indent:{left:100}}));
+        if (h.recomendacion) c.push(new d.Paragraph({children:[run("Recomendación. ", {bold:true, color:"1E2761", size:20}), run(escHtmlNoTag(h.recomendacion), {size:20})], spacing:{after:60}, indent:{left:100}}));
       });
     }
 
-    // Conclusión
-    children.push(new d.Paragraph({
-      children: [run("4. CONCLUSIÓN", { bold: true, size: 30, color: "FFFFFF" })],
-      shading: { fill: "1E2761", type: d.ShadingType.CLEAR },
-      spacing: { before: 400, after: 200 },
-      pageBreakBefore: true
-    }));
-    children.push(new d.Paragraph({
-      children: [run(altos > 0
-        ? `El sistema de auditoría interna ha cumplido su función de identificar oportunamente las debilidades de control. Se requiere acción ejecutiva sobre los hallazgos críticos.`
-        : `El sistema de auditoría interna opera de forma satisfactoria en el alcance ejecutado.`, { size: 22 })],
-      spacing: { after: 200 }
-    }));
+    // 6. RECOMENDACIONES DE GOBIERNO
+    c.push(new d.Paragraph({children:[run("5. RECOMENDACIONES DE GOBIERNO", {bold:true, size:30, color:"FFFFFF"})], shading:{fill:"1E2761", type:d.ShadingType.CLEAR}, spacing:{before:300, after:200}, pageBreakBefore:true}));
+    const recs = [];
+    if (altos.length > 0) recs.push("Aprobar planes de acción específicos para los hallazgos clasificados como ALTO, con responsables, plazos y seguimiento mensual.");
+    if (cumpPct < 80) recs.push("Reforzar el seguimiento al cumplimiento del plan anual de auditoría. Solicitar al Coordinador un cronograma de recuperación.");
+    if (madurez.score < 60) recs.push("Implementar acciones para elevar el Índice de Madurez del Sistema de Auditoría Interna.");
+    if (recs.length === 0) recs.push("Mantener los niveles actuales de gestión del Sistema de Auditoría Interna y continuar con el ciclo de mejora continua.");
+    recs.push("Recibir el presente informe y autorizar su archivo en los registros corporativos.");
 
-    const doc = new d.Document({
-      sections: [{
-        properties: { page: { size: { width: 12240, height: 15840 }, margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 } } },
-        children
-      }]
+    recs.forEach((r, i) => {
+      c.push(new d.Paragraph({children:[
+        run(`${i+1}. `, {bold:true, color:"1E2761", size:22}),
+        run(r, {size:22})
+      ], spacing:{after:120}}));
     });
 
+    // 7. CIERRE
+    c.push(new d.Paragraph({children:[run("Atentamente,", {size:22})], spacing:{before:400, after:600}}));
+    c.push(new d.Paragraph({children:[run("____________________________________", {size:22})]}));
+    c.push(new d.Paragraph({children:[run(currentUser ? currentUser.nombre : "Contralor", {bold:true, size:22, color:"1E2761"})]}));
+    c.push(new d.Paragraph({children:[run("Contralor Interno", {size:20, color:"37474F"})]}));
+    c.push(new d.Paragraph({children:[run("DISPAPELES S.A.S.", {size:20, color:"37474F"})]}));
+
+    const doc = new d.Document({sections:[{properties:{page:{margin:{top:1440, right:1440, bottom:1440, left:1440}}}, children:c}]});
     const blob = await d.Packer.toBlob(doc);
     saveAs(blob, `Informe_Junta_Directiva_${new Date().toISOString().split("T")[0]}.docx`);
     toast("✓ Informe Junta Directiva generado");
@@ -4102,10 +5028,6 @@ async function generarInformeJunta() {
     toast("❌ Error: " + err.message);
   }
 }
-
-// ============================================================================
-//  INICIALIZACIÓN MAESTRA — extiende el init original
-// ============================================================================
 function initAuthSystem() {
   setupLoginUI();
   setupUserMenu();
